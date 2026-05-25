@@ -1,312 +1,571 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Numeracy Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Numeracy Game: Before Numbers</title>
+    <style>
+        /* --- Core Layout & Scale Optimization --- */
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #111;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Fixed Aspect-Ratio Wrapper to prevent stretching and scrolling */
+        #game-container {
+            width: 100vw;
+            height: 56.25vw; /* 16:9 Aspect Ratio */
+            max-height: 100vh;
+            max-width: 177.78vh; 
+            background-color: #fff;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Comic Sans MS', sans-serif;
-}
+        /* --- Slide 1: Splash Screen --- */
+        #splash-slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        #splash-slide img {
+            max-width: 40%;
+            max-height: 60%;
+            object-fit: contain;
+        }
 
-body{
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-background:#f2f2f2;
-}
+        /* --- Gameplay Slides UI --- */
+        #gameplay-ui {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2% 4%;
+        }
+        header {
+            text-align: center;
+            width: 100%;
+        }
+        h1 {
+            font-size: 2.8vw;
+            color: #1d3557;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+            font-weight: 900;
+        }
 
-/* GAME CONTAINER */
-#game{
-width:95vw;
-max-width:900px;
-aspect-ratio:16/9;
-background:white;
-border-radius:15px;
-overflow:hidden;
-position:relative;
-}
+        /* --- The Sun Component --- */
+        #sun-element {
+            position: absolute;
+            top: 3%;
+            left: 3%;
+            width: 10vw;
+            height: 10vw;
+            transition: transform 0.3s ease;
+        }
+        .sun-face {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffea00 60%, #ff9100 100%);
+            position: relative;
+            border: 0.3vw solid #ff6a00;
+            box-shadow: 0 0 20px #ffea00;
+        }
+        /* Procedural face components ensuring high compatibility across legacy devices */
+        .sun-eye {
+            position: absolute;
+            top: 30%;
+            width: 1.2vw;
+            height: 1.2vw;
+            background-color: #222;
+            border-radius: 50%;
+        }
+        .sun-eye.left { left: 25%; }
+        .sun-eye.right { right: 25%; }
+        .sun-mouth {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4vw;
+            height: 2vw;
+            border-bottom: 0.6vw solid #222;
+            border-radius: 0 0 4vw 4vw;
+            transition: all 0.2s ease;
+        }
+        /* Sun expressions states */
+        #sun-element.smile .sun-mouth {
+            height: 2.5vw;
+            border-bottom: 0.6vw solid #222;
+            border-radius: 0 0 4vw 4vw;
+        }
+        #sun-element.sad .sun-mouth {
+            height: 1.5vw;
+            border-bottom: none;
+            border-top: 0.6vw solid #222;
+            border-radius: 4vw 4vw 0 0;
+            bottom: 15%;
+        }
 
-/* SPLASH */
-#splash{
-position:absolute;
-width:100%;
-height:100%;
-background:white;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:10;
-}
+        /* --- Train Mechanics & Track Area --- */
+        #track-zone {
+            width: 100%;
+            height: 40%;
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+            margin-bottom: 1%;
+        }
+        #train-assembly {
+            display: flex;
+            align-items: flex-end;
+            position: absolute;
+            right: 5%;
+            bottom: 5%;
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        /* Locomotive */
+        .locomotive {
+            width: 14vw;
+            height: 13vw;
+            background: #023e8a;
+            border-radius: 2vw 4vw 1vw 1vw;
+            border: 0.4vw solid #03045e;
+            position: relative;
+            margin-right: -0.2vw;
+            z-index: 2;
+        }
+        .cabin {
+            position: absolute;
+            top: 15%; right: 10%;
+            width: 6vw; height: 6vw;
+            background: #90e0ef;
+            border: 0.3vw solid #03045e;
+        }
+        .chimney {
+            position: absolute;
+            top: -2.5vw; left: 15%;
+            width: 2.5vw; height: 3vw;
+            background: #e63946;
+            border: 0.3vw solid #03045e;
+        }
+        /* Procedural CSS smoke animation */
+        .smoke-puff {
+            position: absolute;
+            top: -4.5vw;
+            left: 1.5vw;
+            width: 2vw;
+            height: 2vw;
+            background: rgba(255,255,255,0.8);
+            border-radius: 50%;
+            opacity: 0;
+        }
+        @keyframes emit-smoke {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-5vw) scale(2.2); opacity: 0; }
+        }
+        .animating-smoke .smoke-puff {
+            animation: emit-smoke 0.6s ease-out infinite;
+        }
+        /* Train moving animation to left */
+        .move-left {
+            transform: translateX(-120vw);
+        }
 
-#splash img{
-width:50%;
-}
+        /* Train Compartments */
+        .compartment {
+            width: 11vw;
+            height: 10vw;
+            background: #ffb703;
+            border: 0.4vw solid #fb8500;
+            border-radius: 1.5vw 1.5vw 0.5vw 0.5vw;
+            margin-right: 0.5vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        .compartment:nth-child(3) { background: #2a9d8f; border-color: #264653; }
+        .compartment:nth-child(4) { background: #e76f51; border-color: #f4a261; }
+        .compartment:nth-child(5) { background: #a8dadc; border-color: #457b9d; }
+        .compartment:nth-child(6) { background: #e63946; border-color: #1d3557; }
+        
+        .compartment-window {
+            width: 8vw;
+            height: 7vw;
+            background: #ffffff;
+            border: 0.3vw solid #333;
+            border-radius: 0.8vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4vw;
+            font-weight: bold;
+            color: #222;
+        }
+        /* First compartment interacts like a button hook */
+        #target-compartment .compartment-window {
+            cursor: pointer;
+            background: #fff;
+            border: 0.4vw dashed #e63946;
+            color: #b7094c;
+        }
+        #target-compartment.pulse .compartment-window {
+            background: #ffe3e3;
+        }
 
-/* SLIDE */
-#slide{
-width:100%;
-height:100%;
-background-size:cover;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-padding:10px;
-}
+        /* --- Bottom Options Box and Circles --- */
+        #options-zone {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 2%;
+        }
+        .options-box {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 0.5vw solid #8338ec;
+            border-radius: 2.5vw;
+            padding: 1.5% 6%;
+            display: flex;
+            gap: 5vw;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease;
+        }
+        .option-circle {
+            width: 9vw;
+            height: 9vw;
+            border-radius: 50%;
+            border: 0.5vw solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.8vw;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #333;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .option-circle:nth-child(1) { background-color: #00b4d8; border-color: #0077b6; box-shadow: 0 6px 0 #0077b6; }
+        .option-circle:nth-child(2) { background-color: #ff85a1; border-color: #ff477e; box-shadow: 0 6px 0 #ff477e; }
+        .option-circle:nth-child(3) { background-color: #70e000; border-color: #38b000; box-shadow: 0 6px 0 #38b000; }
+        
+        .option-circle.selected {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #333 !important;
+            border: 0.6vw solid #fff !important;
+        }
+        
+        /* Wrong Answer Shake Animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .shake-element {
+            animation: shake 0.4s ease-in-out;
+        }
 
-/* HEADER */
-#instruction{
-font-size:clamp(14px,2.5vw,24px);
-font-weight:bold;
-text-align:center;
-}
-
-/* SUN */
-#sun{
-position:absolute;
-top:10px;
-right:10px;
-font-size:40px;
-}
-
-/* TRAIN */
-#train{
-display:flex;
-justify-content:center;
-gap:10px;
-}
-
-.compartment{
-width:clamp(50px,10vw,90px);
-height:clamp(50px,10vw,90px);
-background:#ffcc66;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:clamp(18px,4vw,28px);
-font-weight:bold;
-}
-
-/* OPTIONS */
-#optionsBox{
-border:3px solid black;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:10px;
-}
-
-.option{
-width:clamp(50px,10vw,80px);
-height:clamp(50px,10vw,80px);
-border-radius:50%;
-background:#66ccff;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:clamp(18px,4vw,28px);
-cursor:pointer;
-}
-
-.selected{
-background:#ff6666;
-}
-
-/* ANIMATIONS */
-.move{
-animation:move 2s linear;
-}
-@keyframes move{
-0%{transform:translateX(0);}
-100%{transform:translateX(-100%);}
-}
-
-.shake{
-animation:shake 0.4s;
-}
-@keyframes shake{
-0%,100%{transform:translateX(0);}
-25%{transform:translateX(-5px);}
-75%{transform:translateX(5px);}
-}
-
-/* SUCCESS */
-#success{
-position:absolute;
-width:100%;
-height:100%;
-background:white;
-display:none;
-justify-content:center;
-align-items:center;
-font-size:40px;
-font-weight:bold;
-flex-direction:column;
-}
-</style>
+        /* --- Slide 7: Success/Great Job Screen --- */
+        #success-slide {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #00f5d4, #00bbf9);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+        }
+        #success-slide h2 {
+            font-size: 7vw;
+            color: #fff;
+            text-shadow: 4px 4px 0px #f15bb5;
+            letter-spacing: 2px;
+            animation: bounce 0.6s infinite alternate;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+        canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="game">
+    <div id="game-container">
+        <div id="splash-slide">
+            <img src="assets/innovine_logo.png" alt="Innovine Logo">
+        </div>
 
-<!-- SPLASH -->
-<div id="splash">
-<img src="assets/innovine_logo.png">
-</div>
+        <div id="gameplay-ui">
+            <div id="sun-element" class="smile">
+                <div class="sun-face">
+                    <div class="sun-eye left"></div>
+                    <div class="sun-eye right"></div>
+                    <div class="sun-mouth"></div>
+                </div>
+            </div>
 
-<!-- SUN -->
-<div id="sun">😊</div>
+            <header>
+                <h1 id="instruction-text"><b>Identify the missing number from the given options</b></h1>
+            </header>
 
-<!-- SLIDE -->
-<div id="slide">
+            <div id="track-zone">
+                <div id="train-assembly">
+                    <div class="locomotive">
+                        <div class="chimney">
+                            <div class="smoke-puff"></div>
+                        </div>
+                        <div class="cabin"></div>
+                    </div>
+                    <div class="compartment" id="target-compartment">
+                        <div class="compartment-window" id="comp-1">_</div>
+                    </div>
+                    <div class="compartment"><div class="compartment-window" id="comp-2">18</div></div>
+                    <div class="compartment"><div class="compartment-window" id="comp-3">19</div></div>
+                    <div class="compartment"><div class="compartment-window" id="comp-4">20</div></div>
+                    <div class="compartment"><div class="compartment-window" id="comp-5">21</div></div>
+                </div>
+            </div>
 
-<div id="instruction">
-Identify the missing number from the given options
-</div>
+            <div id="options-zone">
+                <div class="options-box" id="options-box-container">
+                    <div class="option-circle" onclick="selectOption(this)">15</div>
+                    <div class="option-circle" onclick="selectOption(this)">14</div>
+                    <div class="option-circle" onclick="selectOption(this)">17</div>
+                </div>
+            </div>
+        </div>
 
-<div id="train"></div>
+        <div id="success-slide">
+            <h2 id="win-message">Great job!</h2>
+            <canvas id="confetti-canvas"></canvas>
+        </div>
+    </div>
 
-<div id="optionsBox"></div>
+    <audio id="audio-correct" src="assets/correct.mp3" preload="auto"></audio>
+    <audio id="audio-wrong" src="assets/wrong.mp3" preload="auto"></audio>
 
-</div>
+    <script>
+        // --- Slide Dataset Architecture ---
+        const slideData = [
+            { id: 2, background: "assets/slide2.png", trainNums: ["_", "18", "19", "20", "21"], options: ["15", "14", "17"], correct: "17" },
+            { id: 3, background: "assets/slide3.png", trainNums: ["_", "21", "22", "23", "24"], options: ["25", "20", "19"], correct: "20" },
+            { id: 4, background: "assets/slide4.png", trainNums: ["_", "26", "27", "28", "29"], options: ["25", "22", "12"], correct: "25" },
+            { id: 5, background: "assets/slide1.png", trainNums: ["_", "18", "19", "20", "21"], options: ["15", "14", "17"], correct: "17" },
+            { id: 6, background: "assets/slide6.png", trainNums: ["_", "12", "13", "14", "15"], options: ["15", "14", "11"], correct: "11" }
+        ];
 
-<!-- SUCCESS -->
-<div id="success">Great Job! 🎉</div>
+        let currentSlideIndex = 0;
+        let selectedValue = null;
+        let isTransitioning = false;
 
-</div>
+        const container = document.getElementById('game-container');
+        const gameplayUi = document.getElementById('gameplay-ui');
+        const targetCompartment = document.getElementById('target-compartment');
+        const trainAssembly = document.getElementById('train-assembly');
+        const optionsBox = document.getElementById('options-box-container');
+        const sunElement = document.getElementById('sun-element');
 
-<audio id="correctSound" src="assets/correct.mp3"></audio>
-<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+        // --- Audio Fallbacks for Resilient Deployments ---
+        function playAudio(elementId) {
+            const audio = document.getElementById(elementId);
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.log("Audio play blocked or file unmapped:", e));
+            }
+        }
 
-<script>
-const slides=[
-{bg:"assets/slide2.png",train:["_",18,19,20,21],options:[15,14,17],correct:17},
-{bg:"assets/slide3.png",train:["_",21,22,23,24],options:[25,20,19],correct:20},
-{bg:"assets/slide4.png",train:["_",26,27,28,29],options:[25,22,12],correct:25},
-{bg:"assets/slide1.png",train:["_",18,19,20,21],options:[15,14,17],correct:17},
-{bg:"assets/slide6.png",train:["_",12,13,14,15],options:[15,14,11],correct:11}
-];
+        // --- Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            // Auto transition from Splash Screen (Slide 1) after 2000ms
+            setTimeout(() => {
+                document.getElementById('splash-slide').style.display = 'none';
+                gameplayUi.style.display = 'flex';
+                loadSlide(currentSlideIndex);
+            }, 2000);
 
-let current=0;
-let selected=null;
+            // Hook Target Window event listener
+            targetCompartment.addEventListener('click', evaluateChoice);
+        });
 
-const slideEl=document.getElementById("slide");
-const trainEl=document.getElementById("train");
-const optionsEl=document.getElementById("optionsBox");
-const sun=document.getElementById("sun");
+        // --- Stage Render Controller ---
+        function loadSlide(index) {
+            if (index >= slideData.length) {
+                showSuccessScreen();
+                return;
+            }
 
-const correctSound=document.getElementById("correctSound");
-const wrongSound=document.getElementById("wrongSound");
+            isTransitioning = false;
+            selectedValue = null;
 
-/* SPLASH */
-setTimeout(()=>{
-document.getElementById("splash").style.display="none";
-loadSlide();
-},2000);
+            // Reset UI states smoothly
+            sunElement.className = "smile";
+            trainAssembly.classList.remove('move-left', 'animating-smoke');
+            targetCompartment.classList.remove('pulse');
 
-/* LOAD */
-function loadSlide(){
-let data=slides[current];
-slideEl.style.backgroundImage=`url(${data.bg})`;
+            const currentData = slideData[index];
+            
+            // Set dynamic background layout asset
+            container.style.backgroundImage = `url('${currentData.background}')`;
 
-trainEl.innerHTML="";
-data.train.forEach((num,i)=>{
-let d=document.createElement("div");
-d.className="compartment";
-d.innerText=num;
+            // Map numbers cleanly to components
+            document.getElementById('comp-1').innerText = currentData.trainNums[0];
+            document.getElementById('comp-2').innerText = currentData.trainNums[1];
+            document.getElementById('comp-3').innerText = currentData.trainNums[2];
+            document.getElementById('comp-4').innerText = currentData.trainNums[3];
+            document.getElementById('comp-5').innerText = currentData.trainNums[4];
 
-if(i===0){
-d.onclick=handleDrop;
-}
-trainEl.appendChild(d);
-});
+            // Render and bind option bubbles
+            optionsBox.innerHTML = '';
+            currentData.options.forEach(num => {
+                const circle = document.createElement('div');
+                circle.className = 'option-circle';
+                circle.innerText = num;
+                circle.addEventListener('click', () => selectOption(circle));
+                optionsBox.appendChild(circle);
+            });
+        }
 
-optionsEl.innerHTML="";
-data.options.forEach(num=>{
-let d=document.createElement("div");
-d.className="option";
-d.innerText=num;
+        // --- Selection Handler ---
+        function selectOption(element) {
+            if (isTransitioning) return;
+            
+            // Clear current active options styles
+            document.querySelectorAll('.option-circle').forEach(el => el.classList.remove('selected'));
+            
+            // Capture Selection
+            element.classList.add('selected');
+            selectedValue = element.innerText;
+            
+            // Give subtle hint to tap the train container
+            targetCompartment.classList.add('pulse');
+        }
 
-d.onclick=()=>{
-selected=num;
-document.querySelectorAll(".option").forEach(o=>o.classList.remove("selected"));
-d.classList.add("selected");
-};
+        // --- Core Gameplay Rule Logic ---
+        function evaluateChoice() {
+            if (isTransitioning || !selectedValue) return;
 
-optionsEl.appendChild(d);
-});
-}
+            const correctAnswer = slideData[currentSlideIndex].correct;
 
-/* CHECK */
-function handleDrop(){
-if(selected===null)return;
+            if (selectedValue === correctAnswer) {
+                // CORRECT PATH
+                isTransitioning = true;
+                playAudio('audio-correct');
+                
+                sunElement.className = "smile";
+                document.getElementById('comp-1').innerText = selectedValue;
+                
+                // Add physical visual effect triggers
+                trainAssembly.classList.add('animating-smoke');
+                
+                setTimeout(() => {
+                    trainAssembly.classList.add('move-left');
+                }, 100);
 
-let correct=slides[current].correct;
+                // Wait for layout animations, then route forward
+                setTimeout(() => {
+                    currentSlideIndex++;
+                    loadSlide(currentSlideIndex);
+                }, 2000);
 
-if(selected===correct){
-correctSound.play();
-sun.innerText="😄";
-trainEl.children[0].innerText=correct;
+            } else {
+                // INCORRECT PATH
+                playAudio('audio-wrong');
+                sunElement.className = "sad";
+                
+                // Fire tactile feedback animation
+                optionsBox.classList.add('shake-element');
+                setTimeout(() => {
+                    optionsBox.classList.remove('shake-element');
+                }, 400);
+            }
+        }
 
-trainEl.classList.add("move");
+        // --- Slide 7 UI & Confetti Animation Rigging ---
+        function showSuccessScreen() {
+            gameplayUi.style.display = 'none';
+            container.style.backgroundImage = 'none';
+            const successSlide = document.getElementById('success-slide');
+            successSlide.style.display = 'flex';
+            
+            initConfetti();
+        }
 
-setTimeout(()=>{
-trainEl.classList.remove("move");
-next();
-},2000);
+        function initConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
 
-}else{
-wrongSound.play();
-sun.innerText="😢";
-optionsEl.classList.add("shake");
-setTimeout(()=>optionsEl.classList.remove("shake"),400);
-}
-}
+            let particles = [];
+            const colors = ['#ffc300', '#ff0054', '#ffbd00', '#70e000', '#00bbf9', '#f15bb5'];
 
-/* NEXT */
-function next(){
-current++;
-if(current>=slides.length){
-showSuccess();
-return;
-}
-selected=null;
-sun.innerText="😊";
-loadSlide();
-}
+            for (let i = 0; i < 75; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * canvas.height,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 10 - 5,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+                    tiltAngle: 0
+                });
+            }
 
-/* SUCCESS */
-function showSuccess(){
-document.getElementById("slide").style.display="none";
-document.getElementById("sun").style.display="none";
-document.getElementById("success").style.display="flex";
-confetti();
-}
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, index) => {
+                    p.tiltAngle += p.tiltAngleIncremental;
+                    p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                    p.x += Math.sin(p.tiltAngle);
+                    p.tilt = Math.sin(p.tiltAngle - index / 3) * 15;
 
-/* CONFETTI */
-function confetti(){
-for(let i=0;i<60;i++){
-let d=document.createElement("div");
-d.style.position="absolute";
-d.style.width="6px";
-d.style.height="6px";
-d.style.background="red";
-d.style.top=Math.random()*100+"%";
-d.style.left=Math.random()*100+"%";
-d.style.animation="fall 2s linear";
-document.body.appendChild(d);
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                    ctx.stroke();
 
-setTimeout(()=>d.remove(),2000);
-}
-}
-</script>
-
+                    if (p.y > canvas.height) {
+                        particles[index] = p;
+                        p.x = Math.random() * canvas.width;
+                        p.y = -20;
+                    }
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+    </script>
 </body>
 </html>
