@@ -10,16 +10,16 @@
   margin:0;
   padding:0;
   box-sizing:border-box;
-  font-family: Arial;
-  touch-action: manipulation;
+  font-family:Arial;
+  touch-action:manipulation;
 }
 
 body{
   overflow:hidden;
-  background: linear-gradient(#5ecbff, #8fdc6a);
+  background: linear-gradient(#6ec6ff, #7ed957);
 }
 
-/* ---------- SCREEN ---------- */
+/* SCREEN */
 .screen{
   width:100vw;
   height:100vh;
@@ -30,7 +30,7 @@ body{
   flex-direction:column;
 }
 
-/* ---------- SPLASH ---------- */
+/* SPLASH */
 #splash{
   justify-content:center;
   align-items:center;
@@ -40,7 +40,7 @@ body{
   width:40vmin;
 }
 
-/* ---------- HEADER ---------- */
+/* HEADER */
 .header{
   text-align:center;
   font-size:3vmin;
@@ -48,41 +48,13 @@ body{
   padding:1vmin;
 }
 
-/* ---------- GAME AREA ---------- */
+/* GAME AREA */
 .game-area{
   flex:1;
   position:relative;
 }
 
-/* ---------- TRAIN ---------- */
-.train{
-  position:absolute;
-  width:95%;
-  left:2.5%;
-  top:30%;
-  transition: transform 1.2s ease;
-}
-.train img{
-  width:100%;
-}
-
-/* ---------- NUMBER OVERLAY ---------- */
-.num{
-  position:absolute;
-  top:48%;
-  transform:translate(-50%,-50%);
-  font-size:3.5vmin;
-  font-weight:bold;
-}
-
-/* Adjust if needed */
-.n1{ left:34%; }
-.n2{ left:46%; }
-.n3{ left:57%; }
-.n4{ left:68%; }
-.n5{ left:79%; }
-
-/* ---------- SUN ---------- */
+/* SUN */
 .sun{
   position:absolute;
   top:2%;
@@ -90,7 +62,90 @@ body{
   font-size:6vmin;
 }
 
-/* ---------- OPTIONS ---------- */
+/* TRAIN */
+.train{
+  position:absolute;
+  display:flex;
+  align-items:flex-end;
+  gap:1vmin;
+  left:5%;
+  top:35%;
+  transition: transform 1.2s ease;
+}
+
+/* ENGINE */
+.engine{
+  width:18vmin;
+  height:12vmin;
+  background:#1976d2;
+  border-radius:1vmin;
+  position:relative;
+}
+
+.engine::before{
+  content:'';
+  position:absolute;
+  width:4vmin;
+  height:6vmin;
+  background:red;
+  left:-3vmin;
+  top:3vmin;
+  border-radius:1vmin;
+}
+
+/* WHEELS */
+.wheel{
+  width:3vmin;
+  height:3vmin;
+  background:black;
+  border-radius:50%;
+  position:absolute;
+  bottom:-2vmin;
+}
+
+/* COMPARTMENTS */
+.comp{
+  width:14vmin;
+  height:12vmin;
+  border-radius:1vmin;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:4vmin;
+  font-weight:bold;
+  color:#000;
+  position:relative;
+}
+
+.c1{background:#ffe082;}
+.c2{background:#81c784;}
+.c3{background:#ffcc80;}
+.c4{background:#b39ddb;}
+.c5{background:#f48fb1;}
+
+.comp::after{
+  content:'';
+  width:3vmin;
+  height:3vmin;
+  background:black;
+  border-radius:50%;
+  position:absolute;
+  bottom:-2vmin;
+  left:2vmin;
+}
+
+.comp::before{
+  content:'';
+  width:3vmin;
+  height:3vmin;
+  background:black;
+  border-radius:50%;
+  position:absolute;
+  bottom:-2vmin;
+  right:2vmin;
+}
+
+/* OPTIONS */
 .options{
   display:flex;
   justify-content:center;
@@ -116,7 +171,7 @@ body{
   transform:scale(1.1);
 }
 
-/* ---------- SHAKE ---------- */
+/* SHAKE */
 @keyframes shake{
   0%{transform:translateX(0)}
   50%{transform:translateX(10px)}
@@ -126,7 +181,7 @@ body{
   animation:shake 0.4s;
 }
 
-/* ---------- VICTORY ---------- */
+/* VICTORY */
 #victory{
   justify-content:center;
   align-items:center;
@@ -134,7 +189,7 @@ body{
   color:green;
 }
 
-/* ---------- CONFETTI ---------- */
+/* CONFETTI */
 .confetti{
   position:absolute;
   width:1vmin;
@@ -166,13 +221,13 @@ body{
     <div id="sun" class="sun">😊</div>
 
     <div id="train" class="train">
-      <img src="assets/train.png">
+      <div class="engine"></div>
 
-      <div class="num n1" id="n1">_</div>
-      <div class="num n2" id="n2"></div>
-      <div class="num n3" id="n3"></div>
-      <div class="num n4" id="n4"></div>
-      <div class="num n5" id="n5"></div>
+      <div class="comp c1" id="c1">_</div>
+      <div class="comp c2" id="c2"></div>
+      <div class="comp c3" id="c3"></div>
+      <div class="comp c4" id="c4"></div>
+      <div class="comp c5" id="c5"></div>
     </div>
 
   </div>
@@ -198,94 +253,84 @@ const slides = [
   { nums:['_',12,13,14,15], options:[15,14,11], correct:11 }
 ];
 
-let current = 0;
-let selected = null;
+let current=0, selected=null;
 
-/* START */
 setTimeout(()=>{
   show('game');
   loadSlide();
 },2000);
 
-/* SCREEN SWITCH */
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-/* LOAD SLIDE */
 function loadSlide(){
-  selected = null;
+  selected=null;
+  let d=slides[current];
 
-  const d = slides[current];
+  c1.innerText='_';
+  c2.innerText=d.nums[1];
+  c3.innerText=d.nums[2];
+  c4.innerText=d.nums[3];
+  c5.innerText=d.nums[4];
 
-  n1.innerText = "_";
-  n2.innerText = d.nums[1];
-  n3.innerText = d.nums[2];
-  n4.innerText = d.nums[3];
-  n5.innerText = d.nums[4];
+  options.innerHTML='';
 
-  options.innerHTML = '';
+  d.options.forEach(n=>{
+    let div=document.createElement('div');
+    div.className='option';
+    div.innerText=n;
 
-  d.options.forEach(num=>{
-    const div = document.createElement('div');
-    div.className = 'option';
-    div.innerText = num;
-
-    div.onclick = ()=>{
+    div.onclick=()=>{
       document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
       div.classList.add('selected');
-      selected = num;
+      selected=n;
     };
 
     options.appendChild(div);
   });
 
-  sun.innerText = '😊';
-
-  // reset position (fix reverse bug)
-  train.style.transform = 'translateX(0)';
+  sun.innerText='😊';
+  train.style.transform='translateX(0)';
 }
 
-/* CHECK ANSWER */
-n1.onclick = ()=>{
-  if(selected === null) return;
+c1.onclick=()=>{
+  if(selected===null)return;
 
-  const d = slides[current];
+  let d=slides[current];
 
-  if(selected === d.correct){
+  if(selected===d.correct){
     correctSound.play();
-    sun.innerText = '😄';
+    sun.innerText='😄';
 
-    train.style.transform = 'translateX(-120%)';
+    train.style.transform='translateX(-120%)';
 
     setTimeout(()=>{
       current++;
-      if(current >= slides.length){
+      if(current>=slides.length){
         showVictory();
-      } else {
+      }else{
         loadSlide();
       }
     },1500);
 
-  } else {
+  }else{
     wrongSound.play();
-    sun.innerText = '😢';
+    sun.innerText='😢';
 
     train.classList.add('shake');
     setTimeout(()=>train.classList.remove('shake'),400);
 
-    selected = null;
+    selected=null;
     document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
   }
 };
 
-/* VICTORY */
 function showVictory(){
   show('victory');
-
   for(let i=0;i<60;i++){
-    let c = document.createElement('div');
+    let c=document.createElement('div');
     c.className='confetti';
     c.style.left=Math.random()*100+'vw';
     c.style.background=`hsl(${Math.random()*360},100%,50%)`;
