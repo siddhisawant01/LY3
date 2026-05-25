@@ -2,28 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Before Number Game</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 
-/* FIRST SLIDE */
-#intro{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#ffffff;
-}
-#intro img{
-  width:200px;
-  max-width:80%;
-}
-
-/* GAME BACKGROUND */
 body{
-  height:100vh;
+  height:100dvh;
   overflow:hidden;
   background:linear-gradient(#87CEEB 60%, #4CAF50 60%);
 }
@@ -33,14 +19,15 @@ body{
   text-align:center;
   font-weight:bold;
   padding:10px;
+  font-size:18px;
 }
 
 /* SUN */
 .sun{
   position:absolute;
-  top:10px;
-  left:10px;
-  font-size:40px;
+  top:8px;
+  left:8px;
+  font-size:32px;
 }
 
 /* GAME AREA */
@@ -54,99 +41,89 @@ body{
 .train-area{
   flex:1;
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
   position:relative;
 }
 
 /* TRACK */
 .track{
-  height:80px;
-  position:absolute;
-  bottom:90px;
+  height:70px;
   width:100%;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #5d4037 0 40px,
-      #8d6e63 40px 80px
-    );
+  position:absolute;
+  bottom:60px;
+  background:repeating-linear-gradient(90deg,#5d4037 0 40px,#8d6e63 40px 80px);
 }
-.track:before{
+.track:before,.track:after{
   content:"";
   position:absolute;
-  top:20px;
   width:100%;
   height:6px;
   background:#3e2723;
 }
-.track:after{
-  content:"";
-  position:absolute;
-  top:50px;
-  width:100%;
-  height:6px;
-  background:#3e2723;
-}
+.track:before{top:18px;}
+.track:after{top:45px;}
 
 /* TRAIN */
 .train{
   display:flex;
-  align-items:flex-end;
-  gap:12px;
+  gap:10px;
   position:absolute;
-  bottom:130px;
-  transform:translateX(120vw);
+  bottom:110px;
+  transform:translateX(120vw) scale(0.9);
+  transform-origin:center bottom;
 }
 
 /* ENGINE */
 .engine{
-  width:130px;height:110px;
+  width:110px;height:90px;
   background:#1976d2;
-  border-radius:20px;
+  border-radius:15px;
   position:relative;
 }
 .engine:before{
   content:"";
   position:absolute;
-  width:40px;height:35px;
+  width:35px;height:28px;
   background:#90caf9;
-  top:20px;left:25px;
-  border-radius:8px;
+  top:15px;left:20px;
+  border-radius:6px;
 }
 
 /* SMOKE */
 .smoke{
   position:absolute;
-  width:15px;height:15px;
+  width:12px;height:12px;
   background:#ddd;
   border-radius:50%;
-  top:-15px;
-  left:90px;
+  top:-10px;
+  left:75px;
   animation:smoke 1.5s infinite;
 }
 @keyframes smoke{
   0%{transform:translateY(0);opacity:1;}
-  100%{transform:translateY(-60px);opacity:0;}
+  100%{transform:translateY(-50px);opacity:0;}
 }
 
 /* COMPARTMENTS */
 .comp{
-  width:110px;height:110px;
-  border-radius:20px;
+  width:95px;height:90px;
+  border-radius:15px;
   display:flex;
   justify-content:center;
   align-items:center;
   position:relative;
 }
+
+/* WINDOW */
 .window{
-  width:70px;height:60px;
+  width:60px;height:50px;
   background:#fff;
-  border-radius:12px;
+  border-radius:10px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:28px;
+  font-size:22px;
   font-weight:bold;
 }
 
@@ -160,37 +137,39 @@ body{
 /* WHEELS */
 .wheel{
   position:absolute;
-  bottom:-20px;
-  width:20px;height:20px;
+  bottom:-15px;
+  width:16px;height:16px;
   background:#000;
   border-radius:50%;
 }
-.w1{left:20px;}
-.w2{right:20px;}
+.w1{left:15px;}
+.w2{right:15px;}
 
 /* OPTIONS */
 .options{
   display:flex;
+  flex-wrap:wrap;
   justify-content:center;
-  gap:20px;
-  padding:20px;
+  gap:12px;
+  padding:10px;
+  margin-bottom:5px;
 }
 .opt{
-  width:80px;height:80px;
+  width:65px;height:65px;
   border-radius:50%;
   background:#eee;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:26px;
+  font-size:20px;
   border:3px solid #444;
 }
-.opt.selected{border:5px solid green;}
+.opt.selected{border:4px solid green;}
 
 /* FINAL */
 .final{
   background:#b3e5fc;
-  height:100vh;
+  height:100dvh;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -198,27 +177,28 @@ body{
 }
 .loopTrain{
   position:absolute;
-  bottom:130px;
+  bottom:110px;
   display:flex;
-  gap:12px;
+  gap:10px;
   animation:loop 10s linear infinite;
 }
 @keyframes loop{
   0%{transform:translateX(120vw);}
   100%{transform:translateX(-140vw);}
 }
+
+/* 📱 EXTRA MOBILE FIX */
+@media(max-width:480px){
+  .train{transform:translateX(120vw) scale(0.75);}
+  .header{font-size:16px;}
+  .opt{width:55px;height:55px;font-size:18px;}
+}
 </style>
 </head>
 
 <body>
 
-<!-- FIRST SLIDE -->
-<div id="intro">
-  <img src="assets/innovine-logo.png" alt="Innovine Logo">
-</div>
-
-<!-- GAME -->
-<div id="game" class="game" style="display:none;">
+<div id="game" class="game">
 <div class="header">Identify the before number from the given options</div>
 <div class="sun" id="sun">😊</div>
 
@@ -231,12 +211,6 @@ body{
 </div>
 
 <script>
-/* AUTO SHOW GAME AFTER 2 SEC */
-setTimeout(()=>{
-  document.getElementById("intro").style.display="none";
-  document.getElementById("game").style.display="flex";
-},2000);
-
 const levels=[
 {nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
 {nums:["_",21,22,23,24],opt:[25,20,19],ans:20},
@@ -246,44 +220,71 @@ const levels=[
 ];
 
 let current=0,selected=null;
-
 const train=document.getElementById("train");
 const optionsDiv=document.getElementById("options");
 const sun=document.getElementById("sun");
 
+/* TRAIN */
 function createTrain(data){
   train.innerHTML="";
 
   let engine=document.createElement("div");
   engine.className="engine";
-
   let smoke=document.createElement("div");
   smoke.className="smoke";
   engine.appendChild(smoke);
-
   addWheels(engine);
   train.appendChild(engine);
 
   data.forEach((n,i)=>{
     let c=document.createElement("div");
     c.className="comp c"+(i+1);
-
     let w=document.createElement("div");
     w.className="window";
     w.innerText=n;
-
     c.appendChild(w);
     addWheels(c);
 
-    if(i===0) c.onclick=check;
+    if(i===0){
+      c.onclick=()=>{
+        if(selected===levels[current].ans){
+          w.innerText=selected; // fill correct answer
+          correctSound();
+          moveTrain();
+        }else if(selected!=null){
+          wrongSound();
+        }
+      };
+    }
 
     train.appendChild(c);
   });
 
   setTimeout(()=>{
-    train.style.transition="transform 1.5s ease-out";
+    train.style.transition="transform 1.2s ease-out";
     train.style.transform="translateX(0)";
   },100);
+}
+
+/* SOUND FIX (MOBILE FRIENDLY) */
+function correctSound(){
+  let audio=new Audio("assets/correct.mp3");
+  audio.play().catch(()=>{});
+}
+function wrongSound(){
+  let audio=new Audio("assets/wrong.mp3");
+  audio.play().catch(()=>{});
+}
+
+/* MOVE TRAIN */
+function moveTrain(){
+  train.style.transition="transform 2s linear";
+  train.style.transform="translateX(-140vw)";
+  setTimeout(()=>{
+    current++;
+    if(current>=levels.length) showFinal();
+    else load();
+  },2000);
 }
 
 function addWheels(el){
@@ -295,56 +296,32 @@ function addWheels(el){
   el.appendChild(w2);
 }
 
+/* OPTIONS */
 function createOptions(opts){
   optionsDiv.innerHTML="";
   opts.forEach(o=>{
     let d=document.createElement("div");
     d.className="opt";
     d.innerText=o;
-
     d.onclick=()=>{
       document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
       d.classList.add("selected");
       selected=o;
     };
-
     optionsDiv.appendChild(d);
   });
 }
 
-function check(){
-  if(selected==null)return;
-
-  if(selected===levels[current].ans){
-    new Audio("assets/correct.mp3").play();
-    sun.innerText="😊";
-
-    train.style.transition="transform 2s linear";
-    train.style.transform="translateX(-140vw)";
-
-    setTimeout(()=>{
-      current++;
-      if(current>=levels.length) showFinal();
-      else load();
-    },2000);
-
-  }else{
-    new Audio("assets/wrong.mp3").play();
-    sun.innerText="😢";
-    selected=null;
-    document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
-  }
-}
-
+/* LOAD */
 function load(){
   selected=null;
-  sun.innerText="😊";
   train.style.transition="none";
   train.style.transform="translateX(120vw)";
   createTrain(levels[current].nums);
   createOptions(levels[current].opt);
 }
 
+/* FINAL */
 function showFinal(){
   document.body.innerHTML=`
   <div class="final">
@@ -357,7 +334,6 @@ function showFinal(){
 
   function makeTrain(){
     loop.innerHTML="";
-
     let engine=document.createElement("div");
     engine.className="engine";
     let smoke=document.createElement("div");
