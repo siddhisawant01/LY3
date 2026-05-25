@@ -7,16 +7,20 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
-body{height:100vh;overflow:hidden;background:#87CEEB;}
-.game{display:flex;flex-direction:column;height:100vh;}
+body{
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(#87CEEB 60%, #4CAF50 60%);
+}
 
+/* HEADER */
 .header{
   text-align:center;
-  font-size:2.2vh;
   font-weight:bold;
   padding:10px;
 }
 
+/* SUN */
 .sun{
   position:absolute;
   top:10px;
@@ -24,24 +28,15 @@ body{height:100vh;overflow:hidden;background:#87CEEB;}
   font-size:40px;
 }
 
-/* TRACK */
-.track{
-  height:60px;
-  background:
-    repeating-linear-gradient(90deg,#5d4037 0 30px,#8d6e63 30px 60px);
-  position:relative;
-}
-.track:after{
-  content:"";
-  position:absolute;
-  top:20px;
-  width:100%;
-  height:6px;
-  background:#3e2723;
+/* GAME AREA */
+.game{
+  height:100%;
+  display:flex;
+  flex-direction:column;
 }
 
-/* TRAIN */
-.train-wrap{
+/* TRAIN AREA */
+.train-area{
   flex:1;
   display:flex;
   align-items:center;
@@ -49,61 +44,98 @@ body{height:100vh;overflow:hidden;background:#87CEEB;}
   position:relative;
 }
 
+/* TRACK */
+.track{
+  height:80px;
+  position:absolute;
+  bottom:90px;
+  width:100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #5d4037 0 40px,
+      #8d6e63 40px 80px
+    );
+}
+.track:before{
+  content:"";
+  position:absolute;
+  top:20px;
+  width:100%;
+  height:6px;
+  background:#3e2723;
+}
+.track:after{
+  content:"";
+  position:absolute;
+  top:50px;
+  width:100%;
+  height:6px;
+  background:#3e2723;
+}
+
+/* TRAIN */
 .train{
   display:flex;
   align-items:flex-end;
-  gap:10px;
-  transition:transform 2s linear;
+  gap:12px;
+  position:absolute;
+  bottom:130px; /* PERFECT ALIGN ON TRACK */
+  transform:translateX(120vw); /* start from right */
 }
 
 /* ENGINE */
 .engine{
-  width:110px;height:90px;
+  width:130px;height:110px;
   background:#1976d2;
-  border-radius:15px;
+  border-radius:20px;
   position:relative;
 }
+
+/* engine window */
 .engine:before{
   content:"";
   position:absolute;
-  width:30px;height:30px;
+  width:40px;height:35px;
   background:#90caf9;
-  top:15px;left:20px;
-  border-radius:6px;
+  top:20px;left:25px;
+  border-radius:8px;
 }
 
-/* SMOKE */
+/* smoke */
 .smoke{
   position:absolute;
-  width:12px;height:12px;
-  background:#ccc;
+  width:15px;height:15px;
+  background:#ddd;
   border-radius:50%;
-  top:-10px;
-  left:80px;
+  top:-15px;
+  left:90px;
   animation:smoke 1.5s infinite;
 }
 @keyframes smoke{
   0%{transform:translateY(0);opacity:1;}
-  100%{transform:translateY(-50px);opacity:0;}
+  100%{transform:translateY(-60px);opacity:0;}
 }
 
 /* COMPARTMENTS */
 .comp{
-  width:90px;height:90px;
-  border-radius:15px;
+  width:110px;height:110px;
+  border-radius:20px;
   display:flex;
   justify-content:center;
   align-items:center;
   position:relative;
 }
-.comp .window{
-  width:60px;height:50px;
+
+/* windows */
+.window{
+  width:70px;height:60px;
   background:#fff;
-  border-radius:10px;
+  border-radius:12px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
+  font-size:28px;
   font-weight:bold;
 }
 
@@ -114,56 +146,55 @@ body{height:100vh;overflow:hidden;background:#87CEEB;}
 .c4{background:#ab47bc;}
 .c5{background:#ec407a;}
 
-/* WHEELS */
+/* WHEELS (ENGINE + COMPARTMENTS) */
 .wheel{
   position:absolute;
-  bottom:-15px;
-  width:16px;height:16px;
+  bottom:-20px;
+  width:20px;height:20px;
   background:#000;
   border-radius:50%;
 }
-.w1{left:15px;}
-.w2{right:15px;}
+.w1{left:20px;}
+.w2{right:20px;}
 
 /* OPTIONS */
 .options{
   display:flex;
   justify-content:center;
   gap:20px;
-  padding:15px;
+  padding:20px;
 }
 .opt{
-  width:70px;height:70px;
+  width:80px;height:80px;
   border-radius:50%;
   background:#eee;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
+  font-size:26px;
   border:3px solid #444;
 }
 .opt.selected{border:5px solid green;}
 
-/* FINAL */
+/* FINAL SCREEN */
 .final{
+  background:#b3e5fc;
+  height:100vh;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  height:100vh;
-  background:#b3e5fc;
+  align-items:center;
 }
-.final h1{font-size:40px;margin-bottom:20px;}
-
 .loopTrain{
   position:absolute;
-  bottom:60px;
+  bottom:130px;
   display:flex;
-  animation:loop 8s linear infinite;
+  gap:12px;
+  animation:loop 10s linear infinite;
 }
 @keyframes loop{
-  0%{transform:translateX(100vw);}
-  100%{transform:translateX(-120vw);}
+  0%{transform:translateX(120vw);}
+  100%{transform:translateX(-140vw);}
 }
 </style>
 </head>
@@ -171,18 +202,15 @@ body{height:100vh;overflow:hidden;background:#87CEEB;}
 <body>
 
 <div id="game" class="game">
-
 <div class="header">Identify the before number from the given options</div>
 <div class="sun" id="sun">😊</div>
 
-<div class="train-wrap">
+<div class="train-area">
+  <div class="track"></div>
   <div id="train" class="train"></div>
 </div>
 
-<div class="track"></div>
-
 <div class="options" id="options"></div>
-
 </div>
 
 <script>
@@ -200,48 +228,54 @@ const train=document.getElementById("train");
 const optionsDiv=document.getElementById("options");
 const sun=document.getElementById("sun");
 
+/* CREATE TRAIN */
 function createTrain(data){
   train.innerHTML="";
-  
-  // ENGINE
+
   let engine=document.createElement("div");
   engine.className="engine";
-  
+
   let smoke=document.createElement("div");
   smoke.className="smoke";
   engine.appendChild(smoke);
 
+  addWheels(engine);
   train.appendChild(engine);
 
   data.forEach((n,i)=>{
-    let comp=document.createElement("div");
-    comp.className="comp c"+(i+1);
+    let c=document.createElement("div");
+    c.className="comp c"+(i+1);
 
-    let win=document.createElement("div");
-    win.className="window";
-    win.innerText=n;
+    let w=document.createElement("div");
+    w.className="window";
+    w.innerText=n;
 
-    comp.appendChild(win);
+    c.appendChild(w);
+    addWheels(c);
 
-    // wheels
-    let w1=document.createElement("div");
-    w1.className="wheel w1";
-    let w2=document.createElement("div");
-    w2.className="wheel w2";
-    comp.appendChild(w1);
-    comp.appendChild(w2);
+    if(i===0) c.onclick=check;
 
-    if(i===0){
-      comp.onclick=check;
-    }
-
-    train.appendChild(comp);
+    train.appendChild(c);
   });
 
-  // center reset
-  train.style.transform="translateX(0)";
+  /* ENTER FROM RIGHT → STOP CENTER */
+  setTimeout(()=>{
+    train.style.transition="transform 1.5s ease-out";
+    train.style.transform="translateX(0)";
+  },100);
 }
 
+/* ADD WHEELS */
+function addWheels(el){
+  let w1=document.createElement("div");
+  w1.className="wheel w1";
+  let w2=document.createElement("div");
+  w2.className="wheel w2";
+  el.appendChild(w1);
+  el.appendChild(w2);
+}
+
+/* OPTIONS */
 function createOptions(opts){
   optionsDiv.innerHTML="";
   opts.forEach(o=>{
@@ -253,12 +287,13 @@ function createOptions(opts){
       document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
       d.classList.add("selected");
       selected=o;
-    }
+    };
 
     optionsDiv.appendChild(d);
   });
 }
 
+/* CHECK */
 function check(){
   if(selected==null)return;
 
@@ -266,15 +301,14 @@ function check(){
     new Audio("assets/correct.mp3").play();
     sun.innerText="😊";
 
-    train.style.transform="translateX(-120vw)";
+    /* EXIT LEFT */
+    train.style.transition="transform 2s linear";
+    train.style.transform="translateX(-140vw)";
 
     setTimeout(()=>{
       current++;
-      if(current>=levels.length){
-        showFinal();
-      }else{
-        load();
-      }
+      if(current>=levels.length) showFinal();
+      else load();
     },2000);
 
   }else{
@@ -285,25 +319,28 @@ function check(){
   }
 }
 
+/* LOAD LEVEL */
 function load(){
   selected=null;
   sun.innerText="😊";
+  train.style.transition="none";
+  train.style.transform="translateX(120vw)";
   createTrain(levels[current].nums);
   createOptions(levels[current].opt);
 }
 
+/* FINAL SCREEN */
 function showFinal(){
   document.body.innerHTML=`
   <div class="final">
     <h1>🎉 Great Job 🎉</h1>
     <div class="track"></div>
-    <div class="loopTrain" id="loopTrain"></div>
-  </div>
-  `;
+    <div id="loopTrain" class="loopTrain"></div>
+  </div>`;
 
   const loop=document.getElementById("loopTrain");
 
-  function makeLoopTrain(){
+  function makeTrain(){
     loop.innerHTML="";
 
     let engine=document.createElement("div");
@@ -311,24 +348,18 @@ function showFinal(){
     let smoke=document.createElement("div");
     smoke.className="smoke";
     engine.appendChild(smoke);
+    addWheels(engine);
     loop.appendChild(engine);
 
     for(let i=0;i<5;i++){
       let c=document.createElement("div");
       c.className="comp c"+((i%5)+1);
-
-      let w1=document.createElement("div");
-      w1.className="wheel w1";
-      let w2=document.createElement("div");
-      w2.className="wheel w2";
-
-      c.appendChild(w1);
-      c.appendChild(w2);
+      addWheels(c);
       loop.appendChild(c);
     }
   }
 
-  makeLoopTrain();
+  makeTrain();
 }
 
 load();
