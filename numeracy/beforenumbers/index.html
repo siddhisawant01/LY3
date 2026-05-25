@@ -3,407 +3,351 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Before Numbers Game</title>
+<title>Before Number Game</title>
 
 <style>
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial;
-  touch-action:manipulation;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:sans-serif;
 }
 
 body{
-  overflow:hidden;
-  background: linear-gradient(#63c6ff 45%, #6fe36f 55%);
+    overflow:hidden;
+    background:#6ec6ff;
 }
 
-/* SCREEN */
+/* MAIN SCREEN */
 .screen{
-  width:100vw;
-  height:100vh;
-  display:none;
-}
-.active{
-  display:flex;
-  flex-direction:column;
-}
-
-/* SPLASH */
-#splash{
-  justify-content:center;
-  align-items:center;
-  background:#fff;
-}
-#splash img{
-  width:40vmin;
+    width:100vw;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
 }
 
 /* HEADER */
 .header{
-  text-align:center;
-  font-size:3vmin;
-  font-weight:bold;
-  padding:1vmin;
-  color:#083c8c;
+    text-align:center;
+    font-size:2.5vmax;
+    font-weight:bold;
+    padding:10px;
 }
 
-/* GAME AREA */
+/* JUNGLE BG */
 .game-area{
-  flex:1;
-  position:relative;
+    flex:1;
+    position:relative;
+    background:linear-gradient(#6ec6ff 60%, #2ecc71 60%);
 }
 
 /* SUN */
 .sun{
-  position:absolute;
-  top:2%;
-  left:2%;
-  font-size:8vmin;
+    position:absolute;
+    left:20px;
+    top:20px;
+    font-size:3vmax;
 }
 
-/* TRACK (REAL LOOK) */
+/* TRACK */
 .track{
-  position:absolute;
-  bottom:28%;
-  width:100%;
-  height:4vmin;
-  background:#5d4037;
+    position:absolute;
+    bottom:18%;
+    width:100%;
+    height:60px;
+    background:
+    repeating-linear-gradient(
+        90deg,
+        #5d4037 0px,
+        #5d4037 20px,
+        #8d6e63 20px,
+        #8d6e63 40px
+    );
 }
-
 .track::before{
-  content:'';
-  position:absolute;
-  width:100%;
-  height:100%;
-  background: repeating-linear-gradient(
-    to right,
-    #8d6e63 0 4vmin,
-    #5d4037 4vmin 6vmin
-  );
+    content:"";
+    position:absolute;
+    top:20px;
+    width:100%;
+    height:8px;
+    background:#3e2723;
 }
 
 /* TRAIN */
 .train{
-  position:absolute;
-  bottom:32%;
-  display:flex;
-  align-items:flex-end;
-  gap:1.5vmin;
-  transform:translateX(120%);
-  transition:transform 1.2s linear;
+    position:absolute;
+    bottom:25%;
+    display:flex;
+    align-items:flex-end;
+    transition:transform 2s linear;
 }
 
 /* ENGINE */
 .engine{
-  width:18vmin;
-  height:14vmin;
-  background:#1565c0;
-  border-radius:2vmin;
-  position:relative;
+    width:120px;
+    height:90px;
+    background:#1976d2;
+    border-radius:12px;
+    position:relative;
 }
 
-/* FRONT */
+/* MOTORMAN */
+.motorman{
+    position:absolute;
+    top:-20px;
+    left:40px;
+    font-size:22px;
+    animation:wave 1s infinite alternate;
+}
+@keyframes wave{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(20deg);}
+}
+
+/* CHIMNEY */
 .engine::before{
-  content:'';
-  position:absolute;
-  width:5vmin;
-  height:8vmin;
-  background:#ff3d00;
-  left:-4vmin;
-  top:3vmin;
-  border-radius:2vmin;
-}
-
-/* WINDOW */
-.engine::after{
-  content:'';
-  position:absolute;
-  width:6vmin;
-  height:5vmin;
-  background:#bbdefb;
-  top:2vmin;
-  left:4vmin;
-  border-radius:1vmin;
-}
-
-/* SMOKE */
-.smoke{
-  position:absolute;
-  width:2vmin;
-  height:2vmin;
-  background:#ccc;
-  border-radius:50%;
-  top:-3vmin;
-  left:4vmin;
-  animation:smoke 1s infinite;
-}
-
-@keyframes smoke{
-  0%{transform:translateY(0);opacity:1}
-  100%{transform:translateY(-5vmin);opacity:0}
+    content:"";
+    position:absolute;
+    left:-15px;
+    top:20px;
+    width:20px;
+    height:40px;
+    background:red;
+    border-radius:5px;
 }
 
 /* COMPARTMENTS */
 .comp{
-  width:16vmin;
-  height:13vmin;
-  border-radius:2vmin;
-  position:relative;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+    width:110px;
+    height:90px;
+    border-radius:12px;
+    margin-left:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:2vmax;
+    font-weight:bold;
+    position:relative;
 }
-
-/* COLORS */
-.c1{background:#ffd54f;}
-.c2{background:#66bb6a;}
-.c3{background:#ffb74d;}
-.c4{background:#9575cd;}
-.c5{background:#f06292;}
 
 /* WINDOW */
 .window{
-  width:10vmin;
-  height:7vmin;
-  background:#fff;
-  border-radius:1vmin;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:4vmin;
-  font-weight:bold;
+    width:70%;
+    height:60%;
+    background:white;
+    border-radius:8px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
+
+/* COLORS */
+.c1{background:#f4d03f;}
+.c2{background:#58d68d;}
+.c3{background:#f5b041;}
+.c4{background:#af7ac5;}
+.c5{background:#ec7063;}
 
 /* WHEELS */
 .wheel{
-  position:absolute;
-  bottom:-2vmin;
-  width:3vmin;
-  height:3vmin;
-  background:black;
-  border-radius:50%;
+    width:22px;
+    height:22px;
+    background:black;
+    border-radius:50%;
+    position:absolute;
+    bottom:-12px;
 }
-.wheel.left{left:2vmin;}
-.wheel.right{right:2vmin;}
+.w1{left:15px;}
+.w2{right:15px;}
 
 /* OPTIONS */
 .options{
-  position:absolute;
-  bottom:5%;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:3vmin;
+    position:absolute;
+    bottom:3%;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    gap:40px;
+}
+.opt{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:white;
+    border:4px solid #333;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:2vmax;
 }
 
-.option{
-  width:14vmin;
-  height:14vmin;
-  border-radius:50%;
-  background:#fff;
-  border:5px solid #333;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:5vmin;
-  font-weight:bold;
+/* SELECT */
+.selected{
+    background:yellow;
 }
 
-.option.selected{
-  border:7px solid #ff4081;
-  transform:scale(1.1);
+/* SMOKE */
+.smoke{
+    position:absolute;
+    left:-10px;
+    top:-10px;
+    width:15px;
+    height:15px;
+    background:white;
+    border-radius:50%;
+    opacity:0;
+}
+.smoke.show{
+    animation:smoke 1s infinite;
+}
+@keyframes smoke{
+    0%{opacity:1; transform:translateY(0);}
+    100%{opacity:0; transform:translateY(-40px);}
 }
 
-/* SHAKE */
-@keyframes shake{
-  0%{transform:translateX(0)}
-  50%{transform:translateX(10px)}
-  100%{transform:translateX(0)}
-}
-.shake{
-  animation:shake 0.4s;
-}
-
-/* VICTORY */
-#victory{
-  justify-content:center;
-  align-items:center;
-  font-size:6vmin;
-  color:green;
-  position:relative;
+/* FINAL */
+.final{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:4vmax;
+    height:100%;
 }
 
-/* FINAL TRAIN */
-.final-train{
-  position:absolute;
-  bottom:32%;
-  display:flex;
-  animation:move 6s linear infinite;
-}
-
-@keyframes move{
-  from{left:100%}
-  to{left:-120%}
-}
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
-<div id="splash" class="screen active">
-  <img src="assets/innovine-logo.png">
-</div>
-
-<!-- GAME -->
-<div id="game" class="screen">
-
-  <div class="header">
-    Identify the before number from the given options
-  </div>
-
-  <div class="game-area">
-
-    <div id="sun" class="sun">🌞</div>
-
-    <div class="track"></div>
-
-    <div id="train" class="train">
-      <div class="engine">
-        <div class="smoke"></div>
-        <div class="wheel left"></div>
-        <div class="wheel right"></div>
-      </div>
-
-      <div class="comp c1">
-        <div class="window" id="w1">_</div>
-        <div class="wheel left"></div>
-        <div class="wheel right"></div>
-      </div>
-
-      <div class="comp c2"><div class="window" id="w2"></div><div class="wheel left"></div><div class="wheel right"></div></div>
-      <div class="comp c3"><div class="window" id="w3"></div><div class="wheel left"></div><div class="wheel right"></div></div>
-      <div class="comp c4"><div class="window" id="w4"></div><div class="wheel left"></div><div class="wheel right"></div></div>
-      <div class="comp c5"><div class="window" id="w5"></div><div class="wheel left"></div><div class="wheel right"></div></div>
-    </div>
-
-  </div>
-
-  <div class="options" id="options"></div>
-
-</div>
-
-<!-- VICTORY -->
-<div id="victory" class="screen">
-  🎉 Great Job! 🎉
-
-  <div class="track"></div>
-
-  <div class="final-train">
-    <div class="engine"><div class="smoke"></div></div>
-    <div class="comp c1"></div>
-    <div class="comp c2"></div>
-    <div class="comp c3"></div>
-    <div class="comp c4"></div>
-    <div class="comp c5"></div>
-  </div>
-</div>
+<div id="app"></div>
 
 <script>
-const correctSound=new Audio('assets/correct.mp3');
-const wrongSound=new Audio('assets/wrong.mp3');
 
-const slides=[
-{nums:['_',18,19,20,21],options:[15,14,17],correct:17},
-{nums:['_',21,22,23,24],options:[25,20,19],correct:20},
-{nums:['_',26,27,28,29],options:[25,22,12],correct:25},
-{nums:['_',18,19,20,21],options:[15,14,17],correct:17},
-{nums:['_',12,13,14,15],options:[15,14,11],correct:11}
+const data=[
+{nums:["_",18,19,20,21], opts:[15,14,17], ans:17},
+{nums:["_",21,22,23,24], opts:[25,20,19], ans:20},
+{nums:["_",26,27,28,29], opts:[25,22,12], ans:25},
+{nums:["_",18,19,20,21], opts:[15,14,17], ans:17},
+{nums:["_",12,13,14,15], opts:[15,14,11], ans:11},
 ];
 
-let current=0,selected=null;
+let slide=0;
+let selected=null;
+
+function render(){
+
+if(slide>=data.length){
+document.getElementById("app").innerHTML=`
+<div class="screen">
+<div class="final">🎉 Great Job 🎉</div>
+
+<div class="track"></div>
+
+<div class="train" id="finalTrain" style="transform:translateX(100vw)">
+<div class="engine">
+<div class="motorman">👋</div>
+<div class="wheel w1"></div>
+<div class="wheel w2"></div>
+</div>
+
+${[1,2,3,4,5].map(()=>`
+<div class="comp c1">
+<div class="window"></div>
+<div class="wheel w1"></div>
+<div class="wheel w2"></div>
+</div>`).join("")}
+</div>
+</div>`;
 
 setTimeout(()=>{
-show('game');
-loadSlide();
-},2000);
+document.getElementById("finalTrain").style.transform="translateX(-120vw)";
+},100);
 
-function show(id){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
+return;
 }
 
-function loadSlide(){
-selected=null;
-let d=slides[current];
+const d=data[slide];
 
-w1.innerText='_';
-w2.innerText=d.nums[1];
-w3.innerText=d.nums[2];
-w4.innerText=d.nums[3];
-w5.innerText=d.nums[4];
+document.getElementById("app").innerHTML=`
+<div class="screen">
 
-options.innerHTML='';
+<div class="header">
+Identify the before number from the given options
+</div>
 
-d.options.forEach(n=>{
-let div=document.createElement('div');
-div.className='option';
-div.innerText=n;
+<div class="game-area">
 
-div.onclick=()=>{
-document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
-div.classList.add('selected');
-selected=n;
-};
+<div class="sun" id="sun">😊</div>
 
-options.appendChild(div);
-});
+<div class="track"></div>
 
-sun.innerText='🌞';
+<div class="train" id="train" style="transform:translateX(100vw)">
 
-/* ENTER FROM RIGHT */
-train.style.transition='none';
-train.style.transform='translateX(120%)';
-train.offsetHeight;
+<div class="engine">
+<div class="motorman">👋</div>
+<div class="wheel w1"></div>
+<div class="wheel w2"></div>
+<div class="smoke" id="smoke"></div>
+</div>
 
-train.style.transition='transform 1s linear';
-train.style.transform='translateX(0)';
+${d.nums.map((n,i)=>`
+<div class="comp c${i+1}" onclick="submitAns()">
+<div class="window">${n}</div>
+<div class="wheel w1"></div>
+<div class="wheel w2"></div>
+</div>`).join("")}
+
+</div>
+
+<div class="options">
+${d.opts.map(o=>`
+<div class="opt" onclick="selectOpt(this,${o})">${o}</div>
+`).join("")}
+</div>
+
+</div>
+</div>
+`;
+
+/* CENTER STOP */
+setTimeout(()=>{
+document.getElementById("train").style.transform="translateX(0)";
+},100);
+
 }
 
-w1.onclick=()=>{
-if(selected===null)return;
+/* SELECT */
+function selectOpt(el,val){
+document.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected"));
+el.classList.add("selected");
+selected=val;
+}
 
-let d=slides[current];
+/* SUBMIT */
+function submitAns(){
+if(selected===null) return;
 
-if(selected===d.correct){
-correctSound.play();
-sun.innerText='😄';
+if(selected===data[slide].ans){
+
+document.getElementById("sun").textContent="😄";
+document.getElementById("smoke").classList.add("show");
 
 /* EXIT LEFT */
-train.style.transform='translateX(-150%)';
+document.getElementById("train").style.transform="translateX(-120vw)";
 
 setTimeout(()=>{
-current++;
-if(current>=slides.length){
-show('victory');
-}else{
-loadSlide();
-}
-},1200);
-
-}else{
-wrongSound.play();
-sun.innerText='😢';
-
-train.classList.add('shake');
-setTimeout(()=>train.classList.remove('shake'),400);
-
+slide++;
 selected=null;
-document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+render();
+},2000);
+
+}else{
+document.getElementById("sun").textContent="😢";
 }
-};
+}
+
+render();
+
 </script>
 
 </body>
