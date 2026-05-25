@@ -6,12 +6,7 @@
 <title>Before Number Game</title>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 
 body{
   height:100vh;
@@ -37,7 +32,7 @@ body{
   font-size:clamp(24px,5vw,40px);
 }
 
-/* GAME LAYOUT */
+/* GAME */
 .game{
   flex:1;
   display:flex;
@@ -59,22 +54,17 @@ body{
   bottom:5vh;
   width:100%;
   height:8vh;
-  background:repeating-linear-gradient(
-    90deg,
-    #5d4037 0 30px,
-    #8d6e63 30px 60px
-  );
+  background:repeating-linear-gradient(90deg,#5d4037 0 30px,#8d6e63 30px 60px);
 }
-.track:before,
-.track:after{
+.track:before,.track:after{
   content:"";
   position:absolute;
   width:100%;
   height:5px;
   background:#3e2723;
 }
-.track:before{ top:20%; }
-.track:after{ bottom:20%; }
+.track:before{top:20%;}
+.track:after{bottom:20%;}
 
 /* TRAIN */
 .train{
@@ -183,33 +173,7 @@ body{
   font-size:clamp(16px,4vw,26px);
   border:3px solid #444;
 }
-
-.opt.selected{
-  border:5px solid green;
-}
-
-/* FINAL */
-.final{
-  height:100vh;
-  background:#b3e5fc;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-
-.loopTrain{
-  position:absolute;
-  bottom:12vh;
-  display:flex;
-  gap:2vw;
-  animation:loop 10s linear infinite;
-}
-
-@keyframes loop{
-  0%{transform:translateX(120vw);}
-  100%{transform:translateX(-140vw);}
-}
+.opt.selected{border:5px solid green;}
 </style>
 </head>
 
@@ -240,6 +204,16 @@ let current=0,selected=null;
 const train=document.getElementById("train");
 const optionsDiv=document.getElementById("options");
 const sun=document.getElementById("sun");
+
+/* 🔊 SOUND (FIX FOR MOBILE) */
+const correctSound = new Audio("assets/correct.mp3");
+const wrongSound = new Audio("assets/wrong.mp3");
+
+/* unlock audio for iOS */
+document.body.addEventListener("click", () => {
+  correctSound.play().then(()=>correctSound.pause()).catch(()=>{});
+  wrongSound.play().then(()=>wrongSound.pause()).catch(()=>{});
+}, { once:true });
 
 function addWheels(el){
   let w1=document.createElement("div");
@@ -303,7 +277,12 @@ function createOptions(opts){
 }
 
 function check(){
+  if(selected==null)return;
+
   if(selected===levels[current].ans){
+    correctSound.currentTime=0;
+    correctSound.play();
+
     sun.innerText="😊";
 
     train.style.transition="transform 2s linear";
@@ -311,11 +290,14 @@ function check(){
 
     setTimeout(()=>{
       current++;
-      if(current>=levels.length) showFinal();
+      if(current>=levels.length) location.reload();
       else load();
     },2000);
 
   }else{
+    wrongSound.currentTime=0;
+    wrongSound.play();
+
     sun.innerText="😢";
     selected=null;
     document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
@@ -329,33 +311,6 @@ function load(){
   train.style.transform="translateX(120vw)";
   createTrain(levels[current].nums);
   createOptions(levels[current].opt);
-}
-
-function showFinal(){
-  document.body.innerHTML=`
-  <div class="final">
-    <h1>🎉 Great Job 🎉</h1>
-    <div class="track"></div>
-    <div id="loopTrain" class="loopTrain"></div>
-  </div>`;
-
-  const loop=document.getElementById("loopTrain");
-
-  function makeTrain(){
-    let engine=document.createElement("div");
-    engine.className="engine";
-    addWheels(engine);
-    loop.appendChild(engine);
-
-    for(let i=0;i<5;i++){
-      let c=document.createElement("div");
-      c.className="comp c"+((i%5)+1);
-      addWheels(c);
-      loop.appendChild(c);
-    }
-  }
-
-  makeTrain();
 }
 
 load();
