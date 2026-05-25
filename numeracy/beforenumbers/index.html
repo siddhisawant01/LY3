@@ -6,149 +6,143 @@
 <title>Before Numbers Game</title>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
   font-family: Arial;
   touch-action: manipulation;
 }
 
-body {
-  overflow: hidden;
-  background: linear-gradient(#87CEEB, #b6e388);
+body{
+  overflow:hidden;
+  background: linear-gradient(#5ecbff, #8fdc6a);
 }
 
 /* ---------- SCREEN ---------- */
-.screen {
-  width: 100vw;
-  height: 100vh;
-  display: none;
+.screen{
+  width:100vw;
+  height:100vh;
+  display:none;
 }
-
-.active {
-  display: flex;
-  flex-direction: column;
+.active{
+  display:flex;
+  flex-direction:column;
 }
 
 /* ---------- SPLASH ---------- */
-#splash {
-  justify-content: center;
-  align-items: center;
-  background: white;
+#splash{
+  justify-content:center;
+  align-items:center;
+  background:#fff;
 }
-
-#splash img {
-  width: 40vmin;
+#splash img{
+  width:40vmin;
 }
 
 /* ---------- HEADER ---------- */
-.header {
-  text-align: center;
-  font-size: 3vmin;
-  font-weight: bold;
-  padding: 1vmin;
+.header{
+  text-align:center;
+  font-size:3vmin;
+  font-weight:bold;
+  padding:1vmin;
 }
 
 /* ---------- GAME AREA ---------- */
-.game-area {
-  flex: 1;
-  position: relative;
+.game-area{
+  flex:1;
+  position:relative;
 }
 
-/* ---------- TRAIN IMAGE ---------- */
-.train-container {
-  position: absolute;
-  width: 90%;
-  left: 5%;
-  top: 25%;
+/* ---------- TRAIN ---------- */
+.train{
+  position:absolute;
+  width:95%;
+  left:2.5%;
+  top:30%;
   transition: transform 1.2s ease;
 }
-
-.train-img {
-  width: 100%;
+.train img{
+  width:100%;
 }
 
-/* ---------- NUMBER POSITIONS ---------- */
-.num {
-  position: absolute;
-  top: 45%;
-  transform: translate(-50%, -50%);
-  font-size: 3vmin;
-  font-weight: bold;
+/* ---------- NUMBER OVERLAY ---------- */
+.num{
+  position:absolute;
+  top:48%;
+  transform:translate(-50%,-50%);
+  font-size:3.5vmin;
+  font-weight:bold;
 }
 
-/* Adjust positions based on your train image */
-.n1 { left: 28%; } /* underscore box */
-.n2 { left: 41%; }
-.n3 { left: 52%; }
-.n4 { left: 63%; }
-.n5 { left: 74%; }
+/* Adjust if needed */
+.n1{ left:34%; }
+.n2{ left:46%; }
+.n3{ left:57%; }
+.n4{ left:68%; }
+.n5{ left:79%; }
 
 /* ---------- SUN ---------- */
-.sun {
-  position: absolute;
-  top: 2%;
-  right: 2%;
-  font-size: 6vmin;
+.sun{
+  position:absolute;
+  top:2%;
+  right:2%;
+  font-size:6vmin;
 }
 
 /* ---------- OPTIONS ---------- */
-.options {
-  display: flex;
-  justify-content: center;
-  gap: 3vmin;
-  padding: 2vmin;
+.options{
+  display:flex;
+  justify-content:center;
+  gap:3vmin;
+  padding:2vmin;
 }
 
-.option {
-  width: 12vmin;
-  height: 12vmin;
-  border-radius: 50%;
-  background: white;
-  border: 4px solid #444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4vmin;
-  font-weight: bold;
+.option{
+  width:12vmin;
+  height:12vmin;
+  border-radius:50%;
+  background:#fff;
+  border:4px solid #333;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:4vmin;
+  font-weight:bold;
 }
 
-.option.selected {
-  border: 6px solid #ff4081;
-  transform: scale(1.1);
+.option.selected{
+  border:6px solid #ff4081;
+  transform:scale(1.1);
 }
 
 /* ---------- SHAKE ---------- */
-@keyframes shake {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(10px); }
-  100% { transform: translateX(0); }
+@keyframes shake{
+  0%{transform:translateX(0)}
+  50%{transform:translateX(10px)}
+  100%{transform:translateX(0)}
 }
-
-.shake {
-  animation: shake 0.4s;
+.shake{
+  animation:shake 0.4s;
 }
 
 /* ---------- VICTORY ---------- */
-#victory {
-  justify-content: center;
-  align-items: center;
-  font-size: 6vmin;
-  color: green;
+#victory{
+  justify-content:center;
+  align-items:center;
+  font-size:6vmin;
+  color:green;
 }
 
 /* ---------- CONFETTI ---------- */
-.confetti {
-  position: absolute;
-  width: 1vmin;
-  height: 1vmin;
-  background: red;
-  animation: fall 2s linear infinite;
+.confetti{
+  position:absolute;
+  width:1vmin;
+  height:1vmin;
+  animation:fall 2s linear infinite;
 }
-
-@keyframes fall {
-  to { transform: translateY(100vh); }
+@keyframes fall{
+  to{transform:translateY(100vh)}
 }
 </style>
 </head>
@@ -171,10 +165,9 @@ body {
 
     <div id="sun" class="sun">😊</div>
 
-    <div id="train" class="train-container">
-      <img src="assets/train.png" class="train-img">
+    <div id="train" class="train">
+      <img src="assets/train.png">
 
-      <!-- Numbers overlay -->
       <div class="num n1" id="n1">_</div>
       <div class="num n2" id="n2"></div>
       <div class="num n3" id="n3"></div>
@@ -208,60 +201,62 @@ const slides = [
 let current = 0;
 let selected = null;
 
+/* START */
 setTimeout(()=>{
   show('game');
   loadSlide();
 },2000);
 
+/* SCREEN SWITCH */
 function show(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
+/* LOAD SLIDE */
 function loadSlide(){
   selected = null;
 
-  const data = slides[current];
+  const d = slides[current];
 
-  document.getElementById('n1').innerText = '_';
-  document.getElementById('n2').innerText = data.nums[1];
-  document.getElementById('n3').innerText = data.nums[2];
-  document.getElementById('n4').innerText = data.nums[3];
-  document.getElementById('n5').innerText = data.nums[4];
+  n1.innerText = "_";
+  n2.innerText = d.nums[1];
+  n3.innerText = d.nums[2];
+  n4.innerText = d.nums[3];
+  n5.innerText = d.nums[4];
 
-  const optionsBox = document.getElementById('options');
-  optionsBox.innerHTML = '';
+  options.innerHTML = '';
 
-  data.options.forEach(n=>{
+  d.options.forEach(num=>{
     const div = document.createElement('div');
     div.className = 'option';
-    div.innerText = n;
+    div.innerText = num;
 
     div.onclick = ()=>{
       document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
       div.classList.add('selected');
-      selected = n;
+      selected = num;
     };
 
-    optionsBox.appendChild(div);
+    options.appendChild(div);
   });
 
-  document.getElementById('sun').innerText = '😊';
+  sun.innerText = '😊';
 
-  // RESET TRAIN POSITION (fix reverse bug)
-  document.getElementById('train').style.transform = 'translateX(0)';
+  // reset position (fix reverse bug)
+  train.style.transform = 'translateX(0)';
 }
 
-function checkAnswer(){
+/* CHECK ANSWER */
+n1.onclick = ()=>{
   if(selected === null) return;
 
-  const data = slides[current];
+  const d = slides[current];
 
-  if(selected === data.correct){
+  if(selected === d.correct){
     correctSound.play();
-    document.getElementById('sun').innerText = '😄';
+    sun.innerText = '😄';
 
-    const train = document.getElementById('train');
     train.style.transform = 'translateX(-120%)';
 
     setTimeout(()=>{
@@ -275,24 +270,22 @@ function checkAnswer(){
 
   } else {
     wrongSound.play();
-    document.getElementById('sun').innerText = '😢';
+    sun.innerText = '😢';
 
-    const train = document.getElementById('train');
     train.classList.add('shake');
     setTimeout(()=>train.classList.remove('shake'),400);
 
     selected = null;
     document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
   }
-}
+};
 
-// CLICK TARGET
-document.getElementById('n1').onclick = checkAnswer;
-
+/* VICTORY */
 function showVictory(){
   show('victory');
-  for(let i=0;i<50;i++){
-    const c = document.createElement('div');
+
+  for(let i=0;i<60;i++){
+    let c = document.createElement('div');
     c.className='confetti';
     c.style.left=Math.random()*100+'vw';
     c.style.background=`hsl(${Math.random()*360},100%,50%)`;
