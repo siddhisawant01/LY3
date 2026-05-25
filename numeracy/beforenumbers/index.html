@@ -2,140 +2,117 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Before Number Game</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+
 body{
   height:100vh;
+  display:flex;
+  flex-direction:column;
   overflow:hidden;
-  background:linear-gradient(#87CEEB 60%, #4CAF50 60%);
 }
 
 /* HEADER */
 .header{
-  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   font-weight:bold;
+  font-size:clamp(16px,2.5vw,26px);
   padding:10px;
+  text-align:center;
 }
+.sun{font-size:clamp(22px,4vw,36px);}
 
-/* SUN */
-.sun{
-  position:absolute;
-  top:10px;
-  left:10px;
-  font-size:40px;
-}
-
-/* GAME AREA */
-.game{
-  height:100%;
+/* GAME LAYOUT (IMPORTANT FIX) */
+.main{
+  flex:1;
   display:flex;
   flex-direction:column;
+  justify-content:space-between;
 }
 
 /* TRAIN AREA */
 .train-area{
-  flex:1;
+  flex:2;
   display:flex;
-  align-items:center;
+  align-items:flex-end;
   justify-content:center;
   position:relative;
 }
 
 /* TRACK */
 .track{
-  height:80px;
   position:absolute;
-  bottom:90px;
+  bottom:10%;
   width:100%;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #5d4037 0 40px,
-      #8d6e63 40px 80px
-    );
+  height:40px;
+  background:repeating-linear-gradient(90deg,#5d4037 0 30px,#8d6e63 30px 60px);
 }
-.track:before{
+.track:before,.track:after{
   content:"";
   position:absolute;
-  top:20px;
   width:100%;
-  height:6px;
+  height:4px;
   background:#3e2723;
 }
-.track:after{
-  content:"";
-  position:absolute;
-  top:50px;
-  width:100%;
-  height:6px;
-  background:#3e2723;
-}
+.track:before{top:8px;}
+.track:after{bottom:8px;}
 
 /* TRAIN */
 .train{
   display:flex;
+  gap:6px;
   align-items:flex-end;
-  gap:12px;
   position:absolute;
-  bottom:130px; /* PERFECT ALIGN ON TRACK */
-  transform:translateX(120vw); /* start from right */
+  bottom:14%;
+  transform:translateX(120%);
 }
 
 /* ENGINE */
 .engine{
-  width:130px;height:110px;
+  width:clamp(50px,12vw,90px);
+  height:clamp(50px,12vw,80px);
   background:#1976d2;
-  border-radius:20px;
+  border-radius:10px;
   position:relative;
 }
-
-/* engine window */
 .engine:before{
   content:"";
   position:absolute;
-  width:40px;height:35px;
+  width:30%;
+  height:30%;
   background:#90caf9;
-  top:20px;left:25px;
-  border-radius:8px;
-}
-
-/* smoke */
-.smoke{
-  position:absolute;
-  width:15px;height:15px;
-  background:#ddd;
-  border-radius:50%;
-  top:-15px;
-  left:90px;
-  animation:smoke 1.5s infinite;
-}
-@keyframes smoke{
-  0%{transform:translateY(0);opacity:1;}
-  100%{transform:translateY(-60px);opacity:0;}
+  top:20%;
+  left:15%;
+  border-radius:5px;
 }
 
 /* COMPARTMENTS */
 .comp{
-  width:110px;height:110px;
-  border-radius:20px;
+  width:clamp(50px,12vw,90px);
+  height:clamp(50px,12vw,80px);
+  border-radius:10px;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   position:relative;
 }
 
-/* windows */
+/* WINDOW */
 .window{
-  width:70px;height:60px;
+  width:70%;
+  height:60%;
   background:#fff;
-  border-radius:12px;
+  border-radius:8px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:28px;
+  font-size:clamp(14px,3vw,22px);
   font-weight:bold;
 }
 
@@ -146,101 +123,90 @@ body{
 .c4{background:#ab47bc;}
 .c5{background:#ec407a;}
 
-/* WHEELS (ENGINE + COMPARTMENTS) */
+/* WHEELS */
 .wheel{
   position:absolute;
-  bottom:-20px;
-  width:20px;height:20px;
+  bottom:-8px;
+  width:10px;height:10px;
   background:#000;
   border-radius:50%;
 }
-.w1{left:20px;}
-.w2{right:20px;}
+.w1{left:8px;}
+.w2{right:8px;}
 
-/* OPTIONS */
+/* OPTIONS AREA (FIXED VISIBILITY) */
 .options{
+  flex:1;
   display:flex;
   justify-content:center;
-  gap:20px;
-  padding:20px;
+  align-items:center;
+  gap:12px;
+  padding:10px;
 }
+
+/* OPTION BUTTON */
 .opt{
-  width:80px;height:80px;
+  width:clamp(50px,15vw,80px);
+  height:clamp(50px,15vw,80px);
   border-radius:50%;
   background:#eee;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:26px;
+  font-size:clamp(16px,3vw,22px);
   border:3px solid #444;
 }
-.opt.selected{border:5px solid green;}
-
-/* FINAL SCREEN */
-.final{
-  background:#b3e5fc;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-.loopTrain{
-  position:absolute;
-  bottom:130px;
-  display:flex;
-  gap:12px;
-  animation:loop 10s linear infinite;
-}
-@keyframes loop{
-  0%{transform:translateX(120vw);}
-  100%{transform:translateX(-140vw);}
-}
+.opt.selected{border:4px solid green;}
 </style>
 </head>
 
 <body>
 
-<div id="game" class="game">
-<div class="header">Identify the before number from the given options</div>
-<div class="sun" id="sun">😊</div>
-
-<div class="train-area">
-  <div class="track"></div>
-  <div id="train" class="train"></div>
+<div class="header">
+  <div class="sun" id="sun">😊</div>
+  Identify the before number from the given options
 </div>
 
-<div class="options" id="options"></div>
+<div class="main">
+
+  <div class="train-area">
+    <div class="track"></div>
+    <div id="train" class="train"></div>
+  </div>
+
+  <div id="options" class="options"></div>
+
 </div>
 
 <script>
 const levels=[
 {nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
 {nums:["_",21,22,23,24],opt:[25,20,19],ans:20},
-{nums:["_",26,27,28,29],opt:[25,22,12],ans:25},
-{nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
-{nums:["_",12,13,14,15],opt:[15,14,11],ans:11}
+{nums:["_",26,27,28,29],opt:[25,22,12],ans:25}
 ];
 
 let current=0,selected=null;
 
-const train=document.getElementById("train");
-const optionsDiv=document.getElementById("options");
-const sun=document.getElementById("sun");
+/* SOUND */
+const ctx=new (window.AudioContext||window.webkitAudioContext)();
+function sound(type){
+  const o=ctx.createOscillator();
+  const g=ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.frequency.value = type==="correct"?600:200;
+  o.start();
+  g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.5);
+}
 
 /* CREATE TRAIN */
 function createTrain(data){
-  train.innerHTML="";
+  const t=document.getElementById("train");
+  t.innerHTML="";
 
-  let engine=document.createElement("div");
-  engine.className="engine";
-
-  let smoke=document.createElement("div");
-  smoke.className="smoke";
-  engine.appendChild(smoke);
-
-  addWheels(engine);
-  train.appendChild(engine);
+  let e=document.createElement("div");
+  e.className="engine";
+  wheels(e);
+  t.appendChild(e);
 
   data.forEach((n,i)=>{
     let c=document.createElement("div");
@@ -251,45 +217,44 @@ function createTrain(data){
     w.innerText=n;
 
     c.appendChild(w);
-    addWheels(c);
+    wheels(c);
 
-    if(i===0) c.onclick=check;
+    if(i===0)c.onclick=check;
 
-    train.appendChild(c);
+    t.appendChild(c);
   });
 
-  /* ENTER FROM RIGHT → STOP CENTER */
   setTimeout(()=>{
-    train.style.transition="transform 1.5s ease-out";
-    train.style.transform="translateX(0)";
+    t.style.transition="1s";
+    t.style.transform="translateX(0)";
   },100);
 }
 
-/* ADD WHEELS */
-function addWheels(el){
+function wheels(el){
   let w1=document.createElement("div");
   w1.className="wheel w1";
   let w2=document.createElement("div");
   w2.className="wheel w2";
-  el.appendChild(w1);
-  el.appendChild(w2);
+  el.appendChild(w1); el.appendChild(w2);
 }
 
 /* OPTIONS */
-function createOptions(opts){
-  optionsDiv.innerHTML="";
-  opts.forEach(o=>{
-    let d=document.createElement("div");
-    d.className="opt";
-    d.innerText=o;
+function createOptions(arr){
+  const d=document.getElementById("options");
+  d.innerHTML="";
 
-    d.onclick=()=>{
+  arr.forEach(v=>{
+    let o=document.createElement("div");
+    o.className="opt";
+    o.innerText=v;
+
+    o.onclick=()=>{
       document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
-      d.classList.add("selected");
-      selected=o;
+      o.classList.add("selected");
+      selected=v;
     };
 
-    optionsDiv.appendChild(d);
+    d.appendChild(o);
   });
 }
 
@@ -297,69 +262,45 @@ function createOptions(opts){
 function check(){
   if(selected==null)return;
 
-  if(selected===levels[current].ans){
-    new Audio("assets/correct.mp3").play();
-    sun.innerText="😊";
+  const t=document.getElementById("train");
 
-    /* EXIT LEFT */
-    train.style.transition="transform 2s linear";
-    train.style.transform="translateX(-140vw)";
+  if(selected===levels[current].ans){
+    sound("correct");
+    document.getElementById("sun").innerText="😊";
+
+    /* fill answer */
+    t.children[1].querySelector(".window").innerText=selected;
+
+    setTimeout(()=>{
+      t.style.transition="2s linear";
+      t.style.transform="translateX(-120%)";
+    },400);
 
     setTimeout(()=>{
       current++;
-      if(current>=levels.length) showFinal();
-      else load();
-    },2000);
+      if(current>=levels.length){
+        alert("🎉 Great Job!");
+        location.reload();
+      }else load();
+    },2200);
 
   }else{
-    new Audio("assets/wrong.mp3").play();
-    sun.innerText="😢";
-    selected=null;
-    document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
+    sound("wrong");
+    document.getElementById("sun").innerText="😢";
   }
 }
 
-/* LOAD LEVEL */
+/* LOAD */
 function load(){
   selected=null;
-  sun.innerText="😊";
-  train.style.transition="none";
-  train.style.transform="translateX(120vw)";
+  document.getElementById("sun").innerText="😊";
+
+  const t=document.getElementById("train");
+  t.style.transition="none";
+  t.style.transform="translateX(120%)";
+
   createTrain(levels[current].nums);
   createOptions(levels[current].opt);
-}
-
-/* FINAL SCREEN */
-function showFinal(){
-  document.body.innerHTML=`
-  <div class="final">
-    <h1>🎉 Great Job 🎉</h1>
-    <div class="track"></div>
-    <div id="loopTrain" class="loopTrain"></div>
-  </div>`;
-
-  const loop=document.getElementById("loopTrain");
-
-  function makeTrain(){
-    loop.innerHTML="";
-
-    let engine=document.createElement("div");
-    engine.className="engine";
-    let smoke=document.createElement("div");
-    smoke.className="smoke";
-    engine.appendChild(smoke);
-    addWheels(engine);
-    loop.appendChild(engine);
-
-    for(let i=0;i<5;i++){
-      let c=document.createElement("div");
-      c.className="comp c"+((i%5)+1);
-      addWheels(c);
-      loop.appendChild(c);
-    }
-  }
-
-  makeTrain();
 }
 
 load();
