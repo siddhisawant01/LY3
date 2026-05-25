@@ -2,132 +2,141 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Before Number Train Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Before Number Game</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 body{
-height:100vh;
-overflow:hidden;
-background:linear-gradient(#6ed0ff,#3ccf7a);
-display:flex;
-flex-direction:column;
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(#87CEEB 60%, #4CAF50 60%);
 }
 
-/* TITLE */
-.title{
-text-align:center;
-font-size:clamp(18px,3.5vw,32px);
-font-weight:bold;
-padding:10px;
+/* HEADER */
+.header{
+  text-align:center;
+  font-weight:bold;
+  padding:10px;
 }
 
 /* SUN */
 .sun{
-position:absolute;
-top:10px;
-left:10px;
-font-size:40px;
+  position:absolute;
+  top:10px;
+  left:10px;
+  font-size:40px;
 }
 
 /* GAME AREA */
 .game{
-flex:1;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-position:relative;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TRAIN AREA */
+.train-area{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
 }
 
 /* TRACK */
 .track{
-position:absolute;
-bottom:25%;
-width:100%;
-height:60px;
-background:repeating-linear-gradient(
-90deg,
-#5d4037 0px,
-#5d4037 20px,
-#8d6e63 20px,
-#8d6e63 40px
-);
-border-top:6px solid #3e2723;
-border-bottom:6px solid #3e2723;
+  height:80px;
+  position:absolute;
+  bottom:90px;
+  width:100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #5d4037 0 40px,
+      #8d6e63 40px 80px
+    );
+}
+.track:before{
+  content:"";
+  position:absolute;
+  top:20px;
+  width:100%;
+  height:6px;
+  background:#3e2723;
+}
+.track:after{
+  content:"";
+  position:absolute;
+  top:50px;
+  width:100%;
+  height:6px;
+  background:#3e2723;
 }
 
 /* TRAIN */
 .train{
-position:absolute;
-bottom:32%;
-display:flex;
-align-items:flex-end;
-gap:12px;
-transform:translateX(100vw);
+  display:flex;
+  align-items:flex-end;
+  gap:12px;
+  position:absolute;
+  bottom:130px; /* PERFECT ALIGN ON TRACK */
+  transform:translateX(120vw); /* start from right */
 }
 
 /* ENGINE */
 .engine{
-width:100px;
-height:80px;
-background:#e53935;
-border-radius:15px;
-position:relative;
+  width:130px;height:110px;
+  background:#1976d2;
+  border-radius:20px;
+  position:relative;
 }
 
-.engine::before{
-content:"";
-position:absolute;
-top:15px;
-left:20px;
-width:30px;
-height:30px;
-background:#90caf9;
-border-radius:5px;
+/* engine window */
+.engine:before{
+  content:"";
+  position:absolute;
+  width:40px;height:35px;
+  background:#90caf9;
+  top:20px;left:25px;
+  border-radius:8px;
 }
 
-/* SMOKE */
+/* smoke */
 .smoke{
-position:absolute;
-top:-20px;
-left:20px;
-width:15px;
-height:15px;
-background:#ccc;
-border-radius:50%;
-animation:smoke 1s infinite;
+  position:absolute;
+  width:15px;height:15px;
+  background:#ddd;
+  border-radius:50%;
+  top:-15px;
+  left:90px;
+  animation:smoke 1.5s infinite;
 }
-
 @keyframes smoke{
-0%{opacity:0; transform:translateY(0);}
-100%{opacity:1; transform:translateY(-30px);}
+  0%{transform:translateY(0);opacity:1;}
+  100%{transform:translateY(-60px);opacity:0;}
 }
 
 /* COMPARTMENTS */
-.box{
-width:90px;
-height:80px;
-border-radius:15px;
-display:flex;
-justify-content:center;
-align-items:center;
-position:relative;
+.comp{
+  width:110px;height:110px;
+  border-radius:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
 }
 
-.box span{
-background:white;
-padding:10px 15px;
-border-radius:8px;
-font-size:clamp(14px,2vw,22px);
-font-weight:bold;
+/* windows */
+.window{
+  width:70px;height:60px;
+  background:#fff;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:bold;
 }
 
 /* COLORS */
@@ -137,159 +146,223 @@ font-weight:bold;
 .c4{background:#ab47bc;}
 .c5{background:#ec407a;}
 
-/* WHEELS */
+/* WHEELS (ENGINE + COMPARTMENTS) */
 .wheel{
-position:absolute;
-bottom:-10px;
-width:15px;
-height:15px;
-background:black;
-border-radius:50%;
+  position:absolute;
+  bottom:-20px;
+  width:20px;height:20px;
+  background:#000;
+  border-radius:50%;
 }
-
-.w1{left:10px;}
-.w2{right:10px;}
+.w1{left:20px;}
+.w2{right:20px;}
 
 /* OPTIONS */
 .options{
-position:absolute;
-bottom:5%;
-display:flex;
-gap:20px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  padding:20px;
 }
-
-.option{
-width:60px;
-height:60px;
-border-radius:50%;
-background:white;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:18px;
-border:3px solid #444;
+.opt{
+  width:80px;height:80px;
+  border-radius:50%;
+  background:#eee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  border:3px solid #444;
 }
+.opt.selected{border:5px solid green;}
 
-/* ANIMATION STATES */
-.center{
-animation:enterCenter 2s forwards;
+/* FINAL SCREEN */
+.final{
+  background:#b3e5fc;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
 }
-
-@keyframes enterCenter{
-0%{transform:translateX(100vw);}
-100%{transform:translateX(0);}
+.loopTrain{
+  position:absolute;
+  bottom:130px;
+  display:flex;
+  gap:12px;
+  animation:loop 10s linear infinite;
 }
-
-.exit{
-animation:exitLeft 2s forwards;
-}
-
-@keyframes exitLeft{
-0%{transform:translateX(0);}
-100%{transform:translateX(-120vw);}
-}
-
-/* FINAL LOOP */
-.loop{
-animation:loopMove 6s linear infinite;
-}
-
-@keyframes loopMove{
-0%{transform:translateX(100vw);}
-100%{transform:translateX(-120vw);}
-}
-
-/* RESPONSIVE */
-@media(max-width:600px){
-.box{width:65px;height:60px;}
-.engine{width:70px;height:60px;}
-.option{width:50px;height:50px;}
+@keyframes loop{
+  0%{transform:translateX(120vw);}
+  100%{transform:translateX(-140vw);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="title">Identify the before number from the given options</div>
+<div id="game" class="game">
+<div class="header">Identify the before number from the given options</div>
 <div class="sun" id="sun">😊</div>
 
-<div class="game">
-
-<div class="track"></div>
-
-<div class="train center" id="train">
-
-<div class="engine">
-<div class="smoke"></div>
-<div class="wheel w1"></div>
-<div class="wheel w2"></div>
+<div class="train-area">
+  <div class="track"></div>
+  <div id="train" class="train"></div>
 </div>
 
-<div class="box c1"><span id="q">_</span><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c2"><span>18</span><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c3"><span>19</span><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c4"><span>20</span><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c5"><span>21</span><div class="wheel w1"></div><div class="wheel w2"></div></div>
-
-</div>
-
-<div class="options">
-<div class="option" onclick="check(15)">15</div>
-<div class="option" onclick="check(14)">14</div>
-<div class="option" onclick="check(17)">17</div>
-</div>
-
+<div class="options" id="options"></div>
 </div>
 
 <script>
+const levels=[
+{nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
+{nums:["_",21,22,23,24],opt:[25,20,19],ans:20},
+{nums:["_",26,27,28,29],opt:[25,22,12],ans:25},
+{nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
+{nums:["_",12,13,14,15],opt:[15,14,11],ans:11}
+];
 
-let answer = 17;
+let current=0,selected=null;
 
-function check(num){
+const train=document.getElementById("train");
+const optionsDiv=document.getElementById("options");
+const sun=document.getElementById("sun");
 
-if(num === answer){
-document.getElementById("sun").textContent="😄";
+/* CREATE TRAIN */
+function createTrain(data){
+  train.innerHTML="";
 
-let train = document.getElementById("train");
+  let engine=document.createElement("div");
+  engine.className="engine";
 
-train.classList.remove("center");
-train.classList.add("exit");
+  let smoke=document.createElement("div");
+  smoke.className="smoke";
+  engine.appendChild(smoke);
 
-setTimeout(showEnd,2000);
+  addWheels(engine);
+  train.appendChild(engine);
 
-}else{
-document.getElementById("sun").textContent="😢";
+  data.forEach((n,i)=>{
+    let c=document.createElement("div");
+    c.className="comp c"+(i+1);
+
+    let w=document.createElement("div");
+    w.className="window";
+    w.innerText=n;
+
+    c.appendChild(w);
+    addWheels(c);
+
+    if(i===0) c.onclick=check;
+
+    train.appendChild(c);
+  });
+
+  /* ENTER FROM RIGHT → STOP CENTER */
+  setTimeout(()=>{
+    train.style.transition="transform 1.5s ease-out";
+    train.style.transform="translateX(0)";
+  },100);
 }
+
+/* ADD WHEELS */
+function addWheels(el){
+  let w1=document.createElement("div");
+  w1.className="wheel w1";
+  let w2=document.createElement("div");
+  w2.className="wheel w2";
+  el.appendChild(w1);
+  el.appendChild(w2);
 }
 
-function showEnd(){
+/* OPTIONS */
+function createOptions(opts){
+  optionsDiv.innerHTML="";
+  opts.forEach(o=>{
+    let d=document.createElement("div");
+    d.className="opt";
+    d.innerText=o;
 
-document.body.innerHTML = `
-<div class="title">🎉 Great Job 🎉</div>
-<div class="sun">😄</div>
+    d.onclick=()=>{
+      document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
+      d.classList.add("selected");
+      selected=o;
+    };
 
-<div class="game">
-<div class="track"></div>
-
-<div class="train loop">
-
-<div class="engine">
-<div class="smoke"></div>
-<div class="wheel w1"></div>
-<div class="wheel w2"></div>
-</div>
-
-<div class="box c1"><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c2"><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c3"><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c4"><div class="wheel w1"></div><div class="wheel w2"></div></div>
-<div class="box c5"><div class="wheel w1"></div><div class="wheel w2"></div></div>
-
-</div>
-</div>
-`;
+    optionsDiv.appendChild(d);
+  });
 }
 
+/* CHECK */
+function check(){
+  if(selected==null)return;
+
+  if(selected===levels[current].ans){
+    new Audio("assets/correct.mp3").play();
+    sun.innerText="😊";
+
+    /* EXIT LEFT */
+    train.style.transition="transform 2s linear";
+    train.style.transform="translateX(-140vw)";
+
+    setTimeout(()=>{
+      current++;
+      if(current>=levels.length) showFinal();
+      else load();
+    },2000);
+
+  }else{
+    new Audio("assets/wrong.mp3").play();
+    sun.innerText="😢";
+    selected=null;
+    document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
+  }
+}
+
+/* LOAD LEVEL */
+function load(){
+  selected=null;
+  sun.innerText="😊";
+  train.style.transition="none";
+  train.style.transform="translateX(120vw)";
+  createTrain(levels[current].nums);
+  createOptions(levels[current].opt);
+}
+
+/* FINAL SCREEN */
+function showFinal(){
+  document.body.innerHTML=`
+  <div class="final">
+    <h1>🎉 Great Job 🎉</h1>
+    <div class="track"></div>
+    <div id="loopTrain" class="loopTrain"></div>
+  </div>`;
+
+  const loop=document.getElementById("loopTrain");
+
+  function makeTrain(){
+    loop.innerHTML="";
+
+    let engine=document.createElement("div");
+    engine.className="engine";
+    let smoke=document.createElement("div");
+    smoke.className="smoke";
+    engine.appendChild(smoke);
+    addWheels(engine);
+    loop.appendChild(engine);
+
+    for(let i=0;i<5;i++){
+      let c=document.createElement("div");
+      c.className="comp c"+((i%5)+1);
+      addWheels(c);
+      loop.appendChild(c);
+    }
+  }
+
+  makeTrain();
+}
+
+load();
 </script>
 
 </body>
