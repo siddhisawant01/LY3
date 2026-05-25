@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Before Numbers Game</title>
+<title>Numeracy Game</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+
 body{
-    font-family:'Comic Sans MS';
     overflow:hidden;
+    font-family:'Comic Sans MS';
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#87CEEB;
+    background:#000;
 }
 
-/* CONTAINER */
 #game{
     width:100vw;
     height:56.25vw;
@@ -24,41 +24,7 @@ body{
     max-width:177.78vh;
     position:relative;
     overflow:hidden;
-    border-radius:10px;
 }
-
-/* BACKGROUND */
-#game::before{
-    content:"";
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:linear-gradient(#87CEEB 60%, #6ecf68 60%);
-    z-index:-2;
-}
-
-/* TREES */
-.tree{
-    position:absolute;
-    bottom:12%;
-    width:6vw;
-    height:8vw;
-    background:green;
-    border-radius:50%;
-}
-.tree::after{
-    content:"";
-    position:absolute;
-    bottom:-2vw;
-    left:40%;
-    width:1vw;
-    height:3vw;
-    background:#5a3e1b;
-}
-.tree1{left:5%;}
-.tree2{left:15%;}
-.tree3{right:10%;}
-.tree4{right:20%;}
 
 /* SPLASH */
 #splash{
@@ -69,34 +35,36 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-}
-#splash img{
-    max-width:40%;
+    z-index:100;
 }
 
-/* HEADER */
+#splash img{
+    width:35%;
+}
+
+/* GAME BACKGROUND */
+#gameplay{
+    width:100%;
+    height:100%;
+    display:none;
+    background:url('assets/bg-slide2.png') no-repeat center/cover;
+}
+
+/* HEADING */
 h1{
     position:absolute;
-    top:3%;
+    top:2%;
     width:100%;
     text-align:center;
     font-size:2.5vw;
-    color:#003049;
-}
-
-/* TRACK */
-.track{
-    position:absolute;
-    bottom:15%;
-    width:100%;
-    height:1vw;
-    background:#5c3d2e;
+    color:#1d3557;
+    font-weight:bold;
 }
 
 /* TRAIN */
 #train{
     position:absolute;
-    bottom:16%;
+    bottom:18%;
     display:flex;
     align-items:flex-end;
     left:120%;
@@ -107,7 +75,8 @@ h1{
     animation:enter 1.5s forwards;
 }
 @keyframes enter{
-    to{left:10%;}
+    from{left:120%;}
+    to{left:5%;}
 }
 
 /* EXIT */
@@ -115,22 +84,8 @@ h1{
     animation:exit 1.5s forwards;
 }
 @keyframes exit{
+    from{left:5%;}
     to{left:-120%;}
-}
-
-/* COMPARTMENTS */
-.comp{
-    width:10vw;
-    height:8vw;
-    background:#fff;
-    border:0.4vw solid #333;
-    margin-right:0.5vw;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:3vw;
-    font-weight:bold;
-    border-radius:1vw;
 }
 
 /* ENGINE */
@@ -139,29 +94,46 @@ h1{
     height:10vw;
     background:#0077b6;
     border-radius:2vw;
-    border:0.4vw solid #333;
+    border:0.4vw solid #222;
+}
+
+/* COMPARTMENTS */
+.comp{
+    width:10vw;
+    height:8vw;
+    background:#fff;
+    border:0.4vw solid #222;
+    margin-left:0.5vw;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:3vw;
+    font-weight:bold;
+    border-radius:1vw;
 }
 
 /* OPTIONS */
 #options{
     position:absolute;
-    bottom:3%;
+    bottom:5%;
     width:100%;
     display:flex;
     justify-content:center;
     gap:3vw;
 }
+
 .option{
     width:8vw;
     height:8vw;
     border-radius:50%;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     font-size:3vw;
     color:#fff;
     cursor:pointer;
 }
+
 .option:nth-child(1){background:#00b4d8;}
 .option:nth-child(2){background:#ff4d6d;}
 .option:nth-child(3){background:#70e000;}
@@ -173,22 +145,21 @@ h1{
 
 <div id="game">
 
+<!-- SPLASH -->
 <div id="splash">
-    <img src="assets/innovine_logo.png" onerror="this.style.display='none';this.parentNode.innerHTML='<h1>INNOVINE</h1>'">
+    <img src="assets/innovine_logo.png"
+         onerror="this.style.display='none';this.parentNode.innerHTML='<h1>INNOVINE</h1>'">
 </div>
+
+<!-- GAME -->
+<div id="gameplay">
 
 <h1>Identify the missing number from the given options</h1>
 
-<div class="tree tree1"></div>
-<div class="tree tree2"></div>
-<div class="tree tree3"></div>
-<div class="tree tree4"></div>
-
-<div class="track"></div>
-
 <div id="train"></div>
-
 <div id="options"></div>
+
+</div>
 
 </div>
 
@@ -196,14 +167,13 @@ h1{
 
 const data = [
 {
-nums:["_","18","19","20","21"],
-opt:["15","14","17"],
-ans:"17"
+nums:["18","19","20","21"],
+missing:"17",
+options:["15","14","17"]
 }
 ];
 
 let current=0;
-let selected=null;
 
 const train=document.getElementById("train");
 const options=document.getElementById("options");
@@ -211,18 +181,30 @@ const options=document.getElementById("options");
 /* START */
 setTimeout(()=>{
 document.getElementById("splash").style.display="none";
+document.getElementById("gameplay").style.display="block";
 loadGame();
 },2000);
 
+/* LOAD GAME */
 function loadGame(){
 
 train.innerHTML="";
 options.innerHTML="";
-selected=null;
 
 let d=data[current];
 
-/* CREATE COMPARTMENTS (LEFT SIDE) */
+/* ENGINE FIRST (CORRECT DIRECTION) */
+let engine=document.createElement("div");
+engine.className="engine";
+train.appendChild(engine);
+
+/* MISSING BOX */
+let miss=document.createElement("div");
+miss.className="comp";
+miss.innerText="_";
+train.appendChild(miss);
+
+/* OTHER NUMBERS */
 d.nums.forEach(n=>{
 let div=document.createElement("div");
 div.className="comp";
@@ -230,50 +212,34 @@ div.innerText=n;
 train.appendChild(div);
 });
 
-/* ENGINE ON RIGHT */
-let engine=document.createElement("div");
-engine.className="engine";
-train.appendChild(engine);
-
-/* ENTER ANIMATION */
+/* ENTER */
 train.className="enter";
 
 /* OPTIONS */
-d.opt.forEach(o=>{
+d.options.forEach(o=>{
 let btn=document.createElement("div");
 btn.className="option";
 btn.innerText=o;
 
 btn.onclick=()=>{
-selected=o;
-checkAnswer();
-};
+if(o===d.missing){
 
-options.appendChild(btn);
-});
-}
-
-/* CHECK */
-function checkAnswer(){
-if(selected===data[current].ans){
+miss.innerText=o;
 
 train.classList.remove("enter");
 train.classList.add("exit");
 
 setTimeout(()=>{
-current++;
-if(current<data.length){
-train.className="";
-train.style.left="120%";
-loadGame();
-}else{
 alert("Great Job!");
-}
 },1500);
 
 }else{
 alert("Try Again!");
 }
+};
+
+options.appendChild(btn);
+});
 }
 
 </script>
