@@ -9,6 +9,7 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 body{overflow:hidden;}
 
+/* SCREEN */
 .screen{
     width:100vw;
     height:100vh;
@@ -44,21 +45,21 @@ body{overflow:hidden;}
     position:absolute;
     bottom:18%;
     width:100%;
-    height:60px;
+    height:70px;
     background:repeating-linear-gradient(
         90deg,
-        #5d4037 0px,
-        #5d4037 20px,
-        #8d6e63 20px,
-        #8d6e63 40px
+        #6d4c41 0px,
+        #6d4c41 30px,
+        #a1887f 30px,
+        #a1887f 60px
     );
 }
 .track::before{
     content:"";
     position:absolute;
-    top:20px;
+    top:25px;
     width:100%;
-    height:8px;
+    height:10px;
     background:#3e2723;
 }
 
@@ -67,7 +68,7 @@ body{overflow:hidden;}
     position:absolute;
     bottom:25%;
     left:50%;
-    transform:translateX(150vw); /* START RIGHT */
+    transform:translateX(150vw);
     display:flex;
     align-items:flex-end;
     transition:transform 2s ease;
@@ -75,42 +76,37 @@ body{overflow:hidden;}
 
 /* ENGINE */
 .engine{
-    width:130px;
-    height:100px;
-    background:#1976d2;
+    width:140px;
+    height:110px;
+    background:#e53935;
     border-radius:12px;
     position:relative;
 }
 
-/* MOTORMAN */
+/* MOTORMAN IMAGE */
 .motorman{
     position:absolute;
-    top:-20px;
-    left:40px;
-    font-size:24px;
-    animation:wave 1s infinite alternate;
-}
-@keyframes wave{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(20deg);}
+    top:-25px;
+    left:35px;
+    width:60px;
 }
 
 /* CHIMNEY */
 .engine::before{
     content:"";
     position:absolute;
-    left:-15px;
-    top:20px;
-    width:20px;
-    height:40px;
-    background:red;
+    left:-18px;
+    top:25px;
+    width:25px;
+    height:45px;
+    background:#c62828;
     border-radius:5px;
 }
 
 /* COMPARTMENTS */
 .comp{
     width:120px;
-    height:100px;
+    height:110px;
     border-radius:12px;
     margin-left:10px;
     display:flex;
@@ -126,27 +122,27 @@ body{overflow:hidden;}
     width:70%;
     height:60%;
     background:white;
-    border-radius:8px;
+    border-radius:10px;
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
 /* COLORS */
-.c1{background:#f4d03f;}
-.c2{background:#58d68d;}
-.c3{background:#f5b041;}
-.c4{background:#af7ac5;}
-.c5{background:#ec7063;}
+.c1{background:#fdd835;}
+.c2{background:#66bb6a;}
+.c3{background:#ffa726;}
+.c4{background:#ab47bc;}
+.c5{background:#ec407a;}
 
 /* WHEELS */
 .wheel{
-    width:24px;
-    height:24px;
+    width:26px;
+    height:26px;
     background:black;
     border-radius:50%;
     position:absolute;
-    bottom:-12px;
+    bottom:-14px;
 }
 .w1{left:15px;}
 .w2{right:15px;}
@@ -229,9 +225,9 @@ document.getElementById("app").innerHTML=`
 
 <div class="track"></div>
 
-<div class="train" id="finalTrain">
+<div class="train" id="finalTrain" style="transition:transform 6s linear;">
 <div class="engine">
-<div class="motorman">👋</div>
+<img src="/mnt/data/b422615b-f38d-4c24-8b9f-848d1f68f9f9.png" class="motorman">
 <div class="wheel w1"></div>
 <div class="wheel w2"></div>
 </div>
@@ -247,7 +243,7 @@ ${[1,2,3,4,5].map(()=>`
 
 setTimeout(()=>{
 document.getElementById("finalTrain").style.transform="translateX(-150vw)";
-},500);
+},200);
 
 return;
 }
@@ -270,7 +266,7 @@ Identify the before number from the given options
 <div class="train" id="train">
 
 <div class="engine">
-<div class="motorman">👋</div>
+<img src="/mnt/data/b422615b-f38d-4c24-8b9f-848d1f68f9f9.png" class="motorman">
 <div class="wheel w1"></div>
 <div class="wheel w2"></div>
 <div class="smoke" id="smoke"></div>
@@ -295,7 +291,7 @@ ${d.opts.map(o=>`
 </div>
 `;
 
-/* MOVE TO EXACT CENTER */
+/* CENTER STOP */
 setTimeout(()=>{
 document.getElementById("train").style.transform="translateX(-50%)";
 },100);
@@ -318,7 +314,7 @@ if(selected===data[slide].ans){
 document.getElementById("sun").textContent="😄";
 document.getElementById("smoke").classList.add("show");
 
-/* EXIT LEFT */
+/* EXIT */
 document.getElementById("train").style.transform="translateX(-150vw)";
 
 setTimeout(()=>{
