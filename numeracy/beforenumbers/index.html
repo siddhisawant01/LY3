@@ -10,9 +10,43 @@
 
 body{
   height:100vh;
+  overflow:hidden;
+}
+
+/* ---------- SLIDES ---------- */
+.slide{
+  height:100vh;
   display:flex;
   flex-direction:column;
-  overflow:hidden;
+  justify-content:center;
+  align-items:center;
+}
+
+/* ---------- INTRO SLIDE ---------- */
+#intro{
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4,#fbc2eb);
+}
+
+.logo{
+  width:150px;
+  margin-bottom:20px;
+}
+
+.startBtn{
+  padding:12px 25px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  background:#ff9800;
+  color:#fff;
+}
+
+/* ---------- GAME ---------- */
+#game{
+  display:none;
+  flex-direction:column;
+  height:100vh;
+  background:linear-gradient(#87CEEB 65%, #4CAF50 65%);
 }
 
 /* HEADER */
@@ -24,11 +58,10 @@ body{
   font-weight:bold;
   font-size:clamp(16px,2.5vw,26px);
   padding:10px;
-  text-align:center;
 }
-.sun{font-size:clamp(22px,4vw,36px);}
+.sun{font-size:30px;}
 
-/* GAME LAYOUT (IMPORTANT FIX) */
+/* MAIN LAYOUT */
 .main{
   flex:1;
   display:flex;
@@ -39,10 +72,10 @@ body{
 /* TRAIN AREA */
 .train-area{
   flex:2;
+  position:relative;
   display:flex;
   align-items:flex-end;
   justify-content:center;
-  position:relative;
 }
 
 /* TRACK */
@@ -67,7 +100,6 @@ body{
 .train{
   display:flex;
   gap:6px;
-  align-items:flex-end;
   position:absolute;
   bottom:14%;
   transform:translateX(120%);
@@ -75,8 +107,7 @@ body{
 
 /* ENGINE */
 .engine{
-  width:clamp(50px,12vw,90px);
-  height:clamp(50px,12vw,80px);
+  width:70px;height:60px;
   background:#1976d2;
   border-radius:10px;
   position:relative;
@@ -84,26 +115,36 @@ body{
 .engine:before{
   content:"";
   position:absolute;
-  width:30%;
-  height:30%;
+  width:20px;height:20px;
   background:#90caf9;
-  top:20%;
-  left:15%;
+  top:10px;left:10px;
   border-radius:5px;
+}
+
+/* SMOKE */
+.smoke{
+  position:absolute;
+  width:10px;height:10px;
+  background:#ddd;
+  border-radius:50%;
+  top:-10px;
+  left:50px;
+  animation:smoke 1.5s infinite;
+}
+@keyframes smoke{
+  0%{transform:translateY(0);opacity:1;}
+  100%{transform:translateY(-40px);opacity:0;}
 }
 
 /* COMPARTMENTS */
 .comp{
-  width:clamp(50px,12vw,90px);
-  height:clamp(50px,12vw,80px);
+  width:70px;height:60px;
   border-radius:10px;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   position:relative;
 }
-
-/* WINDOW */
 .window{
   width:70%;
   height:60%;
@@ -112,7 +153,6 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:clamp(14px,3vw,22px);
   font-weight:bold;
 }
 
@@ -134,68 +174,91 @@ body{
 .w1{left:8px;}
 .w2{right:8px;}
 
-/* OPTIONS AREA (FIXED VISIBILITY) */
+/* OPTIONS */
 .options{
   flex:1;
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:12px;
-  padding:10px;
+  gap:10px;
 }
-
-/* OPTION BUTTON */
 .opt{
-  width:clamp(50px,15vw,80px);
-  height:clamp(50px,15vw,80px);
+  width:60px;height:60px;
   border-radius:50%;
   background:#eee;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:clamp(16px,3vw,22px);
+  font-size:20px;
   border:3px solid #444;
 }
 .opt.selected{border:4px solid green;}
+
+/* ---------- FINAL ---------- */
+#final{
+  display:none;
+  background:linear-gradient(#81d4fa,#a5d6a7);
+}
+
+.loopTrain{
+  position:absolute;
+  bottom:20%;
+  display:flex;
+  gap:6px;
+  animation:move 8s linear infinite;
+}
+@keyframes move{
+  0%{transform:translateX(120vw);}
+  100%{transform:translateX(-140vw);}
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div class="sun" id="sun">😊</div>
-  Identify the before number from the given options
+<!-- ---------- INTRO ---------- -->
+<div id="intro" class="slide">
+  <img src="assets/innovine.png" class="logo">
+  <button class="startBtn" onclick="startGame()">Start Game</button>
 </div>
 
-<div class="main">
-
-  <div class="train-area">
-    <div class="track"></div>
-    <div id="train" class="train"></div>
+<!-- ---------- GAME ---------- -->
+<div id="game">
+  <div class="header">
+    <div class="sun" id="sun">😊</div>
+    Identify the before number from the given options
   </div>
 
-  <div id="options" class="options"></div>
+  <div class="main">
+    <div class="train-area">
+      <div class="track"></div>
+      <div id="train" class="train"></div>
+    </div>
 
+    <div id="options" class="options"></div>
+  </div>
+</div>
+
+<!-- ---------- FINAL ---------- -->
+<div id="final" class="slide">
+  <h1>🎉 Great Job 🎉</h1>
+  <div class="track"></div>
+  <div id="loopTrain" class="loopTrain"></div>
 </div>
 
 <script>
 const levels=[
 {nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
-{nums:["_",21,22,23,24],opt:[25,20,19],ans:20},
-{nums:["_",26,27,28,29],opt:[25,22,12],ans:25}
+{nums:["_",21,22,23,24],opt:[25,20,19],ans:20}
 ];
 
 let current=0,selected=null;
 
-/* SOUND */
-const ctx=new (window.AudioContext||window.webkitAudioContext)();
-function sound(type){
-  const o=ctx.createOscillator();
-  const g=ctx.createGain();
-  o.connect(g); g.connect(ctx.destination);
-  o.frequency.value = type==="correct"?600:200;
-  o.start();
-  g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.5);
+/* START */
+function startGame(){
+  document.getElementById("intro").style.display="none";
+  document.getElementById("game").style.display="flex";
+  load();
 }
 
 /* CREATE TRAIN */
@@ -205,6 +268,9 @@ function createTrain(data){
 
   let e=document.createElement("div");
   e.className="engine";
+  let s=document.createElement("div");
+  s.className="smoke";
+  e.appendChild(s);
   wheels(e);
   t.appendChild(e);
 
@@ -265,27 +331,22 @@ function check(){
   const t=document.getElementById("train");
 
   if(selected===levels[current].ans){
-    sound("correct");
     document.getElementById("sun").innerText="😊";
 
-    /* fill answer */
     t.children[1].querySelector(".window").innerText=selected;
 
     setTimeout(()=>{
-      t.style.transition="2s linear";
       t.style.transform="translateX(-120%)";
-    },400);
+    },500);
 
     setTimeout(()=>{
       current++;
       if(current>=levels.length){
-        alert("🎉 Great Job!");
-        location.reload();
+        showFinal();
       }else load();
-    },2200);
+    },2000);
 
   }else{
-    sound("wrong");
     document.getElementById("sun").innerText="😢";
   }
 }
@@ -303,7 +364,28 @@ function load(){
   createOptions(levels[current].opt);
 }
 
-load();
+/* FINAL */
+function showFinal(){
+  document.getElementById("game").style.display="none";
+  document.getElementById("final").style.display="flex";
+
+  const loop=document.getElementById("loopTrain");
+
+  let e=document.createElement("div");
+  e.className="engine";
+  let s=document.createElement("div");
+  s.className="smoke";
+  e.appendChild(s);
+  wheels(e);
+  loop.appendChild(e);
+
+  for(let i=0;i<5;i++){
+    let c=document.createElement("div");
+    c.className="comp c"+((i%5)+1);
+    wheels(c);
+    loop.appendChild(c);
+  }
+}
 </script>
 
 </body>
