@@ -6,19 +6,9 @@
 <title>Before Number Game</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+body{overflow:hidden;}
 
-body{
-    overflow:hidden;
-    background:#6ec6ff;
-}
-
-/* MAIN SCREEN */
 .screen{
     width:100vw;
     height:100vh;
@@ -34,7 +24,7 @@ body{
     padding:10px;
 }
 
-/* JUNGLE BG */
+/* BG */
 .game-area{
     flex:1;
     position:relative;
@@ -55,8 +45,7 @@ body{
     bottom:18%;
     width:100%;
     height:60px;
-    background:
-    repeating-linear-gradient(
+    background:repeating-linear-gradient(
         90deg,
         #5d4037 0px,
         #5d4037 20px,
@@ -77,15 +66,17 @@ body{
 .train{
     position:absolute;
     bottom:25%;
+    left:50%;
+    transform:translateX(150vw); /* START RIGHT */
     display:flex;
     align-items:flex-end;
-    transition:transform 2s linear;
+    transition:transform 2s ease;
 }
 
 /* ENGINE */
 .engine{
-    width:120px;
-    height:90px;
+    width:130px;
+    height:100px;
     background:#1976d2;
     border-radius:12px;
     position:relative;
@@ -96,7 +87,7 @@ body{
     position:absolute;
     top:-20px;
     left:40px;
-    font-size:22px;
+    font-size:24px;
     animation:wave 1s infinite alternate;
 }
 @keyframes wave{
@@ -118,8 +109,8 @@ body{
 
 /* COMPARTMENTS */
 .comp{
-    width:110px;
-    height:90px;
+    width:120px;
+    height:100px;
     border-radius:12px;
     margin-left:10px;
     display:flex;
@@ -150,8 +141,8 @@ body{
 
 /* WHEELS */
 .wheel{
-    width:22px;
-    height:22px;
+    width:24px;
+    height:24px;
     background:black;
     border-radius:50%;
     position:absolute;
@@ -180,11 +171,7 @@ body{
     align-items:center;
     font-size:2vmax;
 }
-
-/* SELECT */
-.selected{
-    background:yellow;
-}
+.selected{background:yellow;}
 
 /* SMOKE */
 .smoke{
@@ -213,7 +200,6 @@ body{
     font-size:4vmax;
     height:100%;
 }
-
 </style>
 </head>
 
@@ -243,7 +229,7 @@ document.getElementById("app").innerHTML=`
 
 <div class="track"></div>
 
-<div class="train" id="finalTrain" style="transform:translateX(100vw)">
+<div class="train" id="finalTrain">
 <div class="engine">
 <div class="motorman">👋</div>
 <div class="wheel w1"></div>
@@ -260,8 +246,8 @@ ${[1,2,3,4,5].map(()=>`
 </div>`;
 
 setTimeout(()=>{
-document.getElementById("finalTrain").style.transform="translateX(-120vw)";
-},100);
+document.getElementById("finalTrain").style.transform="translateX(-150vw)";
+},500);
 
 return;
 }
@@ -281,7 +267,7 @@ Identify the before number from the given options
 
 <div class="track"></div>
 
-<div class="train" id="train" style="transform:translateX(100vw)">
+<div class="train" id="train">
 
 <div class="engine">
 <div class="motorman">👋</div>
@@ -309,9 +295,9 @@ ${d.opts.map(o=>`
 </div>
 `;
 
-/* CENTER STOP */
+/* MOVE TO EXACT CENTER */
 setTimeout(()=>{
-document.getElementById("train").style.transform="translateX(0)";
+document.getElementById("train").style.transform="translateX(-50%)";
 },100);
 
 }
@@ -333,7 +319,7 @@ document.getElementById("sun").textContent="😄";
 document.getElementById("smoke").classList.add("show");
 
 /* EXIT LEFT */
-document.getElementById("train").style.transform="translateX(-120vw)";
+document.getElementById("train").style.transform="translateX(-150vw)";
 
 setTimeout(()=>{
 slide++;
