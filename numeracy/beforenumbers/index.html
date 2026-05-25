@@ -3,117 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Before Number Game</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
-body{overflow:hidden;}
-
-.screen{
-    width:100vw;
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-}
+body{height:100vh;overflow:hidden;background:#87CEEB;}
+.game{display:flex;flex-direction:column;height:100vh;}
 
 .header{
-    text-align:center;
-    font-size:2.5vmax;
-    font-weight:bold;
-    padding:10px;
-}
-
-.game-area{
-    flex:1;
-    position:relative;
-    background:linear-gradient(#6ec6ff 60%, #2ecc71 60%);
+  text-align:center;
+  font-size:2.2vh;
+  font-weight:bold;
+  padding:10px;
 }
 
 .sun{
-    position:absolute;
-    left:20px;
-    top:20px;
-    font-size:3vmax;
+  position:absolute;
+  top:10px;
+  left:10px;
+  font-size:40px;
 }
 
 /* TRACK */
 .track{
-    position:absolute;
-    bottom:18%;
-    width:100%;
-    height:70px;
-    background:repeating-linear-gradient(
-        90deg,
-        #6d4c41 0px,
-        #6d4c41 30px,
-        #a1887f 30px,
-        #a1887f 60px
-    );
+  height:60px;
+  background:
+    repeating-linear-gradient(90deg,#5d4037 0 30px,#8d6e63 30px 60px);
+  position:relative;
 }
-.track::before{
-    content:"";
-    position:absolute;
-    top:25px;
-    width:100%;
-    height:10px;
-    background:#3e2723;
+.track:after{
+  content:"";
+  position:absolute;
+  top:20px;
+  width:100%;
+  height:6px;
+  background:#3e2723;
 }
 
 /* TRAIN */
+.train-wrap{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+
 .train{
-    position:absolute;
-    bottom:25%;
-    left:50%;
-    transform:translateX(150vw);
-    display:flex;
-    align-items:flex-end;
-    transition:transform 2s linear;
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  transition:transform 2s linear;
 }
 
 /* ENGINE */
 .engine{
-    width:140px;
-    height:110px;
-    background:#e53935;
-    border-radius:12px;
-    position:relative;
+  width:110px;height:90px;
+  background:#1976d2;
+  border-radius:15px;
+  position:relative;
 }
-.engine::before{
-    content:"";
-    position:absolute;
-    left:-18px;
-    top:25px;
-    width:25px;
-    height:45px;
-    background:#c62828;
-    border-radius:5px;
+.engine:before{
+  content:"";
+  position:absolute;
+  width:30px;height:30px;
+  background:#90caf9;
+  top:15px;left:20px;
+  border-radius:6px;
+}
+
+/* SMOKE */
+.smoke{
+  position:absolute;
+  width:12px;height:12px;
+  background:#ccc;
+  border-radius:50%;
+  top:-10px;
+  left:80px;
+  animation:smoke 1.5s infinite;
+}
+@keyframes smoke{
+  0%{transform:translateY(0);opacity:1;}
+  100%{transform:translateY(-50px);opacity:0;}
 }
 
 /* COMPARTMENTS */
 .comp{
-    width:120px;
-    height:110px;
-    border-radius:12px;
-    margin-left:10px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:2vmax;
-    font-weight:bold;
-    position:relative;
+  width:90px;height:90px;
+  border-radius:15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
 }
-
-.window{
-    width:70%;
-    height:60%;
-    background:white;
-    border-radius:10px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.comp .window{
+  width:60px;height:50px;
+  background:#fff;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  font-weight:bold;
 }
 
 /* COLORS */
-.c1{background:#fdd835;}
+.c1{background:#fbc02d;}
 .c2{background:#66bb6a;}
 .c3{background:#ffa726;}
 .c4{background:#ab47bc;}
@@ -121,209 +116,222 @@ body{overflow:hidden;}
 
 /* WHEELS */
 .wheel{
-    width:26px;
-    height:26px;
-    background:black;
-    border-radius:50%;
-    position:absolute;
-    bottom:-14px;
+  position:absolute;
+  bottom:-15px;
+  width:16px;height:16px;
+  background:#000;
+  border-radius:50%;
 }
 .w1{left:15px;}
 .w2{right:15px;}
 
 /* OPTIONS */
 .options{
-    position:absolute;
-    bottom:3%;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    gap:40px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  padding:15px;
 }
 .opt{
-    width:90px;
-    height:90px;
-    border-radius:50%;
-    background:white;
-    border:4px solid #333;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:2vmax;
+  width:70px;height:70px;
+  border-radius:50%;
+  background:#eee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  border:3px solid #444;
 }
-.selected{background:yellow;}
-
-/* SMOKE */
-.smoke{
-    position:absolute;
-    left:-10px;
-    top:-10px;
-    width:15px;
-    height:15px;
-    background:white;
-    border-radius:50%;
-    opacity:0;
-}
-.smoke.show{
-    animation:smoke 1s infinite;
-}
-@keyframes smoke{
-    0%{opacity:1; transform:translateY(0);}
-    100%{opacity:0; transform:translateY(-40px);}
-}
+.opt.selected{border:5px solid green;}
 
 /* FINAL */
 .final{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:4vmax;
-    height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  background:#b3e5fc;
+}
+.final h1{font-size:40px;margin-bottom:20px;}
+
+.loopTrain{
+  position:absolute;
+  bottom:60px;
+  display:flex;
+  animation:loop 8s linear infinite;
+}
+@keyframes loop{
+  0%{transform:translateX(100vw);}
+  100%{transform:translateX(-120vw);}
 }
 </style>
 </head>
 
 <body>
 
-<div id="app"></div>
+<div id="game" class="game">
 
-<script>
-
-const data=[
-{nums:["_",18,19,20,21], opts:[15,14,17], ans:17},
-{nums:["_",21,22,23,24], opts:[25,20,19], ans:20},
-{nums:["_",26,27,28,29], opts:[25,22,12], ans:25},
-{nums:["_",18,19,20,21], opts:[15,14,17], ans:17},
-{nums:["_",12,13,14,15], opts:[15,14,11], ans:11},
-];
-
-let slide=0;
-let selected=null;
-
-function render(){
-
-/* FINAL SCREEN */
-if(slide>=data.length){
-document.getElementById("app").innerHTML=`
-<div class="screen">
-<div class="final">🎉 Great Job 🎉</div>
-
-<div class="track"></div>
-
-<div class="train" id="loopTrain">
-
-<div class="engine">
-<div class="wheel w1"></div>
-<div class="wheel w2"></div>
-</div>
-
-${[1,2,3,4,5].map((_,i)=>`
-<div class="comp c${i+1}">
-<div class="window"></div>
-<div class="wheel w1"></div>
-<div class="wheel w2"></div>
-</div>`).join("")}
-
-</div>
-</div>`;
-
-/* LOOP TRAIN */
-function loopTrain(){
-let t=document.getElementById("loopTrain");
-t.style.transition="none";
-t.style.transform="translateX(150vw)";
-
-setTimeout(()=>{
-t.style.transition="transform 6s linear";
-t.style.transform="translateX(-150vw)";
-},100);
-}
-
-loopTrain();
-setInterval(loopTrain,6000);
-
-return;
-}
-
-/* GAME SCREEN */
-const d=data[slide];
-
-document.getElementById("app").innerHTML=`
-<div class="screen">
-
-<div class="header">
-Identify the before number from the given options
-</div>
-
-<div class="game-area">
-
+<div class="header">Identify the before number from the given options</div>
 <div class="sun" id="sun">😊</div>
 
+<div class="train-wrap">
+  <div id="train" class="train"></div>
+</div>
+
 <div class="track"></div>
 
-<div class="train" id="train">
-
-<div class="engine">
-<div class="wheel w1"></div>
-<div class="wheel w2"></div>
-<div class="smoke" id="smoke"></div>
-</div>
-
-${d.nums.map((n,i)=>`
-<div class="comp c${i+1}" onclick="submitAns()">
-<div class="window">${n}</div>
-<div class="wheel w1"></div>
-<div class="wheel w2"></div>
-</div>`).join("")}
+<div class="options" id="options"></div>
 
 </div>
 
-<div class="options">
-${d.opts.map(o=>`
-<div class="opt" onclick="selectOpt(this,${o})">${o}</div>
-`).join("")}
-</div>
+<script>
+const levels=[
+{nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
+{nums:["_",21,22,23,24],opt:[25,20,19],ans:20},
+{nums:["_",26,27,28,29],opt:[25,22,12],ans:25},
+{nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
+{nums:["_",12,13,14,15],opt:[15,14,11],ans:11}
+];
 
-</div>
-</div>
-`;
+let current=0,selected=null;
 
-/* CENTER */
-setTimeout(()=>{
-document.getElementById("train").style.transform="translateX(-50%)";
-},100);
+const train=document.getElementById("train");
+const optionsDiv=document.getElementById("options");
+const sun=document.getElementById("sun");
 
+function createTrain(data){
+  train.innerHTML="";
+  
+  // ENGINE
+  let engine=document.createElement("div");
+  engine.className="engine";
+  
+  let smoke=document.createElement("div");
+  smoke.className="smoke";
+  engine.appendChild(smoke);
+
+  train.appendChild(engine);
+
+  data.forEach((n,i)=>{
+    let comp=document.createElement("div");
+    comp.className="comp c"+(i+1);
+
+    let win=document.createElement("div");
+    win.className="window";
+    win.innerText=n;
+
+    comp.appendChild(win);
+
+    // wheels
+    let w1=document.createElement("div");
+    w1.className="wheel w1";
+    let w2=document.createElement("div");
+    w2.className="wheel w2";
+    comp.appendChild(w1);
+    comp.appendChild(w2);
+
+    if(i===0){
+      comp.onclick=check;
+    }
+
+    train.appendChild(comp);
+  });
+
+  // center reset
+  train.style.transform="translateX(0)";
 }
 
-function selectOpt(el,val){
-document.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected"));
-el.classList.add("selected");
-selected=val;
+function createOptions(opts){
+  optionsDiv.innerHTML="";
+  opts.forEach(o=>{
+    let d=document.createElement("div");
+    d.className="opt";
+    d.innerText=o;
+
+    d.onclick=()=>{
+      document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
+      d.classList.add("selected");
+      selected=o;
+    }
+
+    optionsDiv.appendChild(d);
+  });
 }
 
-function submitAns(){
-if(selected===null) return;
+function check(){
+  if(selected==null)return;
 
-if(selected===data[slide].ans){
+  if(selected===levels[current].ans){
+    new Audio("assets/correct.mp3").play();
+    sun.innerText="😊";
 
-document.getElementById("sun").textContent="😄";
-document.getElementById("smoke").classList.add("show");
+    train.style.transform="translateX(-120vw)";
 
-document.getElementById("train").style.transform="translateX(-150vw)";
+    setTimeout(()=>{
+      current++;
+      if(current>=levels.length){
+        showFinal();
+      }else{
+        load();
+      }
+    },2000);
 
-setTimeout(()=>{
-slide++;
-selected=null;
-render();
-},2000);
-
-}else{
-document.getElementById("sun").textContent="😢";
+  }else{
+    new Audio("assets/wrong.mp3").play();
+    sun.innerText="😢";
+    selected=null;
+    document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
+  }
 }
+
+function load(){
+  selected=null;
+  sun.innerText="😊";
+  createTrain(levels[current].nums);
+  createOptions(levels[current].opt);
 }
 
-render();
+function showFinal(){
+  document.body.innerHTML=`
+  <div class="final">
+    <h1>🎉 Great Job 🎉</h1>
+    <div class="track"></div>
+    <div class="loopTrain" id="loopTrain"></div>
+  </div>
+  `;
 
+  const loop=document.getElementById("loopTrain");
+
+  function makeLoopTrain(){
+    loop.innerHTML="";
+
+    let engine=document.createElement("div");
+    engine.className="engine";
+    let smoke=document.createElement("div");
+    smoke.className="smoke";
+    engine.appendChild(smoke);
+    loop.appendChild(engine);
+
+    for(let i=0;i<5;i++){
+      let c=document.createElement("div");
+      c.className="comp c"+((i%5)+1);
+
+      let w1=document.createElement("div");
+      w1.className="wheel w1";
+      let w2=document.createElement("div");
+      w2.className="wheel w2";
+
+      c.appendChild(w1);
+      c.appendChild(w2);
+      loop.appendChild(c);
+    }
+  }
+
+  makeLoopTrain();
+}
+
+load();
 </script>
 
 </body>
