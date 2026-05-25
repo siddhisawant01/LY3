@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Before Number Game</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
 body{overflow:hidden;}
 
-/* SCREEN */
 .screen{
     width:100vw;
     height:100vh;
@@ -17,7 +15,6 @@ body{overflow:hidden;}
     flex-direction:column;
 }
 
-/* HEADER */
 .header{
     text-align:center;
     font-size:2.5vmax;
@@ -25,14 +22,12 @@ body{overflow:hidden;}
     padding:10px;
 }
 
-/* BG */
 .game-area{
     flex:1;
     position:relative;
     background:linear-gradient(#6ec6ff 60%, #2ecc71 60%);
 }
 
-/* SUN */
 .sun{
     position:absolute;
     left:20px;
@@ -71,7 +66,7 @@ body{overflow:hidden;}
     transform:translateX(150vw);
     display:flex;
     align-items:flex-end;
-    transition:transform 2s ease;
+    transition:transform 2s linear;
 }
 
 /* ENGINE */
@@ -82,16 +77,6 @@ body{overflow:hidden;}
     border-radius:12px;
     position:relative;
 }
-
-/* MOTORMAN IMAGE */
-.motorman{
-    position:absolute;
-    top:-25px;
-    left:35px;
-    width:60px;
-}
-
-/* CHIMNEY */
 .engine::before{
     content:"";
     position:absolute;
@@ -117,7 +102,6 @@ body{overflow:hidden;}
     position:relative;
 }
 
-/* WINDOW */
 .window{
     width:70%;
     height:60%;
@@ -218,6 +202,7 @@ let selected=null;
 
 function render(){
 
+/* FINAL SCREEN */
 if(slide>=data.length){
 document.getElementById("app").innerHTML=`
 <div class="screen">
@@ -225,29 +210,42 @@ document.getElementById("app").innerHTML=`
 
 <div class="track"></div>
 
-<div class="train" id="finalTrain" style="transition:transform 6s linear;">
+<div class="train" id="loopTrain">
+
 <div class="engine">
-<img src="/mnt/data/b422615b-f38d-4c24-8b9f-848d1f68f9f9.png" class="motorman">
 <div class="wheel w1"></div>
 <div class="wheel w2"></div>
 </div>
 
-${[1,2,3,4,5].map(()=>`
-<div class="comp c1">
+${[1,2,3,4,5].map((_,i)=>`
+<div class="comp c${i+1}">
 <div class="window"></div>
 <div class="wheel w1"></div>
 <div class="wheel w2"></div>
 </div>`).join("")}
+
 </div>
 </div>`;
 
+/* LOOP TRAIN */
+function loopTrain(){
+let t=document.getElementById("loopTrain");
+t.style.transition="none";
+t.style.transform="translateX(150vw)";
+
 setTimeout(()=>{
-document.getElementById("finalTrain").style.transform="translateX(-150vw)";
-},200);
+t.style.transition="transform 6s linear";
+t.style.transform="translateX(-150vw)";
+},100);
+}
+
+loopTrain();
+setInterval(loopTrain,6000);
 
 return;
 }
 
+/* GAME SCREEN */
 const d=data[slide];
 
 document.getElementById("app").innerHTML=`
@@ -266,7 +264,6 @@ Identify the before number from the given options
 <div class="train" id="train">
 
 <div class="engine">
-<img src="/mnt/data/b422615b-f38d-4c24-8b9f-848d1f68f9f9.png" class="motorman">
 <div class="wheel w1"></div>
 <div class="wheel w2"></div>
 <div class="smoke" id="smoke"></div>
@@ -291,21 +288,19 @@ ${d.opts.map(o=>`
 </div>
 `;
 
-/* CENTER STOP */
+/* CENTER */
 setTimeout(()=>{
 document.getElementById("train").style.transform="translateX(-50%)";
 },100);
 
 }
 
-/* SELECT */
 function selectOpt(el,val){
 document.querySelectorAll(".opt").forEach(o=>o.classList.remove("selected"));
 el.classList.add("selected");
 selected=val;
 }
 
-/* SUBMIT */
 function submitAns(){
 if(selected===null) return;
 
@@ -314,7 +309,6 @@ if(selected===data[slide].ans){
 document.getElementById("sun").textContent="😄";
 document.getElementById("smoke").classList.add("show");
 
-/* EXIT */
 document.getElementById("train").style.transform="translateX(-150vw)";
 
 setTimeout(()=>{
