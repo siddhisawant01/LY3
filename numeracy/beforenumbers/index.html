@@ -7,6 +7,7 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+
 body{
   height:100vh;
   overflow:hidden;
@@ -17,20 +18,21 @@ body{
 .header{
   text-align:center;
   font-weight:bold;
-  padding:10px;
+  font-size:clamp(18px,3vw,28px);
+  padding:1vh;
 }
 
 /* SUN */
 .sun{
   position:absolute;
-  top:10px;
-  left:10px;
-  font-size:40px;
+  top:1vh;
+  left:2vw;
+  font-size:clamp(30px,5vw,50px);
 }
 
 /* GAME AREA */
 .game{
-  height:100%;
+  height:100vh;
   display:flex;
   flex-direction:column;
 }
@@ -46,49 +48,43 @@ body{
 
 /* TRACK */
 .track{
-  height:80px;
   position:absolute;
-  bottom:90px;
+  bottom:18vh;
   width:100%;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      #5d4037 0 40px,
-      #8d6e63 40px 80px
-    );
+  height:8vh;
+  background:repeating-linear-gradient(
+    90deg,
+    #5d4037 0 5vw,
+    #8d6e63 5vw 10vw
+  );
 }
-.track:before{
-  content:"";
-  position:absolute;
-  top:20px;
-  width:100%;
-  height:6px;
-  background:#3e2723;
-}
+.track:before,
 .track:after{
   content:"";
   position:absolute;
-  top:50px;
   width:100%;
-  height:6px;
+  height:0.8vh;
   background:#3e2723;
 }
+.track:before{top:2vh;}
+.track:after{top:5vh;}
 
 /* TRAIN */
 .train{
   display:flex;
   align-items:flex-end;
-  gap:12px;
+  gap:2vw;
   position:absolute;
-  bottom:130px; /* PERFECT ALIGN ON TRACK */
-  transform:translateX(120vw); /* start from right */
+  bottom:26vh;
+  transform:translateX(120vw);
 }
 
 /* ENGINE */
 .engine{
-  width:130px;height:110px;
+  width:18vw;
+  height:14vw;
   background:#1976d2;
-  border-radius:20px;
+  border-radius:2vw;
   position:relative;
 }
 
@@ -96,31 +92,32 @@ body{
 .engine:before{
   content:"";
   position:absolute;
-  width:40px;height:35px;
+  width:5vw;height:4vw;
   background:#90caf9;
-  top:20px;left:25px;
-  border-radius:8px;
+  top:2vw;left:3vw;
+  border-radius:1vw;
 }
 
 /* smoke */
 .smoke{
   position:absolute;
-  width:15px;height:15px;
+  width:2vw;height:2vw;
   background:#ddd;
   border-radius:50%;
-  top:-15px;
-  left:90px;
+  top:-2vw;
+  left:12vw;
   animation:smoke 1.5s infinite;
 }
 @keyframes smoke{
   0%{transform:translateY(0);opacity:1;}
-  100%{transform:translateY(-60px);opacity:0;}
+  100%{transform:translateY(-6vw);opacity:0;}
 }
 
 /* COMPARTMENTS */
 .comp{
-  width:110px;height:110px;
-  border-radius:20px;
+  width:16vw;
+  height:14vw;
+  border-radius:2vw;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -129,13 +126,14 @@ body{
 
 /* windows */
 .window{
-  width:70px;height:60px;
+  width:10vw;
+  height:8vw;
   background:#fff;
-  border-radius:12px;
+  border-radius:1.5vw;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:28px;
+  font-size:clamp(16px,2.5vw,26px);
   font-weight:bold;
 }
 
@@ -146,40 +144,42 @@ body{
 .c4{background:#ab47bc;}
 .c5{background:#ec407a;}
 
-/* WHEELS (ENGINE + COMPARTMENTS) */
+/* WHEELS */
 .wheel{
   position:absolute;
-  bottom:-20px;
-  width:20px;height:20px;
+  bottom:-2vw;
+  width:3vw;height:3vw;
   background:#000;
   border-radius:50%;
 }
-.w1{left:20px;}
-.w2{right:20px;}
+.w1{left:2vw;}
+.w2{right:2vw;}
 
 /* OPTIONS */
 .options{
+  height:20vh;
   display:flex;
   justify-content:center;
-  gap:20px;
-  padding:20px;
+  align-items:center;
+  gap:4vw;
 }
 .opt{
-  width:80px;height:80px;
+  width:12vw;
+  height:12vw;
   border-radius:50%;
   background:#eee;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:26px;
-  border:3px solid #444;
+  font-size:clamp(16px,3vw,26px);
+  border:0.5vw solid #444;
 }
-.opt.selected{border:5px solid green;}
+.opt.selected{border:1vw solid green;}
 
-/* FINAL SCREEN */
+/* FINAL */
 .final{
-  background:#b3e5fc;
   height:100vh;
+  background:#b3e5fc;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -187,9 +187,9 @@ body{
 }
 .loopTrain{
   position:absolute;
-  bottom:130px;
+  bottom:26vh;
   display:flex;
-  gap:12px;
+  gap:2vw;
   animation:loop 10s linear infinite;
 }
 @keyframes loop{
@@ -217,9 +217,7 @@ body{
 const levels=[
 {nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
 {nums:["_",21,22,23,24],opt:[25,20,19],ans:20},
-{nums:["_",26,27,28,29],opt:[25,22,12],ans:25},
-{nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
-{nums:["_",12,13,14,15],opt:[15,14,11],ans:11}
+{nums:["_",26,27,28,29],opt:[25,22,12],ans:25}
 ];
 
 let current=0,selected=null;
@@ -228,7 +226,15 @@ const train=document.getElementById("train");
 const optionsDiv=document.getElementById("options");
 const sun=document.getElementById("sun");
 
-/* CREATE TRAIN */
+function addWheels(el){
+  let w1=document.createElement("div");
+  w1.className="wheel w1";
+  let w2=document.createElement("div");
+  w2.className="wheel w2";
+  el.appendChild(w1);
+  el.appendChild(w2);
+}
+
 function createTrain(data){
   train.innerHTML="";
 
@@ -258,24 +264,12 @@ function createTrain(data){
     train.appendChild(c);
   });
 
-  /* ENTER FROM RIGHT → STOP CENTER */
   setTimeout(()=>{
     train.style.transition="transform 1.5s ease-out";
     train.style.transform="translateX(0)";
   },100);
 }
 
-/* ADD WHEELS */
-function addWheels(el){
-  let w1=document.createElement("div");
-  w1.className="wheel w1";
-  let w2=document.createElement("div");
-  w2.className="wheel w2";
-  el.appendChild(w1);
-  el.appendChild(w2);
-}
-
-/* OPTIONS */
 function createOptions(opts){
   optionsDiv.innerHTML="";
   opts.forEach(o=>{
@@ -293,15 +287,12 @@ function createOptions(opts){
   });
 }
 
-/* CHECK */
 function check(){
   if(selected==null)return;
 
   if(selected===levels[current].ans){
-    new Audio("assets/correct.mp3").play();
     sun.innerText="😊";
 
-    /* EXIT LEFT */
     train.style.transition="transform 2s linear";
     train.style.transform="translateX(-140vw)";
 
@@ -312,14 +303,12 @@ function check(){
     },2000);
 
   }else{
-    new Audio("assets/wrong.mp3").play();
     sun.innerText="😢";
     selected=null;
     document.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
   }
 }
 
-/* LOAD LEVEL */
 function load(){
   selected=null;
   sun.innerText="😊";
@@ -329,7 +318,6 @@ function load(){
   createOptions(levels[current].opt);
 }
 
-/* FINAL SCREEN */
 function showFinal(){
   document.body.innerHTML=`
   <div class="final">
@@ -342,12 +330,8 @@ function showFinal(){
 
   function makeTrain(){
     loop.innerHTML="";
-
     let engine=document.createElement("div");
     engine.className="engine";
-    let smoke=document.createElement("div");
-    smoke.className="smoke";
-    engine.appendChild(smoke);
     addWheels(engine);
     loop.appendChild(engine);
 
