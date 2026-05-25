@@ -16,7 +16,7 @@
 
 body{
   overflow:hidden;
-  background: linear-gradient(#6ed0ff 40%, #6bd96b 60%);
+  background: linear-gradient(#63c6ff 45%, #6fe36f 55%);
 }
 
 /* SCREEN */
@@ -46,7 +46,7 @@ body{
   font-size:3vmin;
   font-weight:bold;
   padding:1vmin;
-  color:#0d47a1;
+  color:#083c8c;
 }
 
 /* GAME AREA */
@@ -63,13 +63,25 @@ body{
   font-size:8vmin;
 }
 
-/* TRACK */
+/* TRACK (REAL LOOK) */
 .track{
   position:absolute;
-  bottom:30%;
+  bottom:28%;
   width:100%;
-  height:2vmin;
+  height:4vmin;
   background:#5d4037;
+}
+
+.track::before{
+  content:'';
+  position:absolute;
+  width:100%;
+  height:100%;
+  background: repeating-linear-gradient(
+    to right,
+    #8d6e63 0 4vmin,
+    #5d4037 4vmin 6vmin
+  );
 }
 
 /* TRAIN */
@@ -78,15 +90,9 @@ body{
   bottom:32%;
   display:flex;
   align-items:flex-end;
-  gap:2vmin;
+  gap:1.5vmin;
   transform:translateX(120%);
-  transition:transform 1.5s linear;
-}
-
-/* BIGGER SCALE */
-.train-scale{
-  transform:scale(1.3);
-  transform-origin:left bottom;
+  transition:transform 1.2s linear;
 }
 
 /* ENGINE */
@@ -98,7 +104,7 @@ body{
   position:relative;
 }
 
-/* ENGINE FRONT */
+/* FRONT */
 .engine::before{
   content:'';
   position:absolute;
@@ -110,7 +116,7 @@ body{
   border-radius:2vmin;
 }
 
-/* ENGINE WINDOW */
+/* WINDOW */
 .engine::after{
   content:'';
   position:absolute;
@@ -144,6 +150,7 @@ body{
   width:16vmin;
   height:13vmin;
   border-radius:2vmin;
+  position:relative;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -168,6 +175,18 @@ body{
   font-size:4vmin;
   font-weight:bold;
 }
+
+/* WHEELS */
+.wheel{
+  position:absolute;
+  bottom:-2vmin;
+  width:3vmin;
+  height:3vmin;
+  background:black;
+  border-radius:50%;
+}
+.wheel.left{left:2vmin;}
+.wheel.right{right:2vmin;}
 
 /* OPTIONS */
 .options{
@@ -216,16 +235,15 @@ body{
   position:relative;
 }
 
-/* FINAL TRAIN LOOP */
+/* FINAL TRAIN */
 .final-train{
   position:absolute;
-  bottom:30%;
+  bottom:32%;
   display:flex;
-  animation:moveTrain 6s linear infinite;
-  transform:scale(1.3);
+  animation:move 6s linear infinite;
 }
 
-@keyframes moveTrain{
+@keyframes move{
   from{left:100%}
   to{left:-120%}
 }
@@ -252,16 +270,23 @@ body{
 
     <div class="track"></div>
 
-    <div id="train" class="train train-scale">
+    <div id="train" class="train">
       <div class="engine">
         <div class="smoke"></div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
       </div>
 
-      <div class="comp c1"><div class="window" id="w1">_</div></div>
-      <div class="comp c2"><div class="window" id="w2"></div></div>
-      <div class="comp c3"><div class="window" id="w3"></div></div>
-      <div class="comp c4"><div class="window" id="w4"></div></div>
-      <div class="comp c5"><div class="window" id="w5"></div></div>
+      <div class="comp c1">
+        <div class="window" id="w1">_</div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
+      </div>
+
+      <div class="comp c2"><div class="window" id="w2"></div><div class="wheel left"></div><div class="wheel right"></div></div>
+      <div class="comp c3"><div class="window" id="w3"></div><div class="wheel left"></div><div class="wheel right"></div></div>
+      <div class="comp c4"><div class="window" id="w4"></div><div class="wheel left"></div><div class="wheel right"></div></div>
+      <div class="comp c5"><div class="window" id="w5"></div><div class="wheel left"></div><div class="wheel right"></div></div>
     </div>
 
   </div>
@@ -280,6 +305,9 @@ body{
     <div class="engine"><div class="smoke"></div></div>
     <div class="comp c1"></div>
     <div class="comp c2"></div>
+    <div class="comp c3"></div>
+    <div class="comp c4"></div>
+    <div class="comp c5"></div>
   </div>
 </div>
 
@@ -335,15 +363,12 @@ options.appendChild(div);
 
 sun.innerText='🌞';
 
-/* RESET: START FROM RIGHT */
+/* ENTER FROM RIGHT */
 train.style.transition='none';
 train.style.transform='translateX(120%)';
-
-/* FORCE REPAINT */
 train.offsetHeight;
 
-/* ENTER FROM RIGHT */
-train.style.transition='transform 1.2s linear';
+train.style.transition='transform 1s linear';
 train.style.transform='translateX(0)';
 }
 
@@ -362,11 +387,11 @@ train.style.transform='translateX(-150%)';
 setTimeout(()=>{
 current++;
 if(current>=slides.length){
-showVictory();
+show('victory');
 }else{
 loadSlide();
 }
-},1500);
+},1200);
 
 }else{
 wrongSound.play();
@@ -379,10 +404,6 @@ selected=null;
 document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
 }
 };
-
-function showVictory(){
-show('victory');
-}
 </script>
 
 </body>
