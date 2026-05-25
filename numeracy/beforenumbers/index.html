@@ -2,208 +2,329 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Before Numbers Game</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+/* ---------- RESET ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  touch-action: manipulation;
 }
 
-body{
-    font-family: Arial Rounded MT Bold, sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    background:#eee;
+body {
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
-#game{
-    width:100vw;
-    max-width:1200px;
-    height:675px;
-    position:relative;
-    overflow:hidden;
-    background-size:cover;
-    background-position:center;
+/* ---------- MAIN WRAPPER ---------- */
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* ---------------- SLIDE 1 ---------------- */
-#slide1{
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.screen {
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
 }
 
-#slide1 img{
-    width:300px;
+.active {
+  display: flex;
 }
 
-/* ---------------- GAME ---------------- */
-#gameplay{
-    display:none;
-    width:100%;
-    height:100%;
-    position:relative;
+/* ---------- SPLASH ---------- */
+#splash {
+  justify-content: center;
+  align-items: center;
+  background: #fff;
 }
 
-/* Title */
-h1{
-    text-align:center;
-    padding:20px;
-    font-size:28px;
+#splash img {
+  width: 40vmin;
 }
 
-/* Train Track */
-.track{
-    position:absolute;
-    bottom:140px;
-    width:100%;
-    height:10px;
-    background:#333;
+/* ---------- HEADER ---------- */
+.header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 3vmin;
+  padding: 1vmin;
 }
 
-/* Train */
-#train{
-    position:absolute;
-    bottom:150px;
-    left:100%;
-    display:flex;
-    align-items:flex-end;
-    transition:all 1.5s ease;
+/* ---------- GAME AREA ---------- */
+.game-area {
+  flex: 1;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* MOVE TRAIN */
-#train.start{
-    left:5%;
+/* ---------- SUN ---------- */
+.sun {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  font-size: 6vmin;
+  transition: transform 0.3s;
 }
 
-/* Engine */
-.engine{
-    width:120px;
-    height:90px;
-    background:#0077b6;
-    border-radius:10px;
+/* ---------- TRAIN ---------- */
+.train {
+  display: flex;
+  gap: 1vmin;
+  transition: transform 1s ease;
 }
 
-/* Compartments */
-.box{
-    width:90px;
-    height:80px;
-    background:#fff;
-    border:3px solid black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:30px;
-    margin-left:5px;
+.compartment {
+  width: 10vmin;
+  height: 10vmin;
+  background: #fff;
+  border: 3px solid #333;
+  border-radius: 1vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4vmin;
+  font-weight: bold;
 }
 
-/* Options */
-#options{
-    position:absolute;
-    bottom:20px;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    gap:40px;
+.target {
+  background: #ffe082;
 }
 
-.option{
-    width:80px;
-    height:80px;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:28px;
-    color:white;
-    cursor:pointer;
+/* ---------- OPTIONS ---------- */
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 3vmin;
+  padding: 2vmin;
 }
 
-.option:nth-child(1){background:#00b4d8;}
-.option:nth-child(2){background:#ff4d6d;}
-.option:nth-child(3){background:#38b000;}
+.option {
+  width: 12vmin;
+  height: 12vmin;
+  border-radius: 50%;
+  background: #e3f2fd;
+  border: 3px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4vmin;
+  font-weight: bold;
+}
 
+.option.selected {
+  border: 5px solid #ff4081;
+  transform: scale(1.1);
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+/* ---------- VICTORY ---------- */
+#victory {
+  justify-content: center;
+  align-items: center;
+  font-size: 6vmin;
+  color: green;
+  font-weight: bold;
+}
+
+/* ---------- CONFETTI ---------- */
+.confetti {
+  position: absolute;
+  width: 1vmin;
+  height: 1vmin;
+  background: red;
+  animation: fall 2s linear infinite;
+}
+
+@keyframes fall {
+  to { transform: translateY(100vh); }
+}
 </style>
 </head>
 
 <body>
 
-<div id="game">
+<div id="app">
 
-<!-- SLIDE 1 -->
-<div id="slide1">
-    <img src="assets/innovine-logo.png" alt="logo">
+<!-- SPLASH -->
+<div id="splash" class="screen active">
+  <img src="assets/innovine-logo.png">
 </div>
 
-<!-- GAMEPLAY -->
-<div id="gameplay">
+<!-- GAME -->
+<div id="game" class="screen">
 
-<h1><b>Identify the missing number from the given options 😊</b></h1>
+  <div class="header">
+    Identify the missing number from the given options
+  </div>
 
-<div class="track"></div>
+  <div id="gameArea" class="game-area">
+    <div id="sun" class="sun">😊</div>
 
-<div id="train">
-    <!-- ENGINE FIRST -->
-    <div class="engine"></div>
+    <div id="train" class="train"></div>
+  </div>
 
-    <!-- COMPARTMENTS -->
-    <div class="box" id="target">_</div>
-    <div class="box">18</div>
-    <div class="box">19</div>
-    <div class="box">20</div>
-    <div class="box">21</div>
+  <div id="options" class="options"></div>
 </div>
 
-<div id="options">
-    <div class="option">15</div>
-    <div class="option">14</div>
-    <div class="option">17</div>
+<!-- VICTORY -->
+<div id="victory" class="screen">
+  Great Job!
 </div>
 
-</div>
 </div>
 
 <script>
+/* ---------- AUDIO ---------- */
+const correctSound = new Audio('assets/correct.mp3');
+const wrongSound = new Audio('assets/wrong.mp3');
 
-// SHOW GAME AFTER 2 SEC
-setTimeout(()=>{
-    document.getElementById("slide1").style.display="none";
-    document.getElementById("gameplay").style.display="block";
+/* ---------- GAME DATA ---------- */
+const slides = [
+  { bg:'assets/slide2.png', nums:['_',18,19,20,21], options:[15,14,17], correct:17 },
+  { bg:'assets/slide3.png', nums:['_',21,22,23,24], options:[25,20,19], correct:20 },
+  { bg:'assets/slide4.png', nums:['_',26,27,28,29], options:[25,22,12], correct:25 },
+  { bg:'assets/slide1.png', nums:['_',18,19,20,21], options:[15,14,17], correct:17 },
+  { bg:'assets/slide6.png', nums:['_',12,13,14,15], options:[15,14,11], correct:11 }
+];
 
-    // SET BACKGROUND
-    document.getElementById("game").style.backgroundImage="url('assets/bg-slide2.png')";
+let current = 0;
+let selected = null;
 
-    // START TRAIN
-    document.getElementById("train").classList.add("start");
+/* ---------- INIT ---------- */
+setTimeout(() => {
+  showScreen('game');
+  loadSlide();
+}, 2000);
 
-},2000);
+/* ---------- SCREEN SWITCH ---------- */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
+/* ---------- LOAD SLIDE ---------- */
+function loadSlide() {
+  selected = null;
 
-// GAME LOGIC
-let correct = "17";
+  const data = slides[current];
 
-document.querySelectorAll(".option").forEach(btn=>{
-    btn.onclick=()=>{
-        if(btn.innerText===correct){
-            document.getElementById("target").innerText=correct;
+  const area = document.getElementById('gameArea');
+  area.style.backgroundImage = `url(${data.bg})`;
 
-            // MOVE TRAIN LEFT OUT
-            document.getElementById("train").style.left="-120%";
-        }else{
-            alert("Try again!");
-        }
+  const train = document.getElementById('train');
+  train.innerHTML = '';
+
+  data.nums.forEach((n, i) => {
+    const div = document.createElement('div');
+    div.className = 'compartment' + (i===0 ? ' target':'');
+    div.textContent = n;
+
+    if(i===0){
+      div.onclick = checkAnswer;
     }
-});
 
+    train.appendChild(div);
+  });
+
+  const options = document.getElementById('options');
+  options.innerHTML = '';
+
+  data.options.forEach(n => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.textContent = n;
+
+    div.onclick = () => {
+      document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+      div.classList.add('selected');
+      selected = n;
+    };
+
+    options.appendChild(div);
+  });
+
+  document.getElementById('sun').textContent = '😊';
+}
+
+/* ---------- CHECK ---------- */
+function checkAnswer(){
+  if(selected === null) return;
+
+  const data = slides[current];
+
+  if(selected === data.correct){
+    correctSound.play();
+    document.getElementById('sun').textContent = '😄';
+
+    const train = document.getElementById('train');
+    train.style.transform = 'translateX(-120vw)';
+
+    setTimeout(()=>{
+      current++;
+      if(current >= slides.length){
+        showVictory();
+      } else {
+        train.style.transform = 'translateX(0)';
+        loadSlide();
+      }
+    },2000);
+
+  } else {
+    wrongSound.play();
+    document.getElementById('sun').textContent = '😢';
+
+    const train = document.getElementById('train');
+    train.classList.add('shake');
+
+    setTimeout(()=>train.classList.remove('shake'),500);
+
+    selected = null;
+    document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+  }
+}
+
+/* ---------- VICTORY ---------- */
+function showVictory(){
+  showScreen('victory');
+  createConfetti();
+}
+
+/* ---------- CONFETTI ---------- */
+function createConfetti(){
+  for(let i=0;i<50;i++){
+    const c = document.createElement('div');
+    c.className='confetti';
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration = (Math.random()*2+1)+'s';
+    document.body.appendChild(c);
+  }
+}
 </script>
 
 </body>
