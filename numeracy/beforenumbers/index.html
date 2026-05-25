@@ -16,7 +16,7 @@
 
 body{
   overflow:hidden;
-  background: linear-gradient(#6ed0ff 40%, #7ed957 60%);
+  background: linear-gradient(#6ed0ff 40%, #6bd96b 60%);
 }
 
 /* SCREEN */
@@ -66,22 +66,27 @@ body{
 /* TRACK */
 .track{
   position:absolute;
-  bottom:28%;
+  bottom:30%;
   width:100%;
   height:2vmin;
   background:#5d4037;
 }
 
-/* TRAIN CENTERED */
+/* TRAIN */
 .train{
   position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
+  bottom:32%;
   display:flex;
   align-items:flex-end;
-  gap:1.5vmin;
-  transition: transform 1.2s ease;
+  gap:2vmin;
+  transform:translateX(120%);
+  transition:transform 1.5s linear;
+}
+
+/* BIGGER SCALE */
+.train-scale{
+  transform:scale(1.3);
+  transform-origin:left bottom;
 }
 
 /* ENGINE */
@@ -105,7 +110,7 @@ body{
   border-radius:2vmin;
 }
 
-/* WINDOW */
+/* ENGINE WINDOW */
 .engine::after{
   content:'';
   position:absolute;
@@ -131,7 +136,7 @@ body{
 
 @keyframes smoke{
   0%{transform:translateY(0);opacity:1}
-  100%{transform:translateY(-4vmin);opacity:0}
+  100%{transform:translateY(-5vmin);opacity:0}
 }
 
 /* COMPARTMENTS */
@@ -139,7 +144,6 @@ body{
   width:16vmin;
   height:13vmin;
   border-radius:2vmin;
-  position:relative;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -163,11 +167,6 @@ body{
   justify-content:center;
   font-size:4vmin;
   font-weight:bold;
-}
-
-/* WHEELS */
-.comp::after, .engine::after{
-  box-shadow: 0 9vmin 0 black, 6vmin 9vmin 0 black;
 }
 
 /* OPTIONS */
@@ -200,9 +199,9 @@ body{
 
 /* SHAKE */
 @keyframes shake{
-  0%{transform:translate(-50%, -50%)}
-  50%{transform:translate(-48%, -50%)}
-  100%{transform:translate(-50%, -50%)}
+  0%{transform:translateX(0)}
+  50%{transform:translateX(10px)}
+  100%{transform:translateX(0)}
 }
 .shake{
   animation:shake 0.4s;
@@ -217,17 +216,18 @@ body{
   position:relative;
 }
 
-/* FINAL TRAIN RUN */
+/* FINAL TRAIN LOOP */
 .final-train{
   position:absolute;
   bottom:30%;
   display:flex;
-  animation:move 6s linear infinite;
+  animation:moveTrain 6s linear infinite;
+  transform:scale(1.3);
 }
 
-@keyframes move{
-  from{left:-40%}
-  to{left:100%}
+@keyframes moveTrain{
+  from{left:100%}
+  to{left:-120%}
 }
 </style>
 </head>
@@ -252,7 +252,7 @@ body{
 
     <div class="track"></div>
 
-    <div id="train" class="train">
+    <div id="train" class="train train-scale">
       <div class="engine">
         <div class="smoke"></div>
       </div>
@@ -334,7 +334,17 @@ options.appendChild(div);
 });
 
 sun.innerText='🌞';
-train.style.transform='translate(-50%, -50%)';
+
+/* RESET: START FROM RIGHT */
+train.style.transition='none';
+train.style.transform='translateX(120%)';
+
+/* FORCE REPAINT */
+train.offsetHeight;
+
+/* ENTER FROM RIGHT */
+train.style.transition='transform 1.2s linear';
+train.style.transform='translateX(0)';
 }
 
 w1.onclick=()=>{
@@ -346,7 +356,8 @@ if(selected===d.correct){
 correctSound.play();
 sun.innerText='😄';
 
-train.style.transform='translate(-200%, -50%)';
+/* EXIT LEFT */
+train.style.transform='translateX(-150%)';
 
 setTimeout(()=>{
 current++;
