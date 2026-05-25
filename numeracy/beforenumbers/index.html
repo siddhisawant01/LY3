@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Numeracy Game</title>
+<title>Before Numbers Game</title>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    overflow:hidden;
     font-family:'Comic Sans MS';
+    overflow:hidden;
     display:flex;
     justify-content:center;
     align-items:center;
     background:#000;
 }
 
+/* GAME CONTAINER */
 #game{
     width:100vw;
     height:56.25vw;
@@ -37,34 +38,42 @@ body{
     align-items:center;
     z-index:100;
 }
-
 #splash img{
-    width:35%;
+    width:40%;
 }
 
-/* GAME BACKGROUND */
+/* GAMEPLAY */
 #gameplay{
+    display:none;
     width:100%;
     height:100%;
-    display:none;
     background:url('assets/bg-slide2.png') no-repeat center/cover;
 }
 
-/* HEADING */
+/* HEADER */
 h1{
     position:absolute;
-    top:2%;
+    top:3%;
     width:100%;
     text-align:center;
     font-size:2.5vw;
     color:#1d3557;
-    font-weight:bold;
+    font-weight:900;
+    text-shadow:2px 2px #fff;
+}
+
+/* SUN */
+#sun{
+    position:absolute;
+    top:3%;
+    right:3%;
+    font-size:4vw;
 }
 
 /* TRAIN */
 #train{
     position:absolute;
-    bottom:18%;
+    bottom:20%;
     display:flex;
     align-items:flex-end;
     left:120%;
@@ -75,7 +84,6 @@ h1{
     animation:enter 1.5s forwards;
 }
 @keyframes enter{
-    from{left:120%;}
     to{left:5%;}
 }
 
@@ -84,47 +92,73 @@ h1{
     animation:exit 1.5s forwards;
 }
 @keyframes exit{
-    from{left:5%;}
     to{left:-120%;}
 }
 
 /* ENGINE */
 .engine{
-    width:12vw;
-    height:10vw;
+    width:11vw;
+    height:9vw;
     background:#0077b6;
     border-radius:2vw;
     border:0.4vw solid #222;
+    position:relative;
 }
 
 /* COMPARTMENTS */
 .comp{
-    width:10vw;
-    height:8vw;
+    width:9vw;
+    height:7vw;
     background:#fff;
-    border:0.4vw solid #222;
+    border-radius:1vw;
+    border:0.4vw solid #333;
     margin-left:0.5vw;
     display:flex;
     justify-content:center;
     align-items:center;
     font-size:3vw;
     font-weight:bold;
-    border-radius:1vw;
+    position:relative;
+}
+
+/* COLORS */
+.comp:nth-child(2){background:#ffd166;}
+.comp:nth-child(3){background:#06d6a0;}
+.comp:nth-child(4){background:#f4a261;}
+.comp:nth-child(5){background:#9b5de5;}
+.comp:nth-child(6){background:#ff6b6b;}
+
+/* WHEELS */
+.comp::after{
+    content:"";
+    position:absolute;
+    bottom:-1.5vw;
+    left:50%;
+    transform:translateX(-50%);
+    width:5vw;
+    height:1vw;
+    background:#333;
+}
+
+/* OPTIONS BOX */
+#options-box{
+    position:absolute;
+    bottom:5%;
+    width:70%;
+    left:15%;
+    background:#fff;
+    padding:2vw;
+    border-radius:2vw;
+    border:0.4vw solid #8338ec;
+    display:flex;
+    justify-content:center;
+    gap:4vw;
 }
 
 /* OPTIONS */
-#options{
-    position:absolute;
-    bottom:5%;
-    width:100%;
-    display:flex;
-    justify-content:center;
-    gap:3vw;
-}
-
 .option{
-    width:8vw;
-    height:8vw;
+    width:7vw;
+    height:7vw;
     border-radius:50%;
     display:flex;
     justify-content:center;
@@ -138,6 +172,9 @@ h1{
 .option:nth-child(2){background:#ff4d6d;}
 .option:nth-child(3){background:#70e000;}
 
+.correct{
+    transform:scale(1.2);
+}
 </style>
 </head>
 
@@ -147,21 +184,26 @@ h1{
 
 <!-- SPLASH -->
 <div id="splash">
-    <img src="assets/innovine_logo.png"
-         onerror="this.style.display='none';this.parentNode.innerHTML='<h1>INNOVINE</h1>'">
+<img src="assets/innovine_logo.png"
+onerror="this.style.display='none';this.parentNode.innerHTML='<h1>INNOVINE</h1>'">
 </div>
 
 <!-- GAME -->
 <div id="gameplay">
 
 <h1>Identify the missing number from the given options</h1>
+<div id="sun">😊</div>
 
 <div id="train"></div>
-<div id="options"></div>
+
+<div id="options-box"></div>
 
 </div>
 
 </div>
+
+<audio id="correctSound" src="assets/correct.mp3"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
 
 <script>
 
@@ -173,10 +215,9 @@ options:["15","14","17"]
 }
 ];
 
-let current=0;
-
-const train=document.getElementById("train");
-const options=document.getElementById("options");
+let train=document.getElementById("train");
+let optionsBox=document.getElementById("options-box");
+let sun=document.getElementById("sun");
 
 /* START */
 setTimeout(()=>{
@@ -185,31 +226,30 @@ document.getElementById("gameplay").style.display="block";
 loadGame();
 },2000);
 
-/* LOAD GAME */
 function loadGame(){
 
 train.innerHTML="";
-options.innerHTML="";
+optionsBox.innerHTML="";
 
-let d=data[current];
+let d=data[0];
 
-/* ENGINE FIRST (CORRECT DIRECTION) */
+/* ENGINE */
 let engine=document.createElement("div");
 engine.className="engine";
 train.appendChild(engine);
 
-/* MISSING BOX */
-let miss=document.createElement("div");
-miss.className="comp";
-miss.innerText="_";
-train.appendChild(miss);
+/* MISSING */
+let missingBox=document.createElement("div");
+missingBox.className="comp";
+missingBox.innerText="_";
+train.appendChild(missingBox);
 
-/* OTHER NUMBERS */
+/* NUMBERS */
 d.nums.forEach(n=>{
-let div=document.createElement("div");
-div.className="comp";
-div.innerText=n;
-train.appendChild(div);
+let c=document.createElement("div");
+c.className="comp";
+c.innerText=n;
+train.appendChild(c);
 });
 
 /* ENTER */
@@ -222,23 +262,26 @@ btn.className="option";
 btn.innerText=o;
 
 btn.onclick=()=>{
+
 if(o===d.missing){
 
-miss.innerText=o;
+document.getElementById("correctSound").play();
+sun.innerText="😄";
+
+missingBox.innerText=o;
+btn.classList.add("correct");
 
 train.classList.remove("enter");
 train.classList.add("exit");
 
-setTimeout(()=>{
-alert("Great Job!");
-},1500);
-
 }else{
-alert("Try Again!");
+document.getElementById("wrongSound").play();
+sun.innerText="😢";
 }
+
 };
 
-options.appendChild(btn);
+optionsBox.appendChild(btn);
 });
 }
 
