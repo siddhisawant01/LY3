@@ -1,249 +1,594 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Before Numbers</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Numeracy Game: Before Numbers</title>
+    <style>
+        /* --- Reset & Layout Framework --- */
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Aspect-ratio container optimized for cross-platform screens */
+        #game-container {
+            width: 100vw;
+            height: 56.25vw; /* 16:9 Aspect Ratio */
+            max-height: 100vh;
+            max-width: 177.78vh; 
+            background-color: #ffffff;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
+        /* --- Slide 1: Splash Screen --- */
+        #splash-slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        #splash-slide img {
+            max-width: 50%;
+            max-height: 70%;
+            object-fit: contain;
+        }
 
-body{
-    font-family:'Comic Sans MS';
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    background:#000;
-    overflow:hidden;
-}
+        /* --- Gameplay Layer --- */
+        #gameplay-ui {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2% 2%;
+            z-index: 10;
+        }
 
-/* MAIN */
-#game{
-    width:100vw;
-    height:56.25vw;
-    max-height:100vh;
-    max-width:177.78vh;
-    position:relative;
-    overflow:hidden;
-}
+        /* Header Area preventing overlaps */
+        header {
+            text-align: center;
+            width: 80%;
+            margin: 0 auto;
+            min-height: 8vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            font-size: 2.6vw;
+            color: #1d3557;
+            font-weight: 900;
+            line-height: 1.2;
+        }
 
-/* SPLASH */
-#splash{
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:100;
-}
-#splash img{
-    width:300px;
-}
+        /* --- UI Component: The Sun --- */
+        #sun-element {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            width: 9vw;
+            height: 9vw;
+            z-index: 20;
+        }
+        .sun-body {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ffea00 60%, #ffaa00 100%);
+            border-radius: 50%;
+            position: relative;
+            border: 0.3vw solid #ff7700;
+            box-shadow: 0 0 15px #ffea00;
+        }
+        /* Procedural sunbeams */
+        .sun-beam {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 105%; height: 105%;
+            border-radius: 50%;
+            border: 0.25vw dashed #ffaa00;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation: rotateBeams 20s linear infinite;
+            z-index: -1;
+        }
+        @keyframes rotateBeams { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+        
+        .sun-eye {
+            position: absolute;
+            top: 35%;
+            width: 1vw; height: 1vw;
+            background-color: #222;
+            border-radius: 50%;
+        }
+        .sun-eye.left { left: 28%; }
+        .sun-eye.right { right: 28%; }
+        .sun-mouth {
+            position: absolute;
+            bottom: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3.5vw; height: 1.8vw;
+            border-bottom: 0.5vw solid #222;
+            border-radius: 0 0 3.5vw 3.5vw;
+            transition: all 0.3s ease;
+        }
+        /* Dynamic Mood States */
+        #sun-element.smile .sun-mouth {
+            height: 1.8vw;
+            border-bottom: 0.5vw solid #222;
+            border-radius: 0 0 3.5vw 3.5vw;
+        }
+        #sun-element.sad .sun-mouth {
+            height: 1vw;
+            border-bottom: none;
+            border-top: 0.5vw solid #222;
+            border-radius: 3.5vw 3.5vw 0 0;
+            bottom: 15%;
+        }
 
-/* GAME */
-#gameplay{
-    display:none;
-    width:100%;
-    height:100%;
-    background:url('assets/bg-slide2.png') center/cover no-repeat;
-}
+        /* --- Train Track & Environment Environment --- */
+        #track-container {
+            width: 100%;
+            height: 45%;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+        }
+        /* Realistic structured landscape tracks */
+        .railway-track {
+            position: absolute;
+            bottom: 1.5vw;
+            left: 0;
+            width: 100%;
+            height: 1.2vw;
+            background: repeating-linear-gradient(90deg, #5c3d2e, #5c3d2e 1.5vw, #8b5e3c 1.5vw, #8b5e3c 3vw);
+            border-top: 0.3vw solid #333;
+            border-bottom: 0.3vw solid #333;
+            z-index: 1;
+        }
 
-/* TITLE */
-h1{
-    position:absolute;
-    top:2%;
-    width:100%;
-    text-align:center;
-    font-size:2.5vw;
-    color:#1d3557;
-    font-weight:900;
-}
+        /* --- Train Assembly and States --- */
+        #train-assembly {
+            display: flex;
+            align-items: flex-end;
+            position: absolute;
+            bottom: 2.2vw;
+            left: 100%; /* Default starting position completely hidden to the right */
+            z-index: 5;
+            transform: translateX(0);
+        }
+        /* State Class: Enters slide elegantly */
+        #train-assembly.arrive {
+            left: 5%;
+            transition: left 1.2s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+        /* State Class: Drives away completely to the left */
+        #train-assembly.exit-left {
+            left: -130vw !important;
+            transition: left 1.6s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
 
-/* TRAIN */
-#train{
-    position:absolute;
-    bottom:22%;
-    left:120%;
-    display:flex;
-    align-items:flex-end;
-}
+        /* Locomotive Engine Layout */
+        .locomotive {
+            width: 13vw;
+            height: 12vw;
+            background: #0077b6;
+            border-radius: 1.5vw 4vw 1vw 1vw;
+            border: 0.4vw solid #03045e;
+            position: relative;
+            z-index: 7;
+        }
+        .cabin-window {
+            position: absolute;
+            top: 15%; right: 12%;
+            width: 5.5vw; height: 5.5vw;
+            background: #90e0ef;
+            border: 0.3vw solid #03045e;
+            border-radius: 0.5vw;
+        }
+        .smokestack {
+            position: absolute;
+            top: -2.2vw; left: 15%;
+            width: 2.2vw; height: 2.8vw;
+            background: #e63946;
+            border: 0.3vw solid #333;
+        }
+        /* Particle Smoke System */
+        .smoke-particle {
+            position: absolute;
+            top: -3.5vw; left: 1.2vw;
+            width: 1.8vw; height: 1.8vw;
+            background: rgba(220, 220, 220, 0.85);
+            border-radius: 50%;
+            opacity: 0;
+        }
+        @keyframes puff {
+            0% { transform: translateY(0) scale(0.8); opacity: 0.8; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-4.5vw) scale(2); opacity: 0; }
+        }
+        #train-assembly.steaming .smoke-particle {
+            animation: puff 0.6s linear infinite;
+        }
 
-/* ANIMATIONS */
-.enter{ animation:enter 1.5s forwards; }
-.exit{ animation:exit 1.5s forwards; }
+        /* Compartments Base */
+        .compartment {
+            width: 10.5vw;
+            height: 9.5vw;
+            border: 0.4vw solid #333;
+            border-radius: 1.2vw 1.2vw 0.5vw 0.5vw;
+            margin-left: -0.2vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 6;
+        }
+        /* Distinct layout colors matched to your design files */
+        .compartment:nth-child(2) { background: #ff9f1c; border-color: #f77f00; }
+        .compartment:nth-child(3) { background: #2ec4b6; border-color: #0096c7; }
+        .compartment:nth-child(4) { background: #ffbf69; border-color: #ff9f1c; }
+        .compartment:nth-child(5) { background: #a8dadc; border-color: #457b9d; }
+        .compartment:nth-child(6) { background: #e63946; border-color: #ba181b; }
 
-@keyframes enter{
-    from{left:120%;}
-    to{left:5%;}
-}
-@keyframes exit{
-    from{left:5%;}
-    to{left:-120%;}
-}
+        .window-pane {
+            width: 7.5vw;
+            height: 6.5vw;
+            background: #ffffff;
+            border: 0.3vw solid #333;
+            border-radius: 0.8vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.8vw;
+            font-weight: bold;
+            color: #222;
+        }
+        
+        /* Interactive Target Underscore Box */
+        #target-compartment .window-pane {
+            cursor: pointer;
+            border: 0.4vw dashed #e63946;
+            color: #ba181b;
+            background-color: #fff;
+            transition: background-color 0.2s;
+        }
+        #target-compartment.pulse .window-pane {
+            background-color: #fffae6;
+            animation: softPulse 1s infinite alternate;
+        }
+        @keyframes softPulse { 100% { background-color: #ffe3e3; } }
 
-/* ENGINE (VISIBLE FIXED) */
-.engine{
-    width:11vw;
-    height:9vw;
-    background:#0077b6;
-    border:0.4vw solid #222;
-    border-radius:2vw;
-}
+        /* --- Options Selector Dock --- */
+        #options-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 2.5%;
+            z-index: 15;
+        }
+        .options-tray {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 0.4vw solid #8338ec;
+            border-radius: 2vw;
+            padding: 1vw 5vw;
+            display: flex;
+            gap: 4.5vw;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .circle-choice {
+            width: 8.5vw;
+            height: 8.5vw;
+            border-radius: 50%;
+            border: 0.4vw solid #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.6vw;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 0.5vw 0 #222;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .circle-choice:nth-child(1) { background-color: #00b4d8; border-color: #0077b6; box-shadow: 0 0.5vw 0 #0077b6; }
+        .circle-choice:nth-child(2) { background-color: #ff85a1; border-color: #ff477e; box-shadow: 0 0.5vw 0 #ff477e; }
+        .circle-choice:nth-child(3) { background-color: #70e000; border-color: #38b000; box-shadow: 0 0.5vw 0 #38b000; }
+        
+        .circle-choice.active {
+            transform: translateY(0.4vw);
+            box-shadow: 0 0.1vw 0 #222 !important;
+            border-color: #fff !important;
+        }
 
-/* COMPARTMENTS */
-.comp{
-    width:9vw;
-    height:7vw;
-    margin-left:0.5vw;
-    border-radius:1vw;
-    border:0.4vw solid #333;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:3vw;
-    font-weight:bold;
-    background:#fff;
-}
+        /* Error Shake Animation */
+        .shake { animation: structuralShake 0.4s ease-in-out; }
+        @keyframes structuralShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
 
-/* COLORS */
-.comp:nth-child(2){background:#ffd166;}
-.comp:nth-child(3){background:#06d6a0;}
-.comp:nth-child(4){background:#f4a261;}
-.comp:nth-child(5){background:#9b5de5;}
-.comp:nth-child(6){background:#ff6b6b;}
-
-/* OPTIONS BOX (FIXED POSITION — NO OVERLAP) */
-#options{
-    position:absolute;
-    bottom:5%;
-    left:50%;
-    transform:translateX(-50%);
-    width:70%;
-    background:#fff;
-    padding:2vw;
-    border-radius:2vw;
-    border:0.4vw solid #8338ec;
-    display:flex;
-    justify-content:center;
-    gap:3vw;
-}
-
-/* OPTIONS */
-.option{
-    width:7vw;
-    height:7vw;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:3vw;
-    color:#fff;
-    cursor:pointer;
-}
-
-.option:nth-child(1){background:#00b4d8;}
-.option:nth-child(2){background:#ff4d6d;}
-.option:nth-child(3){background:#70e000;}
-
-</style>
+        /* --- Slide 7: Outro Framework --- */
+        #outro-slide {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #00f5d4, #00bbf9);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+        #outro-slide h2 {
+            font-size: 7vw;
+            color: #fff;
+            text-shadow: 4px 4px 0px #f15bb5;
+            animation: textFloat 0.8s infinite alternate ease-in-out;
+        }
+        @keyframes textFloat { 100% { transform: translateY(-15px); } }
+        canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+    </style>
 </head>
-
 <body>
 
-<div id="game">
+    <div id="game-container">
+        <div id="splash-slide">
+            <img src="assets/innovine_logo.png" alt="Innovine Logo" onerror="this.style.display='none'; this.parentNode.innerHTML='<h1 style=color:#333;font-size:5vw>INNOVINE</h1>'">
+        </div>
 
-<!-- SPLASH -->
-<div id="splash">
-    <img src="assets/innovine_logo.png"
-         onerror="this.style.display='none';this.parentNode.innerHTML='<h1>INNOVINE</h1>'">
-</div>
+        <div id="gameplay-ui">
+            <div id="sun-element" class="smile">
+                <div class="sun-body">
+                    <div class="sun-beam"></div>
+                    <div class="sun-eye left"></div>
+                    <div class="sun-eye right"></div>
+                    <div class="sun-mouth"></div>
+                </div>
+            </div>
 
-<!-- GAME -->
-<div id="gameplay">
+            <header>
+                <h1><b>Identify the missing number from the given options</b></h1>
+            </header>
 
-<h1>Identify the missing number from the given options 😊</h1>
+            <div id="track-container">
+                <div class="railway-track"></div>
+                
+                <div id="train-assembly">
+                    <div class="compartment" id="target-compartment">
+                        <div class="window-pane" id="display-slot">_</div>
+                    </div>
+                    <div class="compartment"><div class="window-pane" id="box-val-1">18</div></div>
+                    <div class="compartment"><div class="window-pane" id="box-val-2">19</div></div>
+                    <div class="compartment"><div class="window-pane" id="box-val-3">20</div></div>
+                    <div class="compartment"><div class="window-pane" id="box-val-4">21</div></div>
+                    
+                    <div class="locomotive">
+                        <div class="smokestack">
+                            <div class="smoke-particle"></div>
+                        </div>
+                        <div class="cabin-window"></div>
+                    </div>
+                </div>
+            </div>
 
-<div id="train"></div>
-<div id="options"></div>
+            <div id="options-container">
+                <div class="options-tray" id="interactive-tray">
+                    </div>
+            </div>
+        </div>
 
-</div>
-</div>
+        <div id="outro-slide">
+            <h2>Great job!</h2>
+            <canvas id="canvas-particles"></canvas>
+        </div>
+    </div>
 
-<audio id="correct" src="assets/correct.mp3"></audio>
-<audio id="wrong" src="assets/wrong.mp3"></audio>
+    <audio id="sound-success" src="assets/correct.mp3" preload="auto"></audio>
+    <audio id="sound-fail" src="assets/wrong.mp3" preload="auto"></audio>
 
-<script>
+    <script>
+        // --- Complete Game Stage Dataset ---
+        const gameMatrix = [
+            { slideNum: 2, bg: "assets/slide2.png", configuration: ["_", "18", "19", "20", "21"], bank: ["15", "14", "17"], key: "17" },
+            { slideNum: 3, bg: "assets/slide3.png", configuration: ["_", "21", "22", "23", "24"], bank: ["25", "20", "19"], key: "20" },
+            { slideNum: 4, bg: "assets/slide4.png", configuration: ["_", "26", "27", "28", "29"], bank: ["25", "22", "12"], key: "25" },
+            { slideNum: 5, bg: "assets/slide1.png", configuration: ["_", "18", "19", "20", "21"], bank: ["15", "14", "17"], key: "17" },
+            { slideNum: 6, bg: "assets/slide6.png", configuration: ["_", "12", "13", "14", "15"], bank: ["15", "14", "11"], key: "11" }
+        ];
 
-const data = {
-    numbers:["18","19","20","21"],
-    missing:"17",
-    options:["15","14","17"]
-};
+        let playhead = 0;
+        let stagingSelection = null;
+        let actionLock = false;
 
-const train=document.getElementById("train");
-const options=document.getElementById("options");
+        const mainContainer = document.getElementById('game-container');
+        const gameplayCanvas = document.getElementById('gameplay-ui');
+        const trainBox = document.getElementById('train-assembly');
+        const interactiveBox = document.getElementById('target-compartment');
+        const optionsTray = document.getElementById('interactive-tray');
+        const widgetSun = document.getElementById('sun-element');
 
-/* START */
-setTimeout(()=>{
-    document.getElementById("splash").style.display="none";
-    document.getElementById("gameplay").style.display="block";
-    loadGame();
-},2000);
-
-function loadGame(){
-
-train.innerHTML="";
-options.innerHTML="";
-
-/* ENGINE FIRST */
-let engine=document.createElement("div");
-engine.className="engine";
-train.appendChild(engine);
-
-/* MISSING */
-let missing=document.createElement("div");
-missing.className="comp";
-missing.innerText="_";
-train.appendChild(missing);
-
-/* NUMBERS */
-data.numbers.forEach(n=>{
-    let c=document.createElement("div");
-    c.className="comp";
-    c.innerText=n;
-    train.appendChild(c);
-});
-
-/* ENTER */
-train.className="enter";
-
-/* OPTIONS */
-data.options.forEach(o=>{
-    let btn=document.createElement("div");
-    btn.className="option";
-    btn.innerText=o;
-
-    btn.onclick=()=>{
-        if(o===data.missing){
-            document.getElementById("correct").play();
-            missing.innerText=o;
-
-            train.classList.remove("enter");
-            train.classList.add("exit");
-
-        }else{
-            document.getElementById("wrong").play();
+        function executeAudio(nodeId) {
+            const track = document.getElementById(nodeId);
+            if(track) {
+                track.currentTime = 0;
+                track.play().catch(() => {});
+            }
         }
-    };
 
-    options.appendChild(btn);
-});
-}
+        // Initialize Lifecycle Routine
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splash-slide').style.display = 'none';
+                gameplayCanvas.style.display = 'flex';
+                primeSlide(playhead);
+            }, 2000);
 
-</script>
+            interactiveBox.addEventListener('click', confirmPlayerChoice);
+        });
 
+        // Stage Management Layout Controller
+        function primeSlide(index) {
+            if (index >= gameMatrix.length) {
+                renderOutro();
+                return;
+            }
+
+            actionLock = false;
+            stagingSelection = null;
+
+            // Clear visual states safely
+            widgetSun.className = "smile";
+            trainBox.className = ""; 
+            interactiveBox.classList.remove('pulse');
+            document.getElementById('display-slot').innerText = "_";
+
+            const payload = gameMatrix[index];
+
+            // Update Dynamic Scenery Background
+            mainContainer.style.backgroundImage = `url('${payload.bg}')`;
+
+            // Assign numerical array values across window nodes
+            document.getElementById('box-val-1').innerText = payload.configuration[1];
+            document.getElementById('box-val-2').innerText = payload.configuration[2];
+            document.getElementById('box-val-3').innerText = payload.configuration[3];
+            document.getElementById('box-val-4').innerText = payload.configuration[4];
+
+            // Render Option Circles
+            optionsTray.innerHTML = '';
+            payload.bank.forEach(val => {
+                const node = document.createElement('div');
+                node.className = 'circle-choice';
+                node.innerText = val;
+                node.addEventListener('click', () => {
+                    if(actionLock) return;
+                    document.querySelectorAll('.circle-choice').forEach(c => c.classList.remove('active'));
+                    node.classList.add('active');
+                    stagingSelection = val;
+                    interactiveBox.classList.add('pulse');
+                });
+                optionsTray.appendChild(node);
+            });
+
+            // Trigger Entrance Animation from the Right
+            setTimeout(() => {
+                trainBox.classList.add('arrive');
+            }, 50);
+        }
+
+        // Handle Interactive Evaluation
+        function confirmPlayerChoice() {
+            if (actionLock || !stagingSelection) return;
+
+            const targetKey = gameMatrix[playhead].key;
+
+            if (stagingSelection === targetKey) {
+                actionLock = true;
+                executeAudio('sound-success');
+                
+                widgetSun.className = "smile";
+                document.getElementById('display-slot').innerText = stagingSelection;
+                
+                // Add Steam puffs and run left exit action sequentially
+                trainBox.classList.add('steaming');
+                
+                setTimeout(() => {
+                    trainBox.classList.remove('arrive');
+                    trainBox.classList.add('exit-left');
+                }, 200);
+
+                // Transition viewport frame
+                setTimeout(() => {
+                    playhead++;
+                    primeSlide(playhead);
+                }, 1900);
+
+            } else {
+                // Incorrect Action Workflow
+                executeAudio('sound-fail');
+                widgetSun.className = "sad";
+                
+                optionsTray.classList.add('shake');
+                setTimeout(() => optionsTray.classList.remove('shake'), 400);
+            }
+        }
+
+        // Final Celebration Script Engine
+        function renderOutro() {
+            gameplayCanvas.style.display = 'none';
+            mainContainer.style.backgroundImage = 'none';
+            document.getElementById('outro-slide').style.display = 'flex';
+            sparksFly();
+        }
+
+        function sparksFly() {
+            const surface = document.getElementById('canvas-particles');
+            const renderContext = surface.getContext('2d');
+            surface.width = mainContainer.offsetWidth;
+            surface.height = mainContainer.offsetHeight;
+
+            let system = [];
+            const palette = ['#ffc300', '#ff0054', '#ffbd00', '#70e000', '#00bbf9', '#f15bb5'];
+
+            for (let x = 0; x < 80; x++) {
+                system.push({
+                    x: Math.random() * surface.width,
+                    y: Math.random() * surface.height - surface.height,
+                    radius: Math.random() * 5 + 4,
+                    density: Math.random() * surface.height,
+                    color: palette[Math.floor(Math.random() * palette.length)],
+                    swivel: Math.random() * 12 - 6,
+                    rate: Math.random() * 0.05 + 0.02,
+                    angle: 0
+                });
+            }
+
+            function cycle() {
+                renderContext.clearRect(0, 0, surface.width, surface.height);
+                system.forEach((part, idx) => {
+                    part.angle += part.rate;
+                    part.y += (Math.cos(part.density) + 3.5 + part.radius / 2) / 2;
+                    part.x += Math.sin(part.angle);
+                    part.swivel = Math.sin(part.angle - idx / 4) * 12;
+
+                    renderContext.beginPath();
+                    renderContext.lineWidth = part.radius;
+                    renderContext.strokeStyle = part.color;
+                    renderContext.moveTo(part.x + part.swivel + part.radius / 2, part.y);
+                    renderContext.lineTo(part.x + part.swivel, part.y + part.swivel + part.radius / 2);
+                    renderContext.stroke();
+
+                    if (part.y > surface.height) {
+                        system[idx] = part;
+                        part.x = Math.random() * surface.width;
+                        part.y = -20;
+                    }
+                });
+                requestAnimationFrame(cycle);
+            }
+            cycle();
+        }
+    </script>
 </body>
 </html>
