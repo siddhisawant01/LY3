@@ -2,11 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Before Number Game</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:sans-serif;
+}
 
 body{
   height:100vh;
@@ -20,19 +25,19 @@ body{
 .header{
   text-align:center;
   font-weight:bold;
-  font-size:clamp(16px,2.5vw,26px);
-  padding:6px;
+  font-size:clamp(16px,3vw,28px);
+  padding:8px;
 }
 
 /* SUN */
 .sun{
   position:absolute;
-  top:8px;
+  top:10px;
   left:10px;
   font-size:clamp(24px,5vw,40px);
 }
 
-/* GAME AREA */
+/* GAME LAYOUT */
 .game{
   flex:1;
   display:flex;
@@ -41,49 +46,49 @@ body{
 
 /* TRAIN AREA */
 .train-area{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  flex:2;
   position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
 }
 
 /* TRACK */
 .track{
   position:absolute;
-  bottom:18%;
+  bottom:5vh;
   width:100%;
-  height:6%;
+  height:8vh;
   background:repeating-linear-gradient(
     90deg,
     #5d4037 0 30px,
     #8d6e63 30px 60px
   );
 }
-.track:before,.track:after{
+.track:before,
+.track:after{
   content:"";
   position:absolute;
   width:100%;
-  height:4px;
+  height:5px;
   background:#3e2723;
 }
-.track:before{top:10px;}
-.track:after{top:30px;}
+.track:before{ top:20%; }
+.track:after{ bottom:20%; }
 
 /* TRAIN */
 .train{
   display:flex;
-  align-items:flex-end;
-  gap:10px;
+  gap:2vw;
   position:absolute;
-  bottom:24%;
-  transform:translateX(120%);
+  bottom:12vh;
+  transform:translateX(120vw);
 }
 
 /* ENGINE */
 .engine{
-  width:min(90px,18vw);
-  height:min(80px,16vw);
+  width:clamp(70px,12vw,130px);
+  height:clamp(60px,10vw,110px);
   background:#1976d2;
   border-radius:12px;
   position:relative;
@@ -94,9 +99,9 @@ body{
   width:30%;
   height:30%;
   background:#90caf9;
-  top:15%;
-  left:15%;
-  border-radius:5px;
+  top:20%;
+  left:20%;
+  border-radius:6px;
 }
 
 /* SMOKE */
@@ -106,22 +111,22 @@ body{
   background:#ddd;
   border-radius:50%;
   top:-10px;
-  right:10px;
+  left:70%;
   animation:smoke 1.5s infinite;
 }
 @keyframes smoke{
-  from{transform:translateY(0);opacity:1;}
-  to{transform:translateY(-40px);opacity:0;}
+  0%{transform:translateY(0);opacity:1;}
+  100%{transform:translateY(-40px);opacity:0;}
 }
 
 /* COMPARTMENTS */
 .comp{
-  width:min(80px,16vw);
-  height:min(80px,16vw);
+  width:clamp(60px,11vw,110px);
+  height:clamp(60px,10vw,110px);
   border-radius:12px;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   position:relative;
 }
 
@@ -134,7 +139,7 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:clamp(14px,3vw,22px);
+  font-size:clamp(16px,3vw,26px);
   font-weight:bold;
 }
 
@@ -148,8 +153,9 @@ body{
 /* WHEELS */
 .wheel{
   position:absolute;
-  bottom:-10px;
-  width:12px;height:12px;
+  bottom:-12px;
+  width:clamp(10px,2.5vw,18px);
+  height:clamp(10px,2.5vw,18px);
   background:#000;
   border-radius:50%;
 }
@@ -158,51 +164,58 @@ body{
 
 /* OPTIONS */
 .options{
-  height:20%;
+  flex:1;
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:12px;
+  gap:4vw;
+  padding:10px;
 }
+
 .opt{
-  width:min(70px,14vw);
-  height:min(70px,14vw);
+  width:clamp(50px,12vw,90px);
+  height:clamp(50px,12vw,90px);
   border-radius:50%;
   background:#eee;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:clamp(14px,3vw,22px);
+  font-size:clamp(16px,4vw,26px);
   border:3px solid #444;
 }
-.opt.selected{border:4px solid green;}
+
+.opt.selected{
+  border:5px solid green;
+}
 
 /* FINAL */
 .final{
   height:100vh;
   background:#b3e5fc;
   display:flex;
+  flex-direction:column;
   justify-content:center;
   align-items:center;
-  flex-direction:column;
 }
+
 .loopTrain{
   position:absolute;
-  bottom:25%;
+  bottom:12vh;
   display:flex;
-  gap:10px;
-  animation:loop 8s linear infinite;
+  gap:2vw;
+  animation:loop 10s linear infinite;
 }
+
 @keyframes loop{
-  from{transform:translateX(120%);}
-  to{transform:translateX(-140%);}
+  0%{transform:translateX(120vw);}
+  100%{transform:translateX(-140vw);}
 }
 </style>
 </head>
 
 <body>
 
-<div id="game" class="game">
+<div class="game">
 <div class="header">Identify the before number from the given options</div>
 <div class="sun" id="sun">😊</div>
 
@@ -218,7 +231,8 @@ body{
 const levels=[
 {nums:["_",18,19,20,21],opt:[15,14,17],ans:17},
 {nums:["_",21,22,23,24],opt:[25,20,19],ans:20},
-{nums:["_",26,27,28,29],opt:[25,22,12],ans:25}
+{nums:["_",26,27,28,29],opt:[25,22,12],ans:25},
+{nums:["_",12,13,14,15],opt:[15,14,11],ans:11}
 ];
 
 let current=0,selected=null;
@@ -266,7 +280,7 @@ function createTrain(data){
   });
 
   setTimeout(()=>{
-    train.style.transition="transform 1.2s ease-out";
+    train.style.transition="transform 1.5s ease-out";
     train.style.transform="translateX(0)";
   },100);
 }
@@ -289,19 +303,17 @@ function createOptions(opts){
 }
 
 function check(){
-  if(selected==null)return;
-
   if(selected===levels[current].ans){
     sun.innerText="😊";
 
-    train.style.transition="transform 1.5s linear";
-    train.style.transform="translateX(-140%)";
+    train.style.transition="transform 2s linear";
+    train.style.transform="translateX(-140vw)";
 
     setTimeout(()=>{
       current++;
       if(current>=levels.length) showFinal();
       else load();
-    },1500);
+    },2000);
 
   }else{
     sun.innerText="😢";
@@ -314,7 +326,7 @@ function load(){
   selected=null;
   sun.innerText="😊";
   train.style.transition="none";
-  train.style.transform="translateX(120%)";
+  train.style.transform="translateX(120vw)";
   createTrain(levels[current].nums);
   createOptions(levels[current].opt);
 }
@@ -330,8 +342,6 @@ function showFinal(){
   const loop=document.getElementById("loopTrain");
 
   function makeTrain(){
-    loop.innerHTML="";
-
     let engine=document.createElement("div");
     engine.className="engine";
     addWheels(engine);
