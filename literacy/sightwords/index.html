@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Frog Sight Words Game</title>
 
@@ -20,8 +20,7 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    font-family:Arial, sans-serif;
-    background:#dff6ff;
+    font-family:Arial,sans-serif;
 }
 
 body{
@@ -72,50 +71,47 @@ body{
 /* ---------------- GAME SLIDES ---------------- */
 
 .game-slide{
-    background-image:url("assets/pond-background.jpg");
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
+    background:#bfefff;
     position:relative;
+    overflow:hidden;
 }
 
-/* ---------------- TITLE ---------------- */
+/* ---------------- INSTRUCTION ---------------- */
 
 .instruction{
     width:95%;
+    margin:auto;
     text-align:center;
-    font-size:clamp(22px,4vw,38px);
+    font-size:clamp(22px,4vw,40px);
     font-weight:bold;
     color:#000;
-    margin:auto;
     padding-top:15px;
-    text-shadow:1px 1px 2px white;
-    z-index:5;
+    z-index:10;
     position:relative;
+}
+
+/* ---------------- FROG POSITION ---------------- */
+
+.frog-container{
+    position:absolute;
+    top:32%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:170px;
+    height:170px;
+    z-index:20;
+    transition:all 0.9s ease;
 }
 
 /* ---------------- FROG ---------------- */
 
-.frog{
+.frog-body{
     position:absolute;
-    width:180px;
-    height:auto;
-    left:50%;
-    bottom:30%;
-    transform:translateX(-50%);
-    transition:all 0.8s ease;
-    z-index:10;
-}
-
-/* Frog Face */
-
-.frog-face{
-    position:absolute;
-    width:180px;
-    height:160px;
-    background:#31b500;
+    width:170px;
+    height:150px;
+    background:#00c52b;
+    border:5px solid #0d7d18;
     border-radius:50%;
-    border:5px solid #1f7a00;
 }
 
 /* Eyes */
@@ -126,19 +122,19 @@ body{
     height:42px;
     background:white;
     border-radius:50%;
-    top:-12px;
-    border:3px solid #1f7a00;
+    top:-10px;
+    border:4px solid #0d7d18;
 }
 
 .eye::after{
     content:'';
+    position:absolute;
     width:12px;
     height:12px;
     background:black;
     border-radius:50%;
-    position:absolute;
-    top:12px;
-    left:12px;
+    top:11px;
+    left:11px;
 }
 
 .eye.left{
@@ -155,66 +151,52 @@ body{
     position:absolute;
     width:70px;
     height:35px;
-    border-bottom:6px solid #000;
-    border-radius:0 0 70px 70px;
+    border-bottom:6px solid black;
+    border-radius:0 0 60px 60px;
     bottom:40px;
     left:50%;
     transform:translateX(-50%);
 }
 
-/* Frog Legs */
+/* Legs */
 
 .leg{
     position:absolute;
     width:40px;
     height:55px;
-    background:#31b500;
-    border:4px solid #1f7a00;
-    bottom:-25px;
-    border-radius:40px;
+    background:#00c52b;
+    border:4px solid #0d7d18;
+    border-radius:30px;
+    bottom:-22px;
 }
 
 .leg.left{
-    left:25px;
+    left:28px;
 }
 
 .leg.right{
-    right:25px;
-}
-
-/* Frog Jump */
-
-.frog.jump-left{
-    left:28%;
-    bottom:18%;
-    transform:translateX(-50%) translateY(-30px);
-}
-
-.frog.jump-right{
-    left:72%;
-    bottom:18%;
-    transform:translateX(-50%) translateY(-30px);
+    right:28px;
 }
 
 /* ---------------- LEAVES ---------------- */
 
 .leaf{
     position:absolute;
-    width:230px;
+    width:250px;
     height:150px;
-    background:#14c94d;
+    background:#00cc44;
+    border:6px solid #007c27;
     border-radius:50%;
-    border:6px solid #0a7f2e;
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:52px;
+    font-size:56px;
     font-weight:bold;
     color:white;
-    cursor:pointer;
     box-shadow:0 8px 18px rgba(0,0,0,0.3);
+    cursor:pointer;
     user-select:none;
-    z-index:5;
+    z-index:10;
     transition:0.2s;
 }
 
@@ -223,9 +205,9 @@ body{
     position:absolute;
     width:45px;
     height:12px;
-    background:#0a7f2e;
+    background:#007c27;
     right:18px;
-    bottom:22px;
+    bottom:18px;
     border-radius:20px;
     transform:rotate(-20deg);
 }
@@ -244,21 +226,68 @@ body{
     bottom:10%;
 }
 
+/* ---------------- FROG JUMP ---------------- */
+
+.jump-left{
+    animation:jumpLeft 1s forwards;
+}
+
+.jump-right{
+    animation:jumpRight 1s forwards;
+}
+
+@keyframes jumpLeft{
+
+    0%{
+        top:32%;
+        left:50%;
+    }
+
+    30%{
+        top:18%;
+        left:40%;
+    }
+
+    100%{
+        top:54%;
+        left:22%;
+    }
+}
+
+@keyframes jumpRight{
+
+    0%{
+        top:32%;
+        left:50%;
+    }
+
+    30%{
+        top:18%;
+        left:60%;
+    }
+
+    100%{
+        top:54%;
+        left:78%;
+    }
+}
+
 /* ---------------- FINAL SLIDE ---------------- */
 
 .final-slide{
-    background:linear-gradient(to bottom,#75f0ff,#77ff99);
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    background:linear-gradient(to bottom,#72e8ff,#85ff9c);
     overflow:hidden;
 }
 
 .final-text{
-    font-size:clamp(42px,8vw,80px);
+    position:absolute;
+    top:38%;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:clamp(45px,8vw,90px);
     font-weight:bold;
     color:white;
-    text-shadow:3px 3px 6px rgba(0,0,0,0.3);
+    text-shadow:3px 3px 8px rgba(0,0,0,0.3);
     z-index:20;
 }
 
@@ -268,18 +297,18 @@ body{
     position:absolute;
     width:90px;
     height:90px;
-    background:#31b500;
-    border:4px solid #1f7a00;
+    background:#00c52b;
+    border:4px solid #0d7d18;
     border-radius:50%;
-    animation:jump 2s infinite ease-in-out;
+    animation:smallJump 2s infinite ease-in-out;
 }
 
 .small-frog::before,
 .small-frog::after{
     content:'';
     position:absolute;
-    width:20px;
-    height:20px;
+    width:18px;
+    height:18px;
     background:white;
     border-radius:50%;
     top:-8px;
@@ -295,13 +324,13 @@ body{
 
 .small-frog:nth-child(2){
     left:5%;
-    bottom:10%;
+    bottom:12%;
     animation-delay:0s;
 }
 
 .small-frog:nth-child(3){
     left:25%;
-    bottom:20%;
+    bottom:18%;
     animation-delay:0.4s;
 }
 
@@ -313,17 +342,17 @@ body{
 
 .small-frog:nth-child(5){
     left:65%;
-    bottom:20%;
+    bottom:18%;
     animation-delay:1.2s;
 }
 
 .small-frog:nth-child(6){
     left:82%;
-    bottom:10%;
+    bottom:12%;
     animation-delay:1.6s;
 }
 
-@keyframes jump{
+@keyframes smallJump{
 
     0%{
         transform:translateY(0);
@@ -342,24 +371,21 @@ body{
 
 @media(max-width:768px){
 
-    .instruction{
-        font-size:28px;
+    .frog-container{
+        width:140px;
+        height:140px;
+        top:34%;
     }
 
-    .frog{
+    .frog-body{
         width:140px;
-        bottom:34%;
-    }
-
-    .frog-face{
-        width:140px;
-        height:125px;
+        height:120px;
     }
 
     .leaf{
-        width:180px;
+        width:190px;
         height:120px;
-        font-size:40px;
+        font-size:42px;
     }
 
 }
@@ -368,17 +394,42 @@ body{
 
     .instruction{
         font-size:20px;
-        padding:10px;
+        padding-top:10px;
     }
 
-    .frog{
-        width:115px;
-        bottom:36%;
+    .frog-container{
+        width:110px;
+        height:110px;
+        top:36%;
     }
 
-    .frog-face{
-        width:115px;
-        height:100px;
+    .frog-body{
+        width:110px;
+        height:95px;
+    }
+
+    .eye{
+        width:30px;
+        height:30px;
+    }
+
+    .eye.left{
+        left:18px;
+    }
+
+    .eye.right{
+        right:18px;
+    }
+
+    .mouth{
+        width:45px;
+        height:22px;
+        bottom:25px;
+    }
+
+    .leg{
+        width:28px;
+        height:38px;
     }
 
     .leaf{
@@ -389,12 +440,10 @@ body{
 
     .left-leaf{
         left:1%;
-        bottom:14%;
     }
 
     .right-leaf{
         right:1%;
-        bottom:14%;
     }
 
 }
@@ -410,11 +459,11 @@ body{
 
     <div class="slide active logo-slide" id="slide0">
 
-        <img src="assets/innovine-logo.png">
+        <img src="assets/innovine-logo.png" alt="logo">
 
     </div>
 
-    <!-- SLIDE 1 -->
+    <!-- ================= SLIDE 1 ================= -->
 
     <div class="slide game-slide" id="slide1">
 
@@ -422,9 +471,9 @@ body{
             Help the frog to identify the sight words
         </div>
 
-        <div class="frog" id="frog1">
+        <div class="frog-container" id="frog1">
 
-            <div class="frog-face">
+            <div class="frog-body">
 
                 <div class="eye left"></div>
                 <div class="eye right"></div>
@@ -439,18 +488,18 @@ body{
         </div>
 
         <div class="leaf left-leaf"
-             onclick="checkAnswer(1,true,'left')">
-             this
+        onclick="checkAnswer(1,true,'left')">
+        this
         </div>
 
         <div class="leaf right-leaf"
-             onclick="checkAnswer(1,false,'right')">
-             star
+        onclick="checkAnswer(1,false,'right')">
+        star
         </div>
 
     </div>
 
-    <!-- SLIDE 2 -->
+    <!-- ================= SLIDE 2 ================= -->
 
     <div class="slide game-slide" id="slide2">
 
@@ -458,9 +507,9 @@ body{
             Help the frog to identify the sight words
         </div>
 
-        <div class="frog" id="frog2">
+        <div class="frog-container" id="frog2">
 
-            <div class="frog-face">
+            <div class="frog-body">
 
                 <div class="eye left"></div>
                 <div class="eye right"></div>
@@ -475,18 +524,18 @@ body{
         </div>
 
         <div class="leaf left-leaf"
-             onclick="checkAnswer(2,false,'left')">
-             cat
+        onclick="checkAnswer(2,false,'left')">
+        cat
         </div>
 
         <div class="leaf right-leaf"
-             onclick="checkAnswer(2,true,'right')">
-             you
+        onclick="checkAnswer(2,true,'right')">
+        you
         </div>
 
     </div>
 
-    <!-- SLIDE 3 -->
+    <!-- ================= SLIDE 3 ================= -->
 
     <div class="slide game-slide" id="slide3">
 
@@ -494,9 +543,9 @@ body{
             Help the frog to identify the sight words
         </div>
 
-        <div class="frog" id="frog3">
+        <div class="frog-container" id="frog3">
 
-            <div class="frog-face">
+            <div class="frog-body">
 
                 <div class="eye left"></div>
                 <div class="eye right"></div>
@@ -511,18 +560,18 @@ body{
         </div>
 
         <div class="leaf left-leaf"
-             onclick="checkAnswer(3,true,'left')">
-             the
+        onclick="checkAnswer(3,true,'left')">
+        the
         </div>
 
         <div class="leaf right-leaf"
-             onclick="checkAnswer(3,false,'right')">
-             sun
+        onclick="checkAnswer(3,false,'right')">
+        sun
         </div>
 
     </div>
 
-    <!-- SLIDE 4 -->
+    <!-- ================= SLIDE 4 ================= -->
 
     <div class="slide game-slide" id="slide4">
 
@@ -530,9 +579,9 @@ body{
             Help the frog to identify the sight words
         </div>
 
-        <div class="frog" id="frog4">
+        <div class="frog-container" id="frog4">
 
-            <div class="frog-face">
+            <div class="frog-body">
 
                 <div class="eye left"></div>
                 <div class="eye right"></div>
@@ -547,18 +596,18 @@ body{
         </div>
 
         <div class="leaf left-leaf"
-             onclick="checkAnswer(4,false,'left')">
-             lid
+        onclick="checkAnswer(4,false,'left')">
+        lid
         </div>
 
         <div class="leaf right-leaf"
-             onclick="checkAnswer(4,true,'right')">
-             she
+        onclick="checkAnswer(4,true,'right')">
+        she
         </div>
 
     </div>
 
-    <!-- SLIDE 5 -->
+    <!-- ================= SLIDE 5 ================= -->
 
     <div class="slide game-slide" id="slide5">
 
@@ -566,9 +615,9 @@ body{
             Help the frog to identify the sight words
         </div>
 
-        <div class="frog" id="frog5">
+        <div class="frog-container" id="frog5">
 
-            <div class="frog-face">
+            <div class="frog-body">
 
                 <div class="eye left"></div>
                 <div class="eye right"></div>
@@ -583,13 +632,13 @@ body{
         </div>
 
         <div class="leaf left-leaf"
-             onclick="checkAnswer(5,true,'left')">
-             are
+        onclick="checkAnswer(5,true,'left')">
+        are
         </div>
 
         <div class="leaf right-leaf"
-             onclick="checkAnswer(5,false,'right')">
-             van
+        onclick="checkAnswer(5,false,'right')">
+        van
         </div>
 
     </div>
@@ -618,7 +667,7 @@ body{
 
 <script>
 
-/* ---------------- START GAME ---------------- */
+/* ---------------- START ---------------- */
 
 let currentSlide = 0;
 
@@ -647,7 +696,7 @@ function nextSlide(){
 
 }
 
-/* ---------------- ANSWERS ---------------- */
+/* ---------------- ANSWER CHECK ---------------- */
 
 function checkAnswer(slideNum,isCorrect,side){
 
@@ -658,6 +707,7 @@ function checkAnswer(slideNum,isCorrect,side){
         if(side === "left"){
             frog.classList.add("jump-left");
         }
+
         else{
             frog.classList.add("jump-right");
         }
@@ -672,10 +722,10 @@ function checkAnswer(slideNum,isCorrect,side){
 
         document.getElementById("wrongSound").play();
 
-        frog.style.transform = "translateX(-50%) scale(0.9)";
+        frog.style.transform = "translate(-50%,-50%) scale(0.9)";
 
         setTimeout(()=>{
-            frog.style.transform = "translateX(-50%) scale(1)";
+            frog.style.transform = "translate(-50%,-50%) scale(1)";
         },300);
 
     }
