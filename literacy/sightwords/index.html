@@ -159,7 +159,7 @@ body{
 .frog{
     position:absolute;
 
-    width:14%;
+    width:15%;
     aspect-ratio:1;
 
     left:50%;
@@ -175,7 +175,7 @@ body{
     transform 0.7s ease;
 }
 
-/* JUMP ANIMATION */
+/* ---------------- JUMP ---------------- */
 
 @keyframes frogJump{
 
@@ -215,7 +215,7 @@ body{
     }
 }
 
-/* Frog body */
+/* Frog Body */
 
 .frog-body{
     position:absolute;
@@ -295,7 +295,7 @@ body{
 .leaf{
     position:absolute;
 
-    width:24%;
+    width:26%;
     aspect-ratio:1.75/1;
 
     background:#06d43c;
@@ -310,7 +310,7 @@ body{
     justify-content:center;
     align-items:center;
 
-    font-weight:bold;
+    font-weight:900;
     color:white;
 
     cursor:pointer;
@@ -323,10 +323,15 @@ body{
 
     z-index:10;
 
-    /* BIGGER WORDS */
+    /* MUCH BIGGER FONT */
 
     font-size:
-    clamp(22px,2.4vw,54px);
+    clamp(40px,4vw,75px);
+
+    letter-spacing:1px;
+
+    text-shadow:
+    2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .leaf:active{
@@ -448,8 +453,12 @@ body{
     }
 
     .leaf{
-        width:28%;
-        font-size:clamp(28px,4vw,52px);
+        width:30%;
+
+        /* BIGGER TABLET FONT */
+
+        font-size:
+        clamp(44px,5vw,70px);
     }
 
 }
@@ -464,38 +473,38 @@ body{
     }
 
     .pond{
-
         width:96vw;
-
         aspect-ratio:1.15/1;
-
         top:58%;
     }
 
     .frog{
-        width:22%;
+        width:23%;
         top:47%;
     }
 
     .leaf{
 
-        width:36%;
+        width:40%;
 
         bottom:4%;
 
-        /* MUCH BIGGER MOBILE WORDS */
+        /* VERY BIG MOBILE FONT */
 
-        font-size:clamp(30px,6vw,48px);
+        font-size:
+        clamp(42px,8vw,65px);
 
         border-width:4px;
+
+        font-weight:900;
     }
 
     .left-leaf{
-        left:3%;
+        left:2%;
     }
 
     .right-leaf{
-        right:3%;
+        right:2%;
     }
 
     .small-frog{
@@ -518,16 +527,19 @@ body{
     }
 
     .frog{
-        width:24%;
+        width:25%;
     }
 
     .leaf{
 
-        width:38%;
+        width:42%;
 
-        /* EXTRA BIG FONT */
+        /* EXTRA EXTRA BIG */
 
-        font-size:clamp(32px,6.8vw,50px);
+        font-size:
+        clamp(46px,9vw,70px);
+
+        font-weight:900;
     }
 
 }
@@ -543,14 +555,14 @@ body{
 
 <div class="slide active" id="slide0">
 
-    <img src="assets/innovine-logo.png"
-    class="logo">
+<img src="assets/innovine-logo.png"
+class="logo">
 
 </div>
 
 <!-- SLIDE 1 -->
 
-<div class="slide game-slide active2" id="slide1">
+<div class="slide game-slide" id="slide1">
 
 <div class="instruction">
 Help the frog to identify the sight words
@@ -810,8 +822,6 @@ Great Job!
 
 </div>
 
-<!-- AUDIO -->
-
 <audio id="wrongSound"
 src="assets/wrong.mp3"></audio>
 
@@ -819,15 +829,11 @@ src="assets/wrong.mp3"></audio>
 
 let currentSlide = 0;
 
-/* LOGO */
-
 setTimeout(()=>{
 
     nextSlide();
 
 },3000);
-
-/* NEXT SLIDE */
 
 function nextSlide(){
 
@@ -852,8 +858,6 @@ function nextSlide(){
         next.classList.add("active");
     }
 }
-
-/* CHECK ANSWER */
 
 function checkAnswer(
 slideNum,
