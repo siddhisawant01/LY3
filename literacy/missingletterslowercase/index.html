@@ -121,55 +121,41 @@ SLIDE 2
     text-align:center;
 }
 
-/* TABLE AREA */
+/* =========================================
+HORIZONTAL RECTANGLE GRID
+========================================= */
 
 .table-area{
 
     display:flex;
     flex-direction:column;
     align-items:center;
+    gap:8px;
 }
 
-/* MAIN GRID */
+/* ROWS */
 
-.grid{
+.row{
 
-    display:grid;
-
-    grid-template-columns:repeat(4,72px);
-
-    grid-template-rows:repeat(6,72px);
-
-    gap:5px;
-}
-
-/* BOTTOM ROW */
-
-.bottom-row{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,72px);
-
-    gap:5px;
-
-    margin-top:5px;
+    display:flex;
+    gap:6px;
+    justify-content:center;
 }
 
 /* CELL */
 
 .cell{
 
-    width:72px;
-    height:72px;
+    width:64px;
+    height:64px;
 
-    border-radius:18px;
+    border-radius:16px;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
-    font-size:48px;
+    font-size:42px;
     font-weight:bold;
 
     background:white;
@@ -195,8 +181,6 @@ SLIDE 2
     background:#fff6cc;
 
     border:3px dashed #ff006e;
-
-    color:#ff006e;
 
     cursor:pointer;
 }
@@ -359,34 +343,26 @@ MOBILE
 
 @media(max-width:700px){
 
-    .grid{
-
-        grid-template-columns:repeat(4,54px);
-
-        grid-template-rows:repeat(6,54px);
-    }
-
-    .bottom-row{
-
-        grid-template-columns:repeat(2,54px);
+    .row{
+        gap:4px;
     }
 
     .cell{
 
-        width:54px;
-        height:54px;
+        width:44px;
+        height:44px;
 
-        font-size:34px;
+        font-size:28px;
 
-        border-radius:12px;
+        border-radius:10px;
     }
 
     .option{
 
-        width:44px;
-        height:44px;
+        width:42px;
+        height:42px;
 
-        font-size:24px;
+        font-size:22px;
     }
 
     .feedback{
@@ -437,15 +413,9 @@ SLIDE 2
             Identify the missing letters
         </div>
 
-        <!-- TABLE -->
+        <!-- HORIZONTAL RECTANGLE TABLE -->
 
-        <div class="table-area">
-
-            <div class="grid" id="grid"></div>
-
-            <div class="bottom-row" id="bottomRow"></div>
-
-        </div>
+        <div class="table-area" id="tableArea"></div>
 
         <!-- HELP BOX -->
 
@@ -492,54 +462,53 @@ setTimeout(()=>{
 },3000);
 
 /* =========================================
-GAME TABLE DATA
+HORIZONTAL RECTANGLE DATA
 ========================================= */
 
-const gridData = [
+const rows = [
 
-    ["a","","","d"],
-    ["e","","","h"],
-    ["i","","k",""],
-    ["","","","p"],
-    ["","","",""],
-    ["","v","w",""]
+[
+{type:"fixed",letter:"a"},
+{type:"blank",answer:"b"},
+{type:"blank",answer:"c"},
+{type:"fixed",letter:"d"},
+{type:"fixed",letter:"e"},
+{type:"blank",answer:"f"},
+{type:"blank",answer:"g"},
+{type:"fixed",letter:"h"}
+],
+
+[
+{type:"fixed",letter:"i"},
+{type:"blank",answer:"j"},
+{type:"fixed",letter:"k"},
+{type:"blank",answer:"l"},
+{type:"blank",answer:"m"},
+{type:"blank",answer:"n"},
+{type:"blank",answer:"o"},
+{type:"fixed",letter:"p"}
+],
+
+[
+{type:"blank",answer:"q"},
+{type:"blank",answer:"r"},
+{type:"blank",answer:"s"},
+{type:"blank",answer:"t"},
+{type:"blank",answer:"u"},
+{type:"fixed",letter:"v"},
+{type:"fixed",letter:"w"},
+{type:"blank",answer:"x"}
+],
+
+[
+{type:"fixed",letter:"y"},
+{type:"blank",answer:"z"}
+]
 
 ];
 
-/* BOTTOM ROW */
-
-const bottomData = ["y",""];
-
-/* CORRECT ANSWERS */
-
-const answers = {
-
-    "0-1":"b",
-    "0-2":"c",
-
-    "1-1":"f",
-    "1-2":"g",
-
-    "2-1":"j",
-    "2-3":"l",
-
-    "3-0":"m",
-    "3-1":"n",
-    "3-2":"o",
-
-    "4-0":"q",
-    "4-1":"r",
-    "4-2":"s",
-    "4-3":"t",
-
-    "5-0":"u",
-    "5-3":"x",
-
-    "bottom-1":"z"
-};
-
 /* =========================================
-SHUFFLED HELP BOX LETTERS
+SHUFFLED HELP LETTERS
 ========================================= */
 
 const helpLetters = [
@@ -555,10 +524,8 @@ const helpLetters = [
 ELEMENTS
 ========================================= */
 
-const grid = document.getElementById("grid");
-
-const bottomRow =
-document.getElementById("bottomRow");
+const tableArea =
+document.getElementById("tableArea");
 
 const helpBox =
 document.getElementById("helpBox");
@@ -576,32 +543,40 @@ let selectedLetter = null;
 let selectedButton = null;
 
 /* =========================================
-CREATE GRID
+CREATE TABLE
 ========================================= */
 
-gridData.forEach((row,rowIndex)=>{
+rows.forEach(rowData=>{
 
-    row.forEach((item,colIndex)=>{
+    const row =
+    document.createElement("div");
+
+    row.classList.add("row");
+
+    rowData.forEach(item=>{
 
         const cell =
         document.createElement("div");
 
         cell.classList.add("cell");
 
-        if(item === ""){
+        if(item.type === "fixed"){
+
+            cell.classList.add("fixed");
+
+            cell.innerHTML = item.letter;
+
+        }else{
 
             cell.classList.add("blank");
 
-            cell.innerHTML="?";
+            cell.innerHTML = "";
 
             cell.addEventListener("click",()=>{
 
                 if(!selectedLetter) return;
 
-                const key =
-                rowIndex + "-" + colIndex;
-
-                if(selectedLetter === answers[key]){
+                if(selectedLetter === item.answer){
 
                     cell.innerHTML =
                     selectedLetter;
@@ -638,86 +613,13 @@ gridData.forEach((row,rowIndex)=>{
                     },700);
                 }
             });
-
-        }else{
-
-            cell.classList.add("fixed");
-
-            cell.innerHTML = item;
         }
 
-        grid.appendChild(cell);
+        row.appendChild(cell);
 
     });
 
-});
-
-/* =========================================
-BOTTOM ROW
-========================================= */
-
-bottomData.forEach((item,index)=>{
-
-    const cell =
-    document.createElement("div");
-
-    cell.classList.add("cell");
-
-    if(item === ""){
-
-        cell.classList.add("blank");
-
-        cell.innerHTML="?";
-
-        cell.addEventListener("click",()=>{
-
-            if(!selectedLetter) return;
-
-            if(selectedLetter === "z"){
-
-                cell.innerHTML = "z";
-
-                cell.style.background =
-                "#d8ffd8";
-
-                cell.style.border =
-                "3px solid green";
-
-                selectedButton.remove();
-
-                selectedLetter = null;
-                selectedButton = null;
-
-                playCorrect();
-
-                feedback.innerHTML = "✅";
-
-                setTimeout(()=>{
-                    feedback.innerHTML="";
-                },700);
-
-                checkComplete();
-
-            }else{
-
-                playWrong();
-
-                feedback.innerHTML = "❌";
-
-                setTimeout(()=>{
-                    feedback.innerHTML="";
-                },700);
-            }
-        });
-
-    }else{
-
-        cell.classList.add("fixed");
-
-        cell.innerHTML = item;
-    }
-
-    bottomRow.appendChild(cell);
+    tableArea.appendChild(row);
 
 });
 
@@ -787,7 +689,7 @@ function checkComplete(){
 
     blanks.forEach(box=>{
 
-        if(box.innerHTML === "?"){
+        if(box.innerHTML === ""){
             complete = false;
         }
     });
