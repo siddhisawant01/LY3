@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
 <title>Frog Sight Words Game</title>
 
@@ -74,17 +74,33 @@ body{
     background:#bfefff;
 }
 
+/* ---------------- INSTRUCTION ---------------- */
+
+.instruction{
+    width:100%;
+    text-align:center;
+    font-size:clamp(18px,3vw,34px);
+    font-weight:bold;
+    color:#000;
+    padding-top:12px;
+    z-index:20;
+    position:absolute;
+    top:0;
+    left:0;
+}
+
 /* ---------------- POND ---------------- */
 
 .pond{
     position:absolute;
-    width:90%;
-    height:70%;
-    left:5%;
-    bottom:2%;
-    background:linear-gradient(#5fd3ff,#34b5e5);
+    width:min(88vw,520px);
+    height:min(70vh,720px);
+    left:50%;
+    top:56%;
+    transform:translate(-50%,-50%);
+    background:linear-gradient(#5fd3ff,#45b6e6);
     border-radius:45%;
-    border:18px solid #84d35f;
+    border:16px solid #84d35f;
     overflow:hidden;
 }
 
@@ -92,68 +108,73 @@ body{
 
 .water-circle{
     position:absolute;
-    background:rgba(255,255,255,0.15);
+    background:rgba(255,255,255,0.12);
     border-radius:50%;
 }
 
 .w1{
-    width:140px;
-    height:140px;
-    top:12%;
+    width:42%;
+    height:24%;
+    top:16%;
     left:10%;
 }
 
 .w2{
-    width:100px;
-    height:100px;
-    top:28%;
-    right:18%;
+    width:30%;
+    height:18%;
+    top:34%;
+    right:12%;
 }
 
 .w3{
-    width:170px;
-    height:170px;
-    bottom:10%;
-    left:35%;
-}
-
-/* ---------------- INSTRUCTION ---------------- */
-
-.instruction{
-    width:95%;
-    margin:auto;
-    text-align:center;
-    font-size:clamp(22px,4vw,42px);
-    font-weight:bold;
-    color:#000;
-    padding-top:12px;
-    z-index:20;
-    position:relative;
+    width:54%;
+    height:28%;
+    bottom:8%;
+    left:24%;
 }
 
 /* ---------------- FROG ---------------- */
 
 .frog{
     position:absolute;
-    width:170px;
-    height:170px;
+    width:120px;
+    height:120px;
     left:50%;
-    top:43%;
+    top:48%;
     transform:translate(-50%,-50%);
     z-index:15;
     transition:all 1s ease;
+    animation:floating 2s ease-in-out infinite;
+}
+
+/* FLOATING ANIMATION */
+
+@keyframes floating{
+
+    0%{
+        transform:translate(-50%,-50%) translateY(0);
+    }
+
+    50%{
+        transform:translate(-50%,-50%) translateY(-12px);
+    }
+
+    100%{
+        transform:translate(-50%,-50%) translateY(0);
+    }
+
 }
 
 /* Frog Body */
 
 .frog-body{
     position:absolute;
-    width:120px;
-    height:120px;
-    background:#00bf2f;
+    width:82px;
+    height:82px;
+    background:#00c92c;
     border-radius:50%;
-    left:25px;
-    top:35px;
+    left:19px;
+    top:28px;
     border:5px solid #0a7d20;
 }
 
@@ -161,80 +182,80 @@ body{
 
 .eye{
     position:absolute;
-    width:36px;
-    height:36px;
+    width:28px;
+    height:28px;
     background:white;
     border-radius:50%;
     border:4px solid #0a7d20;
-    top:15px;
+    top:8px;
 }
 
 .eye.left{
-    left:38px;
+    left:22px;
 }
 
 .eye.right{
-    right:38px;
+    right:22px;
 }
 
 .pupil{
     position:absolute;
-    width:10px;
-    height:10px;
+    width:8px;
+    height:8px;
     background:black;
     border-radius:50%;
-    top:10px;
-    left:10px;
+    top:8px;
+    left:8px;
 }
 
 /* Smile */
 
 .smile{
     position:absolute;
-    width:42px;
-    height:22px;
-    border-bottom:5px solid black;
-    border-radius:0 0 40px 40px;
-    left:64px;
-    top:88px;
+    width:28px;
+    height:14px;
+    border-bottom:4px solid black;
+    border-radius:0 0 30px 30px;
+    left:46px;
+    top:62px;
 }
 
 /* Legs */
 
 .leg{
     position:absolute;
-    width:35px;
-    height:52px;
-    background:#00bf2f;
+    width:22px;
+    height:34px;
+    background:#00c92c;
     border:4px solid #0a7d20;
     border-radius:40px;
-    bottom:5px;
+    bottom:0;
 }
 
 .leg.left{
-    left:45px;
+    left:36px;
 }
 
 .leg.right{
-    right:45px;
+    right:36px;
 }
 
 /* ---------------- LEAVES ---------------- */
 
 .leaf{
     position:absolute;
-    width:210px;
-    height:135px;
+    width:34%;
+    height:13%;
     background:#00c848;
     border:6px solid #08752c;
     border-radius:50%;
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:52px;
+    font-size:clamp(22px,3vw,40px);
     font-weight:bold;
     color:white;
-    box-shadow:0 8px 15px rgba(0,0,0,0.3);
+    box-shadow:0 8px 15px rgba(0,0,0,0.25);
     cursor:pointer;
     user-select:none;
     z-index:10;
@@ -248,114 +269,108 @@ body{
 .leaf::after{
     content:"";
     position:absolute;
-    width:45px;
-    height:12px;
+    width:28%;
+    height:10%;
     background:#08752c;
     border-radius:20px;
-    right:18px;
-    bottom:16px;
+    right:10%;
+    bottom:12%;
     transform:rotate(-20deg);
 }
 
 .left-leaf{
     left:6%;
-    bottom:12%;
+    bottom:2%;
 }
 
 .right-leaf{
     right:6%;
-    bottom:12%;
+    bottom:2%;
 }
 
 /* ---------------- FROG JUMP ---------------- */
 
 .jump-left{
-    left:23%;
-    top:60%;
-    transform:translate(-50%,-50%) scale(1.05);
+    left:24%;
+    top:78%;
+    animation:none;
 }
 
 .jump-right{
-    left:77%;
-    top:60%;
-    transform:translate(-50%,-50%) scale(1.05);
+    left:76%;
+    top:78%;
+    animation:none;
 }
 
 /* ---------------- FINAL SLIDE ---------------- */
 
 .final-slide{
-    background:linear-gradient(to bottom,#2ed9e8,#67e890,#fff27a);
+    background:linear-gradient(to bottom,#55e7ff,#4df0a2,#fff58c);
     overflow:hidden;
 }
 
-/* FINAL TEXT */
-
 .final-text{
     position:absolute;
-    top:10%;
+    top:12%;
     width:100%;
     text-align:center;
-    font-size:clamp(44px,7vw,80px);
+    font-size:clamp(42px,8vw,90px);
     font-weight:bold;
     color:white;
-    text-shadow:4px 4px 8px rgba(0,0,0,0.4);
+    text-shadow:4px 4px 8px rgba(0,0,0,0.3);
 }
 
-/* ---------------- MOVING FROGS ---------------- */
+/* ---------------- FINAL FROGS ---------------- */
 
-.animated-frog{
+.celebrate-frog{
     position:absolute;
-    width:120px;
-    height:120px;
-    animation:floatJump 2s infinite ease-in-out;
+    width:90px;
+    height:90px;
+    animation:bounce 2s infinite ease-in-out;
 }
 
-/* Different Positions */
-
-.af1{
-    left:8%;
-    bottom:8%;
+.cf1{
+    left:6%;
+    bottom:10%;
     animation-delay:0s;
 }
 
-.af2{
-    left:28%;
+.cf2{
+    left:26%;
     bottom:20%;
-    animation-delay:0.4s;
+    animation-delay:0.3s;
 }
 
-.af3{
-    left:48%;
+.cf3{
+    left:46%;
+    bottom:8%;
+    animation-delay:0.6s;
+}
+
+.cf4{
+    left:66%;
+    bottom:18%;
+    animation-delay:0.9s;
+}
+
+.cf5{
+    left:82%;
     bottom:10%;
-    animation-delay:0.8s;
-}
-
-.af4{
-    left:68%;
-    bottom:22%;
     animation-delay:1.2s;
 }
 
-.af5{
-    left:84%;
-    bottom:6%;
-    animation-delay:1.6s;
-}
-
-/* Up Down Animation */
-
-@keyframes floatJump{
+@keyframes bounce{
 
     0%{
-        transform:translateY(0px);
+        transform:translateY(0);
     }
 
     50%{
-        transform:translateY(-70px);
+        transform:translateY(-60px);
     }
 
     100%{
-        transform:translateY(0px);
+        transform:translateY(0);
     }
 
 }
@@ -364,37 +379,51 @@ body{
 
 @media(max-width:768px){
 
+    .pond{
+        width:88vw;
+        height:68vh;
+        top:58%;
+    }
+
     .frog{
-        width:135px;
-        height:135px;
-        top:44%;
+        width:100px;
+        height:100px;
     }
 
     .frog-body{
-        width:95px;
-        height:95px;
-        left:20px;
+        width:68px;
+        height:68px;
+        left:16px;
+        top:24px;
     }
 
     .eye{
-        width:28px;
-        height:28px;
+        width:24px;
+        height:24px;
+    }
+
+    .eye.left{
+        left:18px;
+    }
+
+    .eye.right{
+        right:18px;
     }
 
     .smile{
-        left:48px;
-        top:72px;
+        left:37px;
+        top:54px;
+    }
+
+    .leg{
+        width:18px;
+        height:28px;
     }
 
     .leaf{
-        width:160px;
-        height:100px;
-        font-size:38px;
-    }
-
-    .animated-frog{
-        width:90px;
-        height:90px;
+        width:38%;
+        height:12%;
+        font-size:28px;
     }
 
 }
@@ -402,75 +431,83 @@ body{
 @media(max-width:480px){
 
     .instruction{
-        font-size:18px;
-        padding-top:10px;
+        font-size:16px;
+        padding-top:16px;
+    }
+
+    .pond{
+        width:86vw;
+        height:64vh;
+        top:60%;
+        border-width:12px;
     }
 
     .frog{
-        width:110px;
-        height:110px;
-        top:45%;
+        width:92px;
+        height:92px;
+        top:48%;
     }
 
     .frog-body{
-        width:78px;
-        height:78px;
-        left:16px;
-        top:25px;
+        width:62px;
+        height:62px;
+        left:15px;
+        top:22px;
     }
 
     .eye{
-        width:24px;
-        height:24px;
-        top:10px;
-    }
-
-    .eye.left{
-        left:25px;
-    }
-
-    .eye.right{
-        right:25px;
+        width:22px;
+        height:22px;
+        top:6px;
     }
 
     .pupil{
-        width:8px;
-        height:8px;
-        top:7px;
-        left:7px;
+        width:7px;
+        height:7px;
+        top:6px;
+        left:6px;
     }
 
     .smile{
-        width:28px;
-        height:16px;
-        left:41px;
-        top:58px;
+        width:24px;
+        height:12px;
+        left:34px;
+        top:48px;
     }
 
     .leg{
-        width:24px;
-        height:38px;
+        width:16px;
+        height:24px;
+    }
+
+    .leg.left{
+        left:28px;
+    }
+
+    .leg.right{
+        right:28px;
     }
 
     .leaf{
-        width:135px;
-        height:85px;
-        font-size:32px;
+        width:40%;
+        height:11%;
+        font-size:18px;
+        border-width:4px;
     }
 
-    .left-leaf{
-        left:2%;
-        bottom:10%;
+    .jump-left{
+        left:25%;
+        top:82%;
     }
 
-    .right-leaf{
-        right:2%;
-        bottom:10%;
+    .jump-right{
+        left:75%;
+        top:82%;
     }
 
-    .animated-frog{
-        width:75px;
-        height:75px;
+    .celebrate-frog{
+        width:70px;
+        height:70px;
     }
 
 }
@@ -482,7 +519,7 @@ body{
 
 <div id="game">
 
-    <!-- LOGO SLIDE -->
+    <!-- LOGO -->
 
     <div class="slide active" id="slide0">
 
@@ -491,7 +528,7 @@ body{
 
     </div>
 
-    <!-- GAME SLIDES -->
+    <!-- SLIDE 1 -->
 
     <div class="slide game-slide" id="slide1">
 
@@ -734,25 +771,23 @@ body{
             Great Job!
         </div>
 
-        <!-- Animated Frogs -->
-
-        <div class="animated-frog af1">
+        <div class="celebrate-frog cf1">
             <div class="frog-body"></div>
         </div>
 
-        <div class="animated-frog af2">
+        <div class="celebrate-frog cf2">
             <div class="frog-body"></div>
         </div>
 
-        <div class="animated-frog af3">
+        <div class="celebrate-frog cf3">
             <div class="frog-body"></div>
         </div>
 
-        <div class="animated-frog af4">
+        <div class="celebrate-frog cf4">
             <div class="frog-body"></div>
         </div>
 
-        <div class="animated-frog af5">
+        <div class="celebrate-frog cf5">
             <div class="frog-body"></div>
         </div>
 
@@ -771,7 +806,9 @@ let currentSlide = 0;
 /* LOGO SCREEN */
 
 setTimeout(() => {
+
     nextSlide();
+
 },3000);
 
 /* NEXT SLIDE */
@@ -782,8 +819,10 @@ function nextSlide(){
     document.getElementById("slide"+currentSlide);
 
     if(current){
+
         current.classList.remove("active");
         current.classList.add("previous");
+
     }
 
     currentSlide++;
@@ -792,7 +831,9 @@ function nextSlide(){
     document.getElementById("slide"+currentSlide);
 
     if(next){
+
         next.classList.add("active");
+
     }
 
 }
@@ -806,11 +847,15 @@ function checkAnswer(slideNum,isCorrect,side){
 
     if(isCorrect){
 
+        frog.style.animation = "none";
+
         if(side === "left"){
 
             frog.classList.add("jump-left");
 
-        }else{
+        }
+
+        else{
 
             frog.classList.add("jump-right");
 
