@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Frog Sight Words Game</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial, sans-serif;
+    background:#ffffff;
+}
+
+body{
+    touch-action:manipulation;
+}
+
+#game{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+}
+
+/* ---------------- SLIDES ---------------- */
+
+.slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+    left:100%;
+    top:0;
+    transition:0.6s;
+    overflow:hidden;
+}
+
+.slide.active{
+    left:0;
+}
+
+.slide.previous{
+    left:-100%;
+}
+
+/* ---------------- LOGO SLIDE ---------------- */
+
+#slide0{
+    background:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#slide0 img{
+    width:260px;
+    max-width:75%;
+}
+
+/* ---------------- GAME SLIDES ---------------- */
+
+.game-slide{
+    background-image:url("assets/pond-background.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+.overlay{
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,0.08);
+    position:relative;
+}
+
+/* ---------------- INSTRUCTION ---------------- */
+
+.instruction{
+    width:95%;
+    margin:auto;
+    text-align:center;
+    font-weight:bold;
+    font-size:clamp(20px,4vw,34px);
+    color:#000;
+    padding-top:10px;
+    text-shadow:1px 1px 2px white;
+}
+
+/* ---------------- FROG ---------------- */
+
+.frog{
+    position:absolute;
+    width:140px;
+    bottom:34%;
+    left:50%;
+    transform:translateX(-50%);
+    transition:all 0.8s ease;
+    z-index:10;
+}
+
+.frog.jump-left{
+    left:28%;
+    bottom:24%;
+}
+
+.frog.jump-right{
+    left:72%;
+    bottom:24%;
+}
+
+/* ---------------- LEAVES ---------------- */
+
+.leaf{
+    position:absolute;
+    width:170px;
+    height:110px;
+    background:#5bbf3a;
+    border:5px solid #2e7d32;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:36px;
+    font-weight:bold;
+    color:white;
+    cursor:pointer;
+    box-shadow:0 6px 12px rgba(0,0,0,0.3);
+    user-select:none;
+    transition:0.2s;
+}
+
+.leaf:active{
+    transform:scale(0.95);
+}
+
+.left-leaf{
+    left:8%;
+    bottom:14%;
+}
+
+.right-leaf{
+    right:8%;
+    bottom:14%;
+}
+
+/* ---------------- FINAL SLIDE ---------------- */
+
+.final-slide{
+    background:linear-gradient(to bottom,#7fffd4,#87cefa,#90ee90);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+.final-text{
+    font-size:clamp(38px,8vw,70px);
+    font-weight:bold;
+    color:white;
+    text-shadow:3px 3px 6px rgba(0,0,0,0.4);
+    z-index:20;
+}
+
+/* ---------------- JUMPING FROGS ---------------- */
+
+.small-frog{
+    position:absolute;
+    width:90px;
+    animation:jump 2s infinite ease-in-out;
+}
+
+.small-frog:nth-child(2){
+    left:5%;
+    bottom:10%;
+    animation-delay:0s;
+}
+
+.small-frog:nth-child(3){
+    left:25%;
+    bottom:20%;
+    animation-delay:0.4s;
+}
+
+.small-frog:nth-child(4){
+    left:45%;
+    bottom:8%;
+    animation-delay:0.8s;
+}
+
+.small-frog:nth-child(5){
+    left:65%;
+    bottom:18%;
+    animation-delay:1.2s;
+}
+
+.small-frog:nth-child(6){
+    left:82%;
+    bottom:10%;
+    animation-delay:1.6s;
+}
+
+@keyframes jump{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-80px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media(max-width:768px){
+
+    .frog{
+        width:110px;
+        bottom:38%;
+    }
+
+    .leaf{
+        width:135px;
+        height:90px;
+        font-size:28px;
+    }
+
+    .left-leaf{
+        left:4%;
+    }
+
+    .right-leaf{
+        right:4%;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .instruction{
+        font-size:20px;
+        padding:10px;
+    }
+
+    .frog{
+        width:90px;
+        bottom:40%;
+    }
+
+    .leaf{
+        width:120px;
+        height:78px;
+        font-size:24px;
+    }
+
+    .left-leaf{
+        left:2%;
+        bottom:16%;
+    }
+
+    .right-leaf{
+        right:2%;
+        bottom:16%;
+    }
+
+    .small-frog{
+        width:70px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+    <!-- ================= LOGO SLIDE ================= -->
+
+    <div class="slide active" id="slide0">
+
+        <div id="slide0">
+
+            <img src="assets/innovine-logo.png" alt="logo">
+
+        </div>
+
+    </div>
+
+    <!-- ================= SLIDE 1 ================= -->
+
+    <div class="slide game-slide" id="slide1">
+
+        <div class="overlay">
+
+            <div class="instruction">
+                Help the frog to identify the sight words
+            </div>
+
+            <img src="assets/frog.png" class="frog" id="frog1">
+
+            <div class="leaf left-leaf"
+                 onclick="checkAnswer(1,true,'left')">
+                 this
+            </div>
+
+            <div class="leaf right-leaf"
+                 onclick="checkAnswer(1,false,'right')">
+                 star
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= SLIDE 2 ================= -->
+
+    <div class="slide game-slide" id="slide2">
+
+        <div class="overlay">
+
+            <div class="instruction">
+                Help the frog to identify the sight words
+            </div>
+
+            <img src="assets/frog.png" class="frog" id="frog2">
+
+            <div class="leaf left-leaf"
+                 onclick="checkAnswer(2,false,'left')">
+                 cat
+            </div>
+
+            <div class="leaf right-leaf"
+                 onclick="checkAnswer(2,true,'right')">
+                 you
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= SLIDE 3 ================= -->
+
+    <div class="slide game-slide" id="slide3">
+
+        <div class="overlay">
+
+            <div class="instruction">
+                Help the frog to identify the sight words
+            </div>
+
+            <img src="assets/frog.png" class="frog" id="frog3">
+
+            <div class="leaf left-leaf"
+                 onclick="checkAnswer(3,true,'left')">
+                 the
+            </div>
+
+            <div class="leaf right-leaf"
+                 onclick="checkAnswer(3,false,'right')">
+                 sun
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= SLIDE 4 ================= -->
+
+    <div class="slide game-slide" id="slide4">
+
+        <div class="overlay">
+
+            <div class="instruction">
+                Help the frog to identify the sight words
+            </div>
+
+            <img src="assets/frog.png" class="frog" id="frog4">
+
+            <div class="leaf left-leaf"
+                 onclick="checkAnswer(4,false,'left')">
+                 lid
+            </div>
+
+            <div class="leaf right-leaf"
+                 onclick="checkAnswer(4,true,'right')">
+                 she
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= SLIDE 5 ================= -->
+
+    <div class="slide game-slide" id="slide5">
+
+        <div class="overlay">
+
+            <div class="instruction">
+                Help the frog to identify the sight words
+            </div>
+
+            <img src="assets/frog.png" class="frog" id="frog5">
+
+            <div class="leaf left-leaf"
+                 onclick="checkAnswer(5,true,'left')">
+                 are
+            </div>
+
+            <div class="leaf right-leaf"
+                 onclick="checkAnswer(5,false,'right')">
+                 van
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FINAL SLIDE ================= -->
+
+    <div class="slide final-slide" id="slide6">
+
+        <div class="final-text">
+            Great Job!
+        </div>
+
+        <img src="assets/frog.png" class="small-frog">
+        <img src="assets/frog.png" class="small-frog">
+        <img src="assets/frog.png" class="small-frog">
+        <img src="assets/frog.png" class="small-frog">
+        <img src="assets/frog.png" class="small-frog">
+
+    </div>
+
+</div>
+
+<!-- ================= AUDIO ================= -->
+
+<audio id="correctSound" src="assets/correct.mp3"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+
+<script>
+
+/* ================= SLIDE CONTROL ================= */
+
+let currentSlide = 0;
+
+setTimeout(()=>{
+    nextSlide();
+},3000);
+
+function nextSlide(){
+
+    let current = document.getElementById("slide"+currentSlide);
+
+    if(current){
+        current.classList.remove("active");
+        current.classList.add("previous");
+    }
+
+    currentSlide++;
+
+    let next = document.getElementById("slide"+currentSlide);
+
+    if(next){
+        next.classList.add("active");
+    }
+}
+
+/* ================= GAME LOGIC ================= */
+
+function checkAnswer(slideNum,isCorrect,side){
+
+    const frog = document.getElementById("frog"+slideNum);
+
+    if(isCorrect){
+
+        document.getElementById("correctSound").play();
+
+        if(side === "left"){
+            frog.classList.add("jump-left");
+        }else{
+            frog.classList.add("jump-right");
+        }
+
+        setTimeout(()=>{
+            nextSlide();
+        },1500);
+
+    }else{
+
+        document.getElementById("wrongSound").play();
+
+        frog.style.transform = "translateX(-50%) scale(0.9)";
+
+        setTimeout(()=>{
+            frog.style.transform = "translateX(-50%) scale(1)";
+        },300);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
