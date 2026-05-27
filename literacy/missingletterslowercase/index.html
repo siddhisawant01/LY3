@@ -33,14 +33,15 @@ html,body{
 }
 
 /* =========================================
-   COMMON SLIDES
+   SLIDES
 ========================================= */
 
 .slide{
     position:absolute;
-    inset:0;
     width:100%;
     height:100vh;
+    top:0;
+    left:0;
 
     display:flex;
     justify-content:center;
@@ -53,13 +54,11 @@ html,body{
 .hidden{
     opacity:0;
     pointer-events:none;
-    transform:scale(1.05);
 }
 
 .show{
     opacity:1;
     pointer-events:auto;
-    transform:scale(1);
 }
 
 /* =========================================
@@ -73,13 +72,10 @@ html,body{
 /* IMPORTANT FIX FOR LOGO */
 
 .logo{
-
-    width:min(75vw,420px);
-    max-width:420px;
-    height:auto;
-
-    display:block;
+    width:min(70vw,350px);
+    max-width:350px;
     object-fit:contain;
+    display:block;
 }
 
 /* =========================================
@@ -89,8 +85,8 @@ html,body{
 #slide2{
 
     background:
-    linear-gradient(rgba(255,255,255,0.88),
-    rgba(255,255,255,0.88)),
+    linear-gradient(rgba(255,255,255,0.90),
+    rgba(255,255,255,0.90)),
     url("assets/background1.png");
 
     background-size:cover;
@@ -99,67 +95,49 @@ html,body{
     padding:10px;
 }
 
+/* GAME WRAPPER */
+
 .game-wrapper{
 
     width:100%;
-    max-width:900px;
     height:100%;
 
     display:flex;
     flex-direction:column;
-    justify-content:space-evenly;
+    justify-content:center;
     align-items:center;
 }
+
+/* TITLE */
 
 .game-title{
 
-    font-size:clamp(28px,4vw,52px);
+    font-size:clamp(24px,4vw,52px);
     font-weight:bold;
-
     color:#ff006e;
 
+    margin-bottom:12px;
     text-align:center;
 }
 
-/* =========================================
-   TABLE GRID
-========================================= */
+/* GRID */
 
-.grid-wrapper{
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
-
-.letters-grid{
+.grid{
 
     display:grid;
-
-    grid-template-columns:repeat(4,68px);
-
-    gap:6px;
-}
-
-.bottom-row{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,68px);
+    grid-template-columns:repeat(4,70px);
 
     gap:6px;
 
-    margin-top:6px;
+    margin-bottom:16px;
 }
 
-/* =========================================
-   LETTER BOX
-========================================= */
+/* BOX */
 
-.letter-box{
+.box{
 
-    width:68px;
-    height:68px;
+    width:70px;
+    height:70px;
 
     border-radius:16px;
 
@@ -171,79 +149,87 @@ html,body{
     justify-content:center;
     align-items:center;
 
-    font-size:28px;
+    font-size:30px;
     font-weight:bold;
 
-    color:#111;
+    color:#000;
 
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    box-shadow:0 3px 8px rgba(0,0,0,0.2);
 }
 
 /* EMPTY BOX */
 
 .blank{
 
-    border:3px dashed #ff006e;
+    background:#fff3cd;
 
-    background:#fff6cc;
+    border:3px dashed #ff006e;
 
     color:#ff006e;
 
     cursor:pointer;
 }
 
-/* =========================================
-   HELP BOX
-========================================= */
+/* INVISIBLE */
+
+.empty{
+
+    visibility:hidden;
+}
+
+/* HELP BOX */
 
 .help-box{
 
-    width:100%;
-    max-width:760px;
+    width:min(95vw,760px);
 
-    background:#ffffff;
+    background:white;
 
     border-radius:24px;
 
     padding:14px;
 
-    box-shadow:0 4px 16px rgba(0,0,0,0.15);
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
 
     display:flex;
     justify-content:center;
     align-items:center;
     flex-wrap:wrap;
 
-    gap:8px;
+    gap:10px;
 }
+
+/* OPTIONS */
 
 .option{
 
-    width:42px;
-    height:42px;
+    width:52px;
+    height:52px;
 
     border:none;
-    border-radius:12px;
+    border-radius:14px;
+
+    font-size:30px;
+    font-weight:bold;
 
     color:white;
-
-    font-size:20px;
-    font-weight:bold;
 
     cursor:pointer;
 
     transition:0.2s;
+
+    box-shadow:0 3px 8px rgba(0,0,0,0.2);
 }
 
 .option:active{
-    transform:scale(0.9);
+    transform:scale(0.92);
 }
 
 .selected{
     outline:4px solid #111;
 }
 
-/* RANDOM COLORS */
+/* COLORS */
 
 .c1{background:#ff006e;}
 .c2{background:#8338ec;}
@@ -252,24 +238,22 @@ html,body{
 .c5{background:#ffbe0b;}
 .c6{background:#fb5607;}
 
-/* =========================================
-   FEEDBACK
-========================================= */
+/* FEEDBACK */
 
 .feedback{
 
-    position:absolute;
+    position:fixed;
 
-    top:48%;
+    top:50%;
     left:50%;
 
     transform:translate(-50%,-50%);
 
     font-size:90px;
 
-    z-index:100;
+    z-index:999;
 
-    pointer-events:none;
+    display:none;
 }
 
 /* =========================================
@@ -291,7 +275,7 @@ html,body{
 
 .amazing{
 
-    font-size:clamp(52px,9vw,100px);
+    font-size:clamp(48px,8vw,100px);
 
     font-weight:bold;
 
@@ -299,7 +283,7 @@ html,body{
 
     text-shadow:
     3px 3px white,
-    6px 6px 12px rgba(0,0,0,0.25);
+    6px 6px 10px rgba(0,0,0,0.2);
 
     animation:bounce 1s infinite alternate;
 
@@ -313,21 +297,19 @@ html,body{
     }
 
     to{
-        transform:translateY(-15px);
+        transform:translateY(-12px);
     }
 }
 
-/* =========================================
-   RAIN LETTERS
-========================================= */
+/* RAIN */
 
 .rain-letter{
 
     position:absolute;
 
-    top:-60px;
+    top:-50px;
 
-    font-size:clamp(24px,5vw,50px);
+    font-size:40px;
 
     font-weight:bold;
 
@@ -349,33 +331,41 @@ html,body{
 
 @media(max-width:700px){
 
-    .letters-grid{
-        grid-template-columns:repeat(4,56px);
+    .grid{
+        grid-template-columns:repeat(4,58px);
+        gap:5px;
     }
 
-    .bottom-row{
-        grid-template-columns:repeat(2,56px);
-    }
-
-    .letter-box{
-        width:56px;
-        height:56px;
+    .box{
+        width:58px;
+        height:58px;
         font-size:24px;
     }
 
     .option{
-        width:38px;
-        height:38px;
-        font-size:18px;
-    }
-
-    .game-title{
+        width:44px;
+        height:44px;
         font-size:24px;
     }
 
+    .game-title{
+        font-size:28px;
+    }
+
     .help-box{
+        gap:7px;
         padding:10px;
-        gap:6px;
+    }
+}
+
+@media(max-height:700px){
+
+    .game-title{
+        margin-bottom:6px;
+    }
+
+    .grid{
+        margin-bottom:10px;
     }
 }
 
@@ -397,17 +387,30 @@ html,body{
 
 <section id="slide1" class="slide show">
 
-    <!-- VERY IMPORTANT:
-         PUT YOUR EXACT LOGO FILE INSIDE assets FOLDER
-         FILE NAME MUST BE:
-         logo.png
-    -->
+    <!-- IMPORTANT -->
+    <!-- KEEP THIS EXACT FILE NAME -->
 
     <img
-    src="assets/logo.png?v=1"
+    src="./assets/logo.png"
     class="logo"
     alt="Innovine Logo"
-    >
+
+    onerror="
+    this.style.display='none';
+    document.getElementById('logoText').style.display='block';
+    ">
+
+    <!-- FALLBACK -->
+    <h1
+    id="logoText"
+    style="
+    display:none;
+    color:#ff006e;
+    font-size:60px;
+    font-weight:bold;
+    ">
+    INNOVINE
+    </h1>
 
 </section>
 
@@ -424,21 +427,14 @@ html,body{
         </div>
 
         <!-- GRID -->
-        <div class="grid-wrapper">
 
-            <div class="letters-grid" id="lettersGrid"></div>
-
-            <div class="bottom-row" id="bottomRow"></div>
-
-        </div>
+        <div class="grid" id="grid"></div>
 
         <!-- HELP BOX -->
-        <div class="help-box" id="optionsContainer"></div>
+
+        <div class="help-box" id="helpBox"></div>
 
     </div>
-
-    <!-- FEEDBACK -->
-    <div class="feedback" id="feedback"></div>
 
 </section>
 
@@ -454,15 +450,24 @@ html,body{
 
 </section>
 
+<!-- FEEDBACK -->
+
+<div class="feedback" id="feedback"></div>
+
 <script>
 
 /* =========================================
    SLIDES
 ========================================= */
 
-const slide1 = document.getElementById("slide1");
-const slide2 = document.getElementById("slide2");
-const slide3 = document.getElementById("slide3");
+const slide1 =
+document.getElementById("slide1");
+
+const slide2 =
+document.getElementById("slide2");
+
+const slide3 =
+document.getElementById("slide3");
 
 setTimeout(()=>{
 
@@ -475,104 +480,48 @@ setTimeout(()=>{
 },3000);
 
 /* =========================================
-   GRID DATA
+   GAME DATA
 ========================================= */
 
-/* VISIBLE LETTERS:
-a d e h i k p v w y
-*/
+const gridData = [
 
-const mainGrid = [
-
-[
-{letter:"a",fixed:true},
-{letter:"b"},
-{letter:"c"},
-{letter:"d",fixed:true}
-],
-
-[
-{letter:"e",fixed:true},
-{letter:"f"},
-{letter:"g"},
-{letter:"h",fixed:true}
-],
-
-[
-{letter:"i",fixed:true},
-{letter:"j"},
-{letter:"k",fixed:true},
-{letter:"l"}
-],
-
-[
-{letter:"m"},
-{letter:"n"},
-{letter:"o"},
-{letter:"p",fixed:true}
-],
-
-[
-{letter:"q"},
-{letter:"r"},
-{letter:"s"},
-{letter:"t"}
-],
-
-[
-{letter:"u"},
-{letter:"v",fixed:true},
-{letter:"w",fixed:true},
-{letter:"x"}
-]
-
+"a","b","c","d",
+"e","f","g","h",
+"i","j","k","l",
+"m","n","o","p",
+"q","r","s","t",
+"u","v","w","x",
+"empty","y","z","empty"
 ];
 
-const bottomGrid = [
+/* ONLY THESE LETTERS VISIBLE */
 
-[
-{letter:"y",fixed:true},
-{letter:"z"}
-]
-
+const visibleLetters = [
+"a","d","e","h","i",
+"k","p","v","w","y"
 ];
 
-/* =========================================
-   SHUFFLED HELP BOX LETTERS
-========================================= */
+/* SHUFFLED HELP BOX */
 
 const helpLetters = [
 
-"q",
-"b",
-"m",
-"z",
-"g",
-"t",
-"c",
-"u",
-"f",
-"n",
-"l",
-"j",
-"x",
-"r",
-"s",
-"o"
+"q","b","m","u","g",
+"z","c","l","x","o",
+"n","f","s","r","j",
+"t"
 ];
+
+let selectedLetter = null;
 
 /* =========================================
    ELEMENTS
 ========================================= */
 
-const lettersGrid =
-document.getElementById("lettersGrid");
+const grid =
+document.getElementById("grid");
 
-const bottomRow =
-document.getElementById("bottomRow");
-
-const optionsContainer =
-document.getElementById("optionsContainer");
+const helpBox =
+document.getElementById("helpBox");
 
 const feedback =
 document.getElementById("feedback");
@@ -583,94 +532,70 @@ document.getElementById("correctSound");
 const wrongSound =
 document.getElementById("wrongSound");
 
-let selectedLetter = null;
-let selectedButton = null;
-
 /* =========================================
    CREATE GRID
 ========================================= */
 
-function createBox(item){
+gridData.forEach(letter=>{
 
     const box =
     document.createElement("div");
 
-    box.classList.add("letter-box");
+    box.classList.add("box");
 
-    if(item.fixed){
+    if(letter === "empty"){
 
-        box.innerHTML = item.letter;
+        box.classList.add("empty");
+
+    }else if(visibleLetters.includes(letter)){
+
+        box.innerHTML = letter;
 
     }else{
 
-        box.classList.add("blank");
-
         box.innerHTML = "?";
 
-        box.dataset.answer = item.letter;
+        box.dataset.answer = letter;
+
+        box.classList.add("blank");
 
         box.addEventListener("click",()=>{
 
             if(!selectedLetter) return;
 
-            if(selectedLetter === item.letter){
+            if(selectedLetter === box.dataset.answer){
 
                 box.innerHTML = selectedLetter;
+
+                box.classList.remove("blank");
 
                 box.style.background = "#d8ffd8";
                 box.style.border = "3px solid green";
 
-                selectedButton.remove();
-
-                selectedLetter = null;
-                selectedButton = null;
-
                 playCorrect();
+
                 showFeedback("✅");
 
-                checkGameComplete();
+                removeHelpLetter(selectedLetter);
+
+                selectedLetter = null;
+
+                checkComplete();
 
             }else{
 
                 playWrong();
+
                 showFeedback("❌");
             }
         });
     }
 
-    return box;
-}
-
-/* MAIN GRID */
-
-mainGrid.forEach(row=>{
-
-    row.forEach(item=>{
-
-        lettersGrid.appendChild(
-        createBox(item)
-        );
-
-    });
-
-});
-
-/* BOTTOM GRID */
-
-bottomGrid.forEach(row=>{
-
-    row.forEach(item=>{
-
-        bottomRow.appendChild(
-        createBox(item)
-        );
-
-    });
-
+    grid.appendChild(box);
 });
 
 /* =========================================
-   CREATE OPTIONS
+   HELP BOX
 ========================================= */
 
 helpLetters.forEach((letter,index)=>{
@@ -683,6 +608,8 @@ helpLetters.forEach((letter,index)=>{
 
     btn.innerHTML = letter;
 
+    btn.dataset.letter = letter;
+
     btn.addEventListener("click",()=>{
 
         document
@@ -694,11 +621,28 @@ helpLetters.forEach((letter,index)=>{
         btn.classList.add("selected");
 
         selectedLetter = letter;
-        selectedButton = btn;
     });
 
-    optionsContainer.appendChild(btn);
+    helpBox.appendChild(btn);
 });
+
+/* =========================================
+   REMOVE HELP LETTER
+========================================= */
+
+function removeHelpLetter(letter){
+
+    const buttons =
+    document.querySelectorAll(".option");
+
+    buttons.forEach(btn=>{
+
+        if(btn.dataset.letter === letter){
+
+            btn.remove();
+        }
+    });
+}
 
 /* =========================================
    FEEDBACK
@@ -706,11 +650,13 @@ helpLetters.forEach((letter,index)=>{
 
 function showFeedback(symbol){
 
+    feedback.style.display = "block";
+
     feedback.innerHTML = symbol;
 
     setTimeout(()=>{
-        feedback.innerHTML = "";
-    },900);
+        feedback.style.display = "none";
+    },700);
 }
 
 /* =========================================
@@ -735,21 +681,12 @@ function playWrong(){
    CHECK COMPLETE
 ========================================= */
 
-function checkGameComplete(){
+function checkComplete(){
 
-    const blanks =
+    const remaining =
     document.querySelectorAll(".blank");
 
-    let completed = true;
-
-    blanks.forEach(box=>{
-
-        if(box.innerHTML === "?"){
-            completed = false;
-        }
-    });
-
-    if(completed){
+    if(remaining.length === 0){
 
         setTimeout(()=>{
 
@@ -759,7 +696,7 @@ function checkGameComplete(){
             slide3.classList.remove("hidden");
             slide3.classList.add("show");
 
-            startLetterRain();
+            startRain();
 
         },1200);
     }
@@ -769,7 +706,7 @@ function checkGameComplete(){
    LETTER RAIN
 ========================================= */
 
-function startLetterRain(){
+function startRain(){
 
     const letters =
     "abcdefghijklmnopqrstuvwxyz";
