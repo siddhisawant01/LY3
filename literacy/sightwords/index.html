@@ -26,7 +26,7 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:Arial,sans-serif;
-    background:#b7ddea;
+    background:#b7ddeb;
 }
 
 body{
@@ -50,7 +50,7 @@ body{
     height:100%;
     top:0;
     left:100%;
-    transition:0.5s ease;
+    transition:0.5s;
 }
 
 .slide.active{
@@ -71,61 +71,51 @@ body{
 }
 
 .logo{
-    width:260px;
-    max-width:80%;
+    width:min(300px,75%);
 }
 
-/* ---------------- GAME SCREEN ---------------- */
+/* ---------------- GAME SLIDES ---------------- */
 
 .game-slide{
-    background:#b7ddea;
+    background:#b7ddeb;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 }
 
 /* ---------------- INSTRUCTION ---------------- */
 
 .instruction{
-    position:absolute;
-    top:2vh;
     width:100%;
     text-align:center;
     font-weight:bold;
     color:#000;
-    z-index:100;
-    padding:0 12px;
-
-    font-size:
-    clamp(18px,2.6vw,48px);
+    padding-top:clamp(12px,2vh,20px);
+    font-size:clamp(18px,2.5vw,48px);
+    z-index:20;
 }
 
 /* ---------------- POND ---------------- */
 
 .pond{
-    position:absolute;
+    position:relative;
 
-    width:min(92vw,1050px);
-    aspect-ratio:1.45/1;
+    width:min(92vw,1000px);
+    height:min(72vh,650px);
 
-    left:50%;
-    top:56%;
+    margin-top:clamp(10px,2vh,25px);
 
-    transform:translate(-50%,-50%);
+    background:linear-gradient(#18bee7,#53b6e1);
 
-    background:
-    linear-gradient(
-    to bottom,
-    #1dc0e8,
-    #58b9df);
+    border-radius:45%;
 
-    border:
-    clamp(10px,1.4vw,18px)
-    solid #82d34f;
-
-    border-radius:48%;
+    border:clamp(10px,1.3vw,18px)
+    solid #7ed04f;
 
     overflow:hidden;
 }
 
-/* ---------------- WATER ---------------- */
+/* ---------------- WATER CIRCLES ---------------- */
 
 .water-circle{
     position:absolute;
@@ -134,24 +124,24 @@ body{
 }
 
 .w1{
-    width:26%;
+    width:22%;
     aspect-ratio:1;
-    top:16%;
+    top:18%;
     left:10%;
 }
 
 .w2{
-    width:18%;
+    width:16%;
     aspect-ratio:1;
-    top:34%;
-    right:13%;
+    top:35%;
+    right:15%;
 }
 
 .w3{
-    width:30%;
+    width:28%;
     aspect-ratio:1;
-    bottom:6%;
-    left:36%;
+    bottom:5%;
+    left:35%;
 }
 
 /* ---------------- FROG ---------------- */
@@ -159,135 +149,147 @@ body{
 .frog{
     position:absolute;
 
-    width:14%;
-    aspect-ratio:1;
+    width:clamp(110px,15vw,200px);
+    height:clamp(110px,15vw,200px);
 
     left:50%;
     top:48%;
 
     transform:translate(-50%,-50%);
 
-    z-index:20;
+    z-index:15;
 
     transition:
-    left 0.7s ease,
-    top 0.7s ease,
-    transform 0.7s ease;
+    left 0.8s ease,
+    top 0.8s ease,
+    transform 0.8s ease;
 }
 
-/* JUMP ANIMATION */
+/* ---------------- JUMP ANIMATION ---------------- */
+
+.frog.jump{
+    animation:frogJump 0.9s ease;
+}
 
 @keyframes frogJump{
 
     0%{
-        transform:
-        translate(-50%,-50%)
-        scale(1)
-        translateY(0);
+        transform:translate(-50%,-50%) translateY(0);
     }
 
     25%{
-        transform:
-        translate(-50%,-50%)
-        scale(1.1)
-        translateY(-55px);
+        transform:translate(-50%,-50%) translateY(-80px) scale(1.08);
     }
 
     50%{
-        transform:
-        translate(-50%,-50%)
-        scale(1.15)
-        translateY(-95px);
+        transform:translate(-50%,-50%) translateY(-120px) scale(1.12);
     }
 
     75%{
-        transform:
-        translate(-50%,-50%)
-        scale(1.05)
-        translateY(-40px);
+        transform:translate(-50%,-50%) translateY(-60px);
     }
 
     100%{
-        transform:
-        translate(-50%,-50%)
-        scale(1)
-        translateY(0);
+        transform:translate(-50%,-50%) translateY(0);
     }
 }
 
-/* Frog body */
+/* ---------------- FROG BODY ---------------- */
 
 .frog-body{
     position:absolute;
-    width:62%;
-    height:62%;
-    background:#00c92c;
-    border:5px solid #0a7c20;
+
+    width:55%;
+    height:55%;
+
+    background:#00cc2f;
+
     border-radius:50%;
-    left:19%;
+
+    left:22%;
     top:28%;
+
+    border:5px solid #08781f;
 }
 
-/* Eyes */
+/* ---------------- EYES ---------------- */
 
 .eye{
     position:absolute;
+
     width:18%;
-    aspect-ratio:1;
+    height:18%;
+
     background:white;
+
     border-radius:50%;
-    border:4px solid #0a7c20;
-    top:5%;
+
+    border:4px solid #08781f;
+
+    top:10%;
 }
 
 .eye.left{
-    left:22%;
+    left:24%;
 }
 
 .eye.right{
-    right:22%;
+    right:24%;
 }
 
 .pupil{
     position:absolute;
-    width:36%;
-    aspect-ratio:1;
+
+    width:38%;
+    height:38%;
+
     background:black;
+
     border-radius:50%;
-    top:32%;
-    left:32%;
-}
 
-/* Smile */
-
-.smile{
-    position:absolute;
-    width:22%;
-    height:12%;
-    border-bottom:4px solid black;
-    border-radius:0 0 30px 30px;
-    left:39%;
-    top:52%;
-}
-
-/* Legs */
-
-.leg{
-    position:absolute;
-    width:13%;
-    height:24%;
-    background:#00c92c;
-    border:4px solid #0a7c20;
-    border-radius:40px;
-    bottom:4%;
-}
-
-.leg.left{
+    top:31%;
     left:31%;
 }
 
+/* ---------------- SMILE ---------------- */
+
+.smile{
+    position:absolute;
+
+    width:20%;
+    height:10%;
+
+    border-bottom:5px solid black;
+
+    border-radius:0 0 40px 40px;
+
+    left:40%;
+    top:48%;
+}
+
+/* ---------------- LEGS ---------------- */
+
+.leg{
+    position:absolute;
+
+    width:10%;
+    height:20%;
+
+    background:#00cc2f;
+
+    border:4px solid #08781f;
+
+    border-radius:20px;
+
+    bottom:12%;
+}
+
+.leg.left{
+    left:38%;
+}
+
 .leg.right{
-    right:31%;
+    right:38%;
 }
 
 /* ---------------- LEAVES ---------------- */
@@ -295,14 +297,12 @@ body{
 .leaf{
     position:absolute;
 
-    width:24%;
-    aspect-ratio:1.75/1;
+    width:clamp(150px,22vw,260px);
+    height:clamp(85px,12vw,145px);
 
-    background:#06d43c;
+    background:#00d63f;
 
-    border:
-    clamp(4px,0.7vw,7px)
-    solid #0a7c20;
+    border:6px solid #08752c;
 
     border-radius:50%;
 
@@ -310,123 +310,126 @@ body{
     justify-content:center;
     align-items:center;
 
+    font-size:clamp(24px,3vw,52px);
+
     font-weight:bold;
+
     color:white;
 
-    cursor:pointer;
+    box-shadow:0 6px 12px rgba(0,0,0,0.3);
+
     user-select:none;
 
-    box-shadow:
-    0 6px 10px rgba(0,0,0,0.25);
+    cursor:pointer;
+
+    z-index:12;
 
     transition:0.2s;
-
-    z-index:10;
-
-    /* BIGGER WORDS */
-
-    font-size:
-    clamp(22px,2.4vw,54px);
 }
 
 .leaf:active{
-    transform:scale(0.92);
+    transform:scale(0.94);
 }
 
 .leaf::after{
     content:"";
+
     position:absolute;
 
-    width:28%;
-    height:8%;
+    width:25%;
+    height:7%;
 
-    background:#0a7c20;
-
-    right:10%;
-    bottom:10%;
+    background:#08752c;
 
     border-radius:20px;
 
-    transform:rotate(-18deg);
+    right:12%;
+    bottom:12%;
+
+    transform:rotate(-20deg);
 }
+
+/* ---------------- LEAF POSITIONS ---------------- */
 
 .left-leaf{
     left:4%;
-    bottom:3%;
+    bottom:-1%;
 }
 
 .right-leaf{
     right:4%;
-    bottom:3%;
+    bottom:-1%;
 }
 
-/* ---------------- JUMP POSITIONS ---------------- */
+/* ---------------- FROG LAND POSITIONS ---------------- */
 
 .jump-left{
-    left:22%;
-    top:73%;
-    animation:frogJump 0.9s ease;
+    left:23%;
+    top:82%;
 }
 
 .jump-right{
-    left:78%;
-    top:73%;
-    animation:frogJump 0.9s ease;
+    left:77%;
+    top:82%;
 }
 
-/* ---------------- FINAL SCREEN ---------------- */
+/* ---------------- FINAL SLIDE ---------------- */
 
 .final-slide{
-    background:
-    linear-gradient(
+    background:linear-gradient(
     to bottom,
-    #42dce5,
-    #4be890,
-    #f7f07f);
+    #69ecff,
+    #5af0a0,
+    #fff173);
+
+    overflow:hidden;
 }
+
+/* ---------------- FINAL TEXT ---------------- */
 
 .final-text{
     position:absolute;
+
     width:100%;
+
     top:15%;
 
     text-align:center;
 
+    font-size:clamp(42px,7vw,90px);
+
     font-weight:bold;
+
     color:white;
 
-    text-shadow:
-    0 4px 10px rgba(0,0,0,0.35);
-
-    font-size:
-    clamp(42px,7vw,90px);
+    text-shadow:4px 4px 8px rgba(0,0,0,0.3);
 }
 
-/* ---------------- FINAL FROGS ---------------- */
+/* ---------------- SMALL FROGS ---------------- */
 
 .small-frog{
     position:absolute;
-    width:90px;
-    aspect-ratio:1;
 
-    animation:
-    finalJump 2s infinite ease-in-out;
+    width:90px;
+    height:90px;
+
+    animation:smallJump 2s infinite ease-in-out;
 }
 
-.sf1{left:5%;bottom:8%;}
-.sf2{left:24%;bottom:18%;}
-.sf3{left:44%;bottom:8%;}
-.sf4{left:64%;bottom:18%;}
-.sf5{left:82%;bottom:8%;}
+.sf1{ left:8%; bottom:8%; animation-delay:0s; }
+.sf2{ left:26%; bottom:18%; animation-delay:0.3s; }
+.sf3{ left:45%; bottom:10%; animation-delay:0.6s; }
+.sf4{ left:64%; bottom:20%; animation-delay:0.9s; }
+.sf5{ left:82%; bottom:10%; animation-delay:1.2s; }
 
-@keyframes finalJump{
+@keyframes smallJump{
 
     0%{
         transform:translateY(0);
     }
 
     50%{
-        transform:translateY(-70px);
+        transform:translateY(-60px);
     }
 
     100%{
@@ -434,102 +437,144 @@ body{
     }
 }
 
-/* ---------------- TABLET ---------------- */
+/* ---------------- MOBILE ---------------- */
 
 @media(max-width:900px){
 
+    .instruction{
+        font-size:22px;
+        padding-top:18px;
+    }
+
     .pond{
-        width:94vw;
-        top:57%;
+        width:95vw;
+        height:62vh;
+        margin-top:20px;
     }
 
     .frog{
-        width:18%;
+        width:160px;
+        height:160px;
     }
 
     .leaf{
-        width:28%;
-        font-size:clamp(28px,4vw,52px);
+        width:190px;
+        height:105px;
+        font-size:36px;
     }
 
+    .jump-left{
+        left:24%;
+        top:82%;
+    }
+
+    .jump-right{
+        left:76%;
+        top:82%;
+    }
 }
 
-/* ---------------- MOBILE ---------------- */
+/* ---------------- PHONES ---------------- */
 
 @media(max-width:600px){
 
     .instruction{
-        font-size:5vw;
-        top:2vh;
+        font-size:18px;
+        padding:16px 10px 0;
     }
 
     .pond{
 
         width:96vw;
+        height:58vh;
 
-        aspect-ratio:1.15/1;
+        border-width:10px;
 
-        top:58%;
+        margin-top:14px;
+
+        border-radius:38%;
     }
 
     .frog{
-        width:22%;
+        width:145px;
+        height:145px;
         top:47%;
+    }
+
+    .frog-body{
+        border-width:4px;
+    }
+
+    .eye{
+        border-width:3px;
+    }
+
+    .leg{
+        border-width:3px;
+    }
+
+    .smile{
+        border-bottom-width:4px;
     }
 
     .leaf{
 
-        width:36%;
+        width:150px;
+        height:85px;
 
-        bottom:4%;
-
-        /* MUCH BIGGER MOBILE WORDS */
-
-        font-size:clamp(30px,6vw,48px);
+        font-size:18px;
 
         border-width:4px;
     }
 
     .left-leaf{
-        left:3%;
+        left:1%;
+        bottom:-2%;
     }
 
     .right-leaf{
-        right:3%;
+        right:1%;
+        bottom:-2%;
+    }
+
+    .jump-left{
+        left:24%;
+        top:80%;
+    }
+
+    .jump-right{
+        left:76%;
+        top:80%;
     }
 
     .small-frog{
-        width:70px;
+        width:65px;
+        height:65px;
     }
-
 }
 
-/* ---------------- SMALL OLD PHONES ---------------- */
+/* ---------------- OLD SMALL PHONES ---------------- */
 
-@media(max-width:420px){
+@media(max-width:380px){
 
     .instruction{
-        font-size:5.4vw;
+        font-size:15px;
     }
 
     .pond{
-        width:97vw;
-        aspect-ratio:1.08/1;
+        height:55vh;
     }
 
     .frog{
-        width:24%;
+        width:120px;
+        height:120px;
     }
 
     .leaf{
-
-        width:38%;
-
-        /* EXTRA BIG FONT */
-
-        font-size:clamp(32px,6.8vw,50px);
+        width:125px;
+        height:75px;
+        font-size:16px;
     }
-
 }
 
 </style>
@@ -539,274 +584,279 @@ body{
 
 <div id="game">
 
-<!-- LOGO -->
+    <!-- LOGO SLIDE -->
 
-<div class="slide active" id="slide0">
+    <div class="slide active" id="slide0">
 
-    <img src="assets/innovine-logo.png"
-    class="logo">
+        <img src="assets/innovine-logo.png"
+        class="logo">
 
-</div>
+    </div>
 
-<!-- SLIDE 1 -->
+    <!-- SLIDE 1 -->
 
-<div class="slide game-slide active2" id="slide1">
+    <div class="slide game-slide active2" id="slide1">
 
-<div class="instruction">
-Help the frog to identify the sight words
-</div>
+        <div class="instruction">
+            Help the frog to identify the sight words
+        </div>
 
-<div class="pond">
+        <div class="pond">
 
-<div class="water-circle w1"></div>
-<div class="water-circle w2"></div>
-<div class="water-circle w3"></div>
+            <div class="water-circle w1"></div>
+            <div class="water-circle w2"></div>
+            <div class="water-circle w3"></div>
 
-<div class="frog" id="frog1">
+            <div class="frog" id="frog1">
 
-<div class="frog-body"></div>
+                <div class="frog-body"></div>
 
-<div class="eye left">
-<div class="pupil"></div>
-</div>
+                <div class="eye left">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="eye right">
-<div class="pupil"></div>
-</div>
+                <div class="eye right">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="smile"></div>
+                <div class="smile"></div>
 
-<div class="leg left"></div>
-<div class="leg right"></div>
+                <div class="leg left"></div>
+                <div class="leg right"></div>
 
-</div>
+            </div>
 
-<div class="leaf left-leaf"
-onclick="checkAnswer(1,true,'left')">
-this
-</div>
+            <div class="leaf left-leaf"
+            onclick="checkAnswer(1,true,'left')">
+                this
+            </div>
 
-<div class="leaf right-leaf"
-onclick="checkAnswer(1,false,'right')">
-star
-</div>
+            <div class="leaf right-leaf"
+            onclick="checkAnswer(1,false,'right')">
+                star
+            </div>
 
-</div>
-</div>
+        </div>
 
-<!-- SLIDE 2 -->
+    </div>
 
-<div class="slide game-slide" id="slide2">
+    <!-- SLIDE 2 -->
 
-<div class="instruction">
-Help the frog to identify the sight words
-</div>
+    <div class="slide game-slide" id="slide2">
 
-<div class="pond">
+        <div class="instruction">
+            Help the frog to identify the sight words
+        </div>
 
-<div class="water-circle w1"></div>
-<div class="water-circle w2"></div>
-<div class="water-circle w3"></div>
+        <div class="pond">
 
-<div class="frog" id="frog2">
+            <div class="water-circle w1"></div>
+            <div class="water-circle w2"></div>
+            <div class="water-circle w3"></div>
 
-<div class="frog-body"></div>
+            <div class="frog" id="frog2">
 
-<div class="eye left">
-<div class="pupil"></div>
-</div>
+                <div class="frog-body"></div>
 
-<div class="eye right">
-<div class="pupil"></div>
-</div>
+                <div class="eye left">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="smile"></div>
+                <div class="eye right">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="leg left"></div>
-<div class="leg right"></div>
+                <div class="smile"></div>
 
-</div>
+                <div class="leg left"></div>
+                <div class="leg right"></div>
 
-<div class="leaf left-leaf"
-onclick="checkAnswer(2,false,'left')">
-cat
-</div>
+            </div>
 
-<div class="leaf right-leaf"
-onclick="checkAnswer(2,true,'right')">
-you
-</div>
+            <div class="leaf left-leaf"
+            onclick="checkAnswer(2,false,'left')">
+                cat
+            </div>
 
-</div>
-</div>
+            <div class="leaf right-leaf"
+            onclick="checkAnswer(2,true,'right')">
+                you
+            </div>
 
-<!-- SLIDE 3 -->
+        </div>
 
-<div class="slide game-slide" id="slide3">
+    </div>
 
-<div class="instruction">
-Help the frog to identify the sight words
-</div>
+    <!-- SLIDE 3 -->
 
-<div class="pond">
+    <div class="slide game-slide" id="slide3">
 
-<div class="water-circle w1"></div>
-<div class="water-circle w2"></div>
-<div class="water-circle w3"></div>
+        <div class="instruction">
+            Help the frog to identify the sight words
+        </div>
 
-<div class="frog" id="frog3">
+        <div class="pond">
 
-<div class="frog-body"></div>
+            <div class="water-circle w1"></div>
+            <div class="water-circle w2"></div>
+            <div class="water-circle w3"></div>
 
-<div class="eye left">
-<div class="pupil"></div>
-</div>
+            <div class="frog" id="frog3">
 
-<div class="eye right">
-<div class="pupil"></div>
-</div>
+                <div class="frog-body"></div>
 
-<div class="smile"></div>
+                <div class="eye left">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="leg left"></div>
-<div class="leg right"></div>
+                <div class="eye right">
+                    <div class="pupil"></div>
+                </div>
 
-</div>
+                <div class="smile"></div>
 
-<div class="leaf left-leaf"
-onclick="checkAnswer(3,true,'left')">
-the
-</div>
+                <div class="leg left"></div>
+                <div class="leg right"></div>
 
-<div class="leaf right-leaf"
-onclick="checkAnswer(3,false,'right')">
-sun
-</div>
+            </div>
 
-</div>
-</div>
+            <div class="leaf left-leaf"
+            onclick="checkAnswer(3,true,'left')">
+                the
+            </div>
 
-<!-- SLIDE 4 -->
+            <div class="leaf right-leaf"
+            onclick="checkAnswer(3,false,'right')">
+                sun
+            </div>
 
-<div class="slide game-slide" id="slide4">
+        </div>
 
-<div class="instruction">
-Help the frog to identify the sight words
-</div>
+    </div>
 
-<div class="pond">
+    <!-- SLIDE 4 -->
 
-<div class="water-circle w1"></div>
-<div class="water-circle w2"></div>
-<div class="water-circle w3"></div>
+    <div class="slide game-slide" id="slide4">
 
-<div class="frog" id="frog4">
+        <div class="instruction">
+            Help the frog to identify the sight words
+        </div>
 
-<div class="frog-body"></div>
+        <div class="pond">
 
-<div class="eye left">
-<div class="pupil"></div>
-</div>
+            <div class="water-circle w1"></div>
+            <div class="water-circle w2"></div>
+            <div class="water-circle w3"></div>
 
-<div class="eye right">
-<div class="pupil"></div>
-</div>
+            <div class="frog" id="frog4">
 
-<div class="smile"></div>
+                <div class="frog-body"></div>
 
-<div class="leg left"></div>
-<div class="leg right"></div>
+                <div class="eye left">
+                    <div class="pupil"></div>
+                </div>
 
-</div>
+                <div class="eye right">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="leaf left-leaf"
-onclick="checkAnswer(4,false,'left')">
-lid
-</div>
+                <div class="smile"></div>
 
-<div class="leaf right-leaf"
-onclick="checkAnswer(4,true,'right')">
-she
-</div>
+                <div class="leg left"></div>
+                <div class="leg right"></div>
 
-</div>
-</div>
+            </div>
 
-<!-- SLIDE 5 -->
+            <div class="leaf left-leaf"
+            onclick="checkAnswer(4,false,'left')">
+                lid
+            </div>
 
-<div class="slide game-slide" id="slide5">
+            <div class="leaf right-leaf"
+            onclick="checkAnswer(4,true,'right')">
+                she
+            </div>
 
-<div class="instruction">
-Help the frog to identify the sight words
-</div>
+        </div>
 
-<div class="pond">
+    </div>
 
-<div class="water-circle w1"></div>
-<div class="water-circle w2"></div>
-<div class="water-circle w3"></div>
+    <!-- SLIDE 5 -->
 
-<div class="frog" id="frog5">
+    <div class="slide game-slide" id="slide5">
 
-<div class="frog-body"></div>
+        <div class="instruction">
+            Help the frog to identify the sight words
+        </div>
 
-<div class="eye left">
-<div class="pupil"></div>
-</div>
+        <div class="pond">
 
-<div class="eye right">
-<div class="pupil"></div>
-</div>
+            <div class="water-circle w1"></div>
+            <div class="water-circle w2"></div>
+            <div class="water-circle w3"></div>
 
-<div class="smile"></div>
+            <div class="frog" id="frog5">
 
-<div class="leg left"></div>
-<div class="leg right"></div>
+                <div class="frog-body"></div>
 
-</div>
+                <div class="eye left">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="leaf left-leaf"
-onclick="checkAnswer(5,true,'left')">
-are
-</div>
+                <div class="eye right">
+                    <div class="pupil"></div>
+                </div>
 
-<div class="leaf right-leaf"
-onclick="checkAnswer(5,false,'right')">
-van
-</div>
+                <div class="smile"></div>
 
-</div>
-</div>
+                <div class="leg left"></div>
+                <div class="leg right"></div>
 
-<!-- FINAL -->
+            </div>
 
-<div class="slide final-slide" id="slide6">
+            <div class="leaf left-leaf"
+            onclick="checkAnswer(5,true,'left')">
+                are
+            </div>
 
-<div class="final-text">
-Great Job!
-</div>
+            <div class="leaf right-leaf"
+            onclick="checkAnswer(5,false,'right')">
+                van
+            </div>
 
-<div class="small-frog sf1">
-<div class="frog-body"></div>
-</div>
+        </div>
 
-<div class="small-frog sf2">
-<div class="frog-body"></div>
-</div>
+    </div>
 
-<div class="small-frog sf3">
-<div class="frog-body"></div>
-</div>
+    <!-- FINAL SLIDE -->
 
-<div class="small-frog sf4">
-<div class="frog-body"></div>
-</div>
+    <div class="slide final-slide" id="slide6">
 
-<div class="small-frog sf5">
-<div class="frog-body"></div>
-</div>
+        <div class="final-text">
+            Great Job!
+        </div>
 
-</div>
+        <div class="small-frog sf1">
+            <div class="frog-body"></div>
+        </div>
+
+        <div class="small-frog sf2">
+            <div class="frog-body"></div>
+        </div>
+
+        <div class="small-frog sf3">
+            <div class="frog-body"></div>
+        </div>
+
+        <div class="small-frog sf4">
+            <div class="frog-body"></div>
+        </div>
+
+        <div class="small-frog sf5">
+            <div class="frog-body"></div>
+        </div>
+
+    </div>
 
 </div>
 
@@ -819,15 +869,15 @@ src="assets/wrong.mp3"></audio>
 
 let currentSlide = 0;
 
-/* LOGO */
+/* ---------------- LOGO SCREEN ---------------- */
 
-setTimeout(()=>{
+setTimeout(() => {
 
     nextSlide();
 
 },3000);
 
-/* NEXT SLIDE */
+/* ---------------- NEXT SLIDE ---------------- */
 
 function nextSlide(){
 
@@ -838,6 +888,7 @@ function nextSlide(){
     if(current){
 
         current.classList.remove("active");
+
         current.classList.add("previous");
     }
 
@@ -853,12 +904,13 @@ function nextSlide(){
     }
 }
 
-/* CHECK ANSWER */
+/* ---------------- ANSWER CHECK ---------------- */
 
 function checkAnswer(
 slideNum,
 isCorrect,
-side){
+side
+){
 
     const frog =
     document.getElementById(
@@ -866,34 +918,38 @@ side){
 
     if(isCorrect){
 
-        if(side==="left"){
+        frog.classList.add("jump");
 
-            frog.classList.add(
-            "jump-left");
+        setTimeout(()=>{
 
-        }else{
+            if(side === "left"){
 
-            frog.classList.add(
-            "jump-right");
-        }
+                frog.classList.add(
+                "jump-left");
+
+            }else{
+
+                frog.classList.add(
+                "jump-right");
+            }
+
+        },450);
 
         setTimeout(()=>{
 
             nextSlide();
 
-        },1100);
+        },1300);
 
     }
 
     else{
 
-        document
-        .getElementById(
-        "wrongSound")
-        .play();
+        document.getElementById(
+        "wrongSound").play();
 
         frog.style.transform =
-        "translate(-50%,-50%) scale(0.88)";
+        "translate(-50%,-50%) scale(0.85)";
 
         setTimeout(()=>{
 
