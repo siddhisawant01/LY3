@@ -29,35 +29,35 @@ html,body{
     overflow:hidden;
     font-family:Arial, sans-serif;
     background:#fff;
-    touch-action:manipulation;
 }
 
 /* =========================================
-   SLIDES
+   COMMON SLIDES
 ========================================= */
 
 .slide{
     position:absolute;
-    inset:0;
+    width:100%;
+    height:100vh;
+    top:0;
+    left:0;
 
     display:flex;
     justify-content:center;
     align-items:center;
     flex-direction:column;
 
-    transition:0.6s ease;
+    transition:0.6s;
 }
 
 .hidden{
     opacity:0;
     pointer-events:none;
-    transform:scale(1.05);
 }
 
 .show{
     opacity:1;
     pointer-events:auto;
-    transform:scale(1);
 }
 
 /* =========================================
@@ -69,7 +69,7 @@ html,body{
 }
 
 .logo{
-    width:min(60vw,320px);
+    width:min(70vw,350px);
     object-fit:contain;
 }
 
@@ -87,168 +87,138 @@ html,body{
     background-size:cover;
     background-position:center;
 
-    padding:8px;
+    padding:10px;
 }
-
-/* GAME WRAPPER */
-
-.game-wrapper{
-
-    width:100%;
-    height:100%;
-
-    display:flex;
-    flex-direction:column;
-    justify-content:space-evenly;
-    align-items:center;
-}
-
-/* TITLE */
 
 .game-title{
 
     font-size:clamp(24px,4vw,42px);
 
+    color:#ff006e;
+
     font-weight:bold;
 
-    color:#ff3366;
+    margin-bottom:10px;
 
     text-align:center;
 }
 
-/* LETTER PATH */
+/* GAME AREA */
 
-.letters-path{
+.game-area{
 
-    width:95%;
-    max-width:1000px;
+    width:100%;
+    max-width:900px;
 
     display:flex;
-    justify-content:center;
+    flex-direction:column;
     align-items:center;
-    flex-wrap:wrap;
-
-    gap:10px;
-
-    padding:10px;
+    gap:15px;
 }
 
-/* LETTER CIRCLE */
+/* TABLE */
 
-.circle{
+.game-table{
 
-    width:min(11vw,70px);
-    height:min(11vw,70px);
-
-    min-width:45px;
-    min-height:45px;
-
-    border-radius:50%;
+    border-collapse:collapse;
 
     background:white;
 
-    border:3px solid #5c4033;
+    border-radius:18px;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    overflow:hidden;
 
-    font-size:clamp(22px,4vw,36px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
+
+.game-table td{
+
+    width:min(12vw,70px);
+    height:min(12vw,70px);
+
+    min-width:48px;
+    min-height:48px;
+
+    border:3px solid #ffb703;
+
+    text-align:center;
+
+    vertical-align:middle;
+
+    font-size:clamp(24px,4vw,40px);
 
     font-weight:bold;
 
     color:#111;
 
-    box-shadow:0 4px 8px rgba(0,0,0,0.15);
-
-    transition:0.2s;
+    background:#fffdf5;
 }
 
-/* BLANK */
+/* FILLED LETTERS */
+
+.filled{
+    background:#d8f3ff;
+}
+
+/* EMPTY BOX */
 
 .blank{
 
-    background:#fff7cc;
+    background:#fff4c7;
 
-    border:3px dashed #ff006e;
+    border:3px dashed #ff006e !important;
 
     color:#ff006e;
 
     cursor:pointer;
 }
 
-/* RANDOM POSITION STYLES */
-
-.up{
-    transform:translateY(-18px);
-}
-
-.down{
-    transform:translateY(18px);
-}
-
-.left{
-    transform:translateX(-10px);
-}
-
-.right{
-    transform:translateX(10px);
-}
-
-/* FEEDBACK */
-
-.feedback{
-
-    height:40px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-size:42px;
-}
-
 /* HELP BOX */
 
-.options-box{
+.help-box{
 
-    width:94%;
-    max-width:1000px;
+    width:100%;
+
+    max-width:900px;
 
     min-height:120px;
 
-    background:rgba(255,255,255,0.95);
+    background:rgba(255,255,255,0.92);
 
-    border-radius:28px;
+    border-radius:22px;
+
+    padding:12px;
 
     display:flex;
-    justify-content:center;
-    align-items:center;
+
     flex-wrap:wrap;
 
-    gap:12px;
+    justify-content:center;
 
-    padding:14px;
+    align-items:center;
 
-    box-shadow:0 5px 12px rgba(0,0,0,0.2);
+    gap:10px;
+
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
 }
 
-/* OPTION BUTTON */
+/* OPTIONS */
 
 .option{
 
-    width:min(11vw,68px);
-    height:min(11vw,68px);
+    width:min(11vw,65px);
+    height:min(11vw,65px);
 
-    min-width:46px;
-    min-height:46px;
+    min-width:48px;
+    min-height:48px;
 
     border:none;
-    border-radius:18px;
+
+    border-radius:14px;
 
     color:white;
 
-    font-size:clamp(22px,4vw,34px);
+    font-size:clamp(20px,4vw,34px);
 
     font-weight:bold;
 
@@ -256,11 +226,11 @@ html,body{
 
     transition:0.2s;
 
-    box-shadow:0 4px 8px rgba(0,0,0,0.2);
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
 .option:active{
-    transform:scale(0.92);
+    transform:scale(0.9);
 }
 
 .selected{
@@ -275,6 +245,19 @@ html,body{
 .c4{background:#06d6a0;}
 .c5{background:#ffbe0b;}
 .c6{background:#fb5607;}
+
+/* FEEDBACK */
+
+.feedback{
+
+    height:45px;
+
+    font-size:45px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
 
 /* =========================================
    SLIDE 3
@@ -297,17 +280,17 @@ html,body{
 
 .amazing{
 
-    font-size:clamp(42px,8vw,90px);
+    font-size:clamp(45px,8vw,95px);
 
     font-weight:bold;
 
     color:#ff006e;
 
+    z-index:5;
+
     text-shadow:
     3px 3px white,
-    6px 6px 10px rgba(0,0,0,0.2);
-
-    z-index:5;
+    6px 6px 12px rgba(0,0,0,0.2);
 
     animation:bounce 1s infinite alternate;
 }
@@ -323,7 +306,7 @@ html,body{
     }
 }
 
-/* RAIN LETTERS */
+/* LETTER RAIN */
 
 .rain-letter{
 
@@ -336,8 +319,6 @@ html,body{
     font-weight:bold;
 
     animation:fall linear forwards;
-
-    user-select:none;
 }
 
 @keyframes fall{
@@ -347,23 +328,28 @@ html,body{
     }
 }
 
-/* =========================================
-   MOBILE
-========================================= */
+/* MOBILE */
 
 @media(max-width:700px){
 
-    .letters-path{
-        gap:6px;
+    .game-table td{
+
+        width:48px;
+        height:48px;
+
+        font-size:28px;
     }
 
-    .options-box{
-        gap:8px;
-        padding:10px;
-    }
+    .option{
 
-    .game-title{
+        width:48px;
+        height:48px;
+
         font-size:24px;
+    }
+
+    .help-box{
+        min-height:100px;
     }
 }
 
@@ -377,7 +363,6 @@ html,body{
 ========================================= -->
 
 <audio id="correctSound" src="assets/correct.mp3"></audio>
-
 <audio id="wrongSound" src="assets/wrong.mp3"></audio>
 
 <!-- =========================================
@@ -386,6 +371,7 @@ html,body{
 
 <section id="slide1" class="slide show">
 
+    <!-- MAKE SURE FILE NAME IS EXACTLY logo.png -->
     <img
     src="assets/logo.png"
     class="logo"
@@ -399,20 +385,69 @@ html,body{
 
 <section id="slide2" class="slide hidden">
 
-    <div class="game-wrapper">
+    <div class="game-title">
+        Identify the missing letters
+    </div>
 
-        <div class="game-title">
-            Identify the missing letters
-        </div>
+    <div class="game-area">
 
-        <!-- LETTERS -->
-        <div class="letters-path" id="lettersPath"></div>
+        <!-- TABLE -->
+        <table class="game-table">
+
+            <tr>
+                <td class="filled">a</td>
+                <td class="blank" data-answer="b">?</td>
+                <td class="blank" data-answer="c">?</td>
+                <td class="filled">d</td>
+            </tr>
+
+            <tr>
+                <td class="blank" data-answer="e">?</td>
+                <td class="blank" data-answer="f">?</td>
+                <td class="blank" data-answer="g">?</td>
+                <td class="blank" data-answer="h">?</td>
+            </tr>
+
+            <tr>
+                <td class="filled">i</td>
+                <td class="blank" data-answer="j">?</td>
+                <td class="filled">k</td>
+                <td class="blank" data-answer="l">?</td>
+            </tr>
+
+            <tr>
+                <td class="blank" data-answer="m">?</td>
+                <td class="blank" data-answer="n">?</td>
+                <td class="blank" data-answer="o">?</td>
+                <td class="filled">p</td>
+            </tr>
+
+            <tr>
+                <td class="blank" data-answer="q">?</td>
+                <td class="blank" data-answer="r">?</td>
+                <td class="blank" data-answer="s">?</td>
+                <td class="blank" data-answer="t">?</td>
+            </tr>
+
+            <tr>
+                <td class="blank" data-answer="u">?</td>
+                <td class="filled">v</td>
+                <td class="blank" data-answer="w">?</td>
+                <td class="blank" data-answer="x">?</td>
+            </tr>
+
+            <tr>
+                <td class="filled">y</td>
+                <td class="blank" data-answer="z">?</td>
+            </tr>
+
+        </table>
 
         <!-- FEEDBACK -->
         <div class="feedback" id="feedback"></div>
 
-        <!-- OPTIONS -->
-        <div class="options-box" id="optionsBox"></div>
+        <!-- HELP BOX -->
+        <div class="help-box" id="helpBox"></div>
 
     </div>
 
@@ -456,88 +491,20 @@ setTimeout(()=>{
 },3000);
 
 /* =========================================
-   LETTER DESIGN
-========================================= */
-
-/*
-VISIBLE LETTERS:
-a d k i p s v
-
-ALL OTHER LETTERS IN HELP BOX
-*/
-
-const gameData = [
-
-    {show:"a"},
-    {show:"?",missing:true,answer:"b"},
-    {show:"?",missing:true,answer:"c"},
-
-    {show:"d"},
-    {show:"?",missing:true,answer:"e"},
-    {show:"?",missing:true,answer:"f"},
-    {show:"?",missing:true,answer:"g"},
-    {show:"?",missing:true,answer:"h"},
-
-    {show:"i"},
-    {show:"?",missing:true,answer:"j"},
-
-    {show:"k"},
-    {show:"?",missing:true,answer:"l"},
-    {show:"?",missing:true,answer:"m"},
-    {show:"?",missing:true,answer:"n"},
-    {show:"?",missing:true,answer:"o"},
-
-    {show:"p"},
-    {show:"?",missing:true,answer:"q"},
-    {show:"?",missing:true,answer:"r"},
-
-    {show:"s"},
-    {show:"?",missing:true,answer:"t"},
-    {show:"?",missing:true,answer:"u"},
-
-    {show:"v"},
-    {show:"?",missing:true,answer:"w"},
-    {show:"?",missing:true,answer:"x"},
-    {show:"?",missing:true,answer:"y"},
-    {show:"?",missing:true,answer:"z"}
-
-];
-
-/* =========================================
    HELP BOX LETTERS
 ========================================= */
 
 const helpLetters = [
 
-    "b","c","e","f","g",
-    "h","j","l","m","n",
-    "o","q","r","t","u",
-    "w","x","y","z"
+"b","c","e","f","g","h",
+"j","l","m","n","o",
+"q","r","s","t","u",
+"w","x","z"
+
 ];
 
-let selectedLetter = null;
-
-/* =========================================
-   RANDOM SHAPES
-========================================= */
-
-const randomShapes = [
-    "up",
-    "down",
-    "left",
-    "right",
-    ""
-];
-
-/* =========================================
-   ELEMENTS
-========================================= */
-
-const lettersPath =
-document.getElementById("lettersPath");
-
-const optionsBox =
-document.getElementById("optionsBox");
+const helpBox =
+document.getElementById("helpBox");
 
 const feedback =
 document.getElementById("feedback");
@@ -548,83 +515,11 @@ document.getElementById("correctSound");
 const wrongSound =
 document.getElementById("wrongSound");
 
-/* =========================================
-   CREATE LETTERS
-========================================= */
-
-gameData.forEach(item=>{
-
-    const div =
-    document.createElement("div");
-
-    div.classList.add("circle");
-
-    /* RANDOM POSITION */
-
-    const randomClass =
-    randomShapes[
-    Math.floor(
-    Math.random()*randomShapes.length
-    )];
-
-    div.classList.add(randomClass);
-
-    div.innerHTML = item.show;
-
-    if(item.missing){
-
-        div.classList.add("blank");
-
-        div.addEventListener("click",()=>{
-
-            if(!selectedLetter) return;
-
-            if(selectedLetter === item.answer){
-
-                div.innerHTML = selectedLetter;
-
-                div.style.background = "#d8ffd8";
-
-                div.style.border =
-                "3px solid green";
-
-                feedback.innerHTML = "✅";
-
-                playCorrect();
-
-                /* REMOVE LETTER FROM HELP BOX */
-
-                const selectedBtn =
-                document.querySelector(
-                `.option[data-letter="${selectedLetter}"]`
-                );
-
-                if(selectedBtn){
-                    selectedBtn.remove();
-                }
-
-                selectedLetter = null;
-
-                checkComplete();
-
-            }else{
-
-                feedback.innerHTML = "❌";
-
-                playWrong();
-
-                setTimeout(()=>{
-                    feedback.innerHTML = "";
-                },1000);
-            }
-        });
-    }
-
-    lettersPath.appendChild(div);
-});
+let selectedLetter = null;
+let selectedButton = null;
 
 /* =========================================
-   CREATE OPTIONS
+   CREATE HELP LETTERS
 ========================================= */
 
 helpLetters.forEach((letter,index)=>{
@@ -632,12 +527,10 @@ helpLetters.forEach((letter,index)=>{
     const btn =
     document.createElement("button");
 
-    btn.className =
-    "option c"+((index%6)+1);
-
     btn.innerHTML = letter;
 
-    btn.dataset.letter = letter;
+    btn.className =
+    "option c"+((index%6)+1);
 
     btn.addEventListener("click",()=>{
 
@@ -650,9 +543,72 @@ helpLetters.forEach((letter,index)=>{
         btn.classList.add("selected");
 
         selectedLetter = letter;
+
+        selectedButton = btn;
     });
 
-    optionsBox.appendChild(btn);
+    helpBox.appendChild(btn);
+});
+
+/* =========================================
+   BLANK BOXES
+========================================= */
+
+const blanks =
+document.querySelectorAll(".blank");
+
+blanks.forEach(blank=>{
+
+    blank.addEventListener("click",()=>{
+
+        if(!selectedLetter) return;
+
+        const answer =
+        blank.dataset.answer;
+
+        /* CORRECT */
+
+        if(selectedLetter === answer){
+
+            blank.innerHTML =
+            selectedLetter;
+
+            blank.style.background =
+            "#d8ffd8";
+
+            blank.style.border =
+            "3px solid green";
+
+            blank.style.color =
+            "#111";
+
+            feedback.innerHTML = "✅";
+
+            playCorrect();
+
+            /* REMOVE LETTER FROM HELP BOX */
+
+            selectedButton.remove();
+
+            selectedLetter = null;
+
+            checkComplete();
+
+        }
+
+        /* WRONG */
+
+        else{
+
+            feedback.innerHTML = "❌";
+
+            playWrong();
+
+            setTimeout(()=>{
+                feedback.innerHTML = "";
+            },1000);
+        }
+    });
 });
 
 /* =========================================
@@ -679,14 +635,11 @@ function playWrong(){
 
 function checkComplete(){
 
-    const blanks =
-    document.querySelectorAll(".blank");
-
     let done = true;
 
-    blanks.forEach(box=>{
+    blanks.forEach(blank=>{
 
-        if(box.innerHTML === "?"){
+        if(blank.innerHTML === "?"){
             done = false;
         }
     });
@@ -725,9 +678,7 @@ function startLetterRain(){
         "rain-letter";
 
         span.innerHTML =
-        letters[
-        Math.floor(Math.random()*26)
-        ];
+        letters[Math.floor(Math.random()*26)];
 
         span.style.left =
         Math.random()*100 + "vw";
@@ -748,7 +699,7 @@ function startLetterRain(){
 }
 
 /* =========================================
-   RANDOM COLORS
+   RANDOM COLOR
 ========================================= */
 
 function randomColor(){
