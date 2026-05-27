@@ -74,8 +74,8 @@ html,body{
 
 .logo{
 
-    width:min(70vw,380px);
-    max-width:380px;
+    width:min(75vw,420px);
+    max-width:420px;
     height:auto;
 
     display:block;
@@ -397,33 +397,17 @@ html,body{
 
 <section id="slide1" class="slide show">
 
-    <!-- IMPORTANT:
-         KEEP THIS EXACT FILE NAME:
-         assets/logo.png
+    <!-- VERY IMPORTANT:
+         PUT YOUR EXACT LOGO FILE INSIDE assets FOLDER
+         FILE NAME MUST BE:
+         logo.png
     -->
 
     <img
-    src="./assets/logo.png"
+    src="assets/logo.png?v=1"
     class="logo"
     alt="Innovine Logo"
-
-    onerror="
-    this.style.display='none';
-    document.getElementById('logoText').style.display='block';
-    "
     >
-
-    <!-- FALLBACK TEXT -->
-    <h1
-    id="logoText"
-    style="
-    display:none;
-    color:#ff006e;
-    font-size:40px;
-    font-weight:bold;
-    ">
-    INNOVINE
-    </h1>
 
 </section>
 
