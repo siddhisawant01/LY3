@@ -86,40 +86,32 @@ body{
 /* ---------------- INSTRUCTION ---------------- */
 
 .instruction{
-
     width:100%;
     text-align:center;
-
     font-weight:bold;
     color:#000;
-
-    padding-top:12px;
-
-    font-size:clamp(18px,2.6vw,56px);
-
+    padding-top:18px;
+    font-size:clamp(22px,3vw,60px);
     z-index:20;
 }
 
 /* ---------------- POND ---------------- */
 
 .pond{
-
     position:relative;
 
-    width:min(92vw,1150px);
+    width:min(92vw,1200px);
+    height:min(78vh,720px);
 
-    aspect-ratio:1.9/1;
+    margin-top:20px;
 
-    margin-top:12px;
+    background:linear-gradient(#18bee7,#42b5e2);
 
-    background:linear-gradient(#14bde9,#25b8eb);
+    border-radius:45%;
 
-    border-radius:42%;
+    border:14px solid #76d438;
 
-    border:clamp(8px,1vw,14px)
-    solid #7ed04f;
-
-    overflow:visible;
+    overflow:hidden;
 }
 
 /* ---------------- WATER CIRCLES ---------------- */
@@ -138,31 +130,29 @@ body{
 }
 
 .w2{
-    width:14%;
+    width:13%;
     aspect-ratio:1;
-    top:32%;
+    top:34%;
     right:16%;
 }
 
 .w3{
     width:25%;
     aspect-ratio:1;
-    bottom:10%;
-    left:50%;
-    transform:translateX(-50%);
+    bottom:8%;
+    left:38%;
 }
 
 /* ---------------- FROG ---------------- */
 
 .frog{
-
     position:absolute;
 
-    width:clamp(95px,12vw,180px);
-    height:clamp(95px,12vw,180px);
+    width:170px;
+    height:170px;
 
     left:50%;
-    top:45%;
+    top:50%;
 
     transform:translate(-50%,-50%);
 
@@ -186,16 +176,12 @@ body{
         transform:translate(-50%,-50%) translateY(0);
     }
 
-    25%{
-        transform:translate(-50%,-50%) translateY(-40px) scale(1.08);
+    30%{
+        transform:translate(-50%,-50%) translateY(-120px) scale(1.1);
     }
 
-    50%{
-        transform:translate(-50%,-50%) translateY(-80px) scale(1.15);
-    }
-
-    75%{
-        transform:translate(-50%,-50%) translateY(-40px);
+    60%{
+        transform:translate(-50%,-50%) translateY(-70px);
     }
 
     100%{
@@ -206,26 +192,24 @@ body{
 /* ---------------- FROG BODY ---------------- */
 
 .frog-body{
-
     position:absolute;
 
-    width:58%;
-    height:58%;
+    width:56%;
+    height:56%;
 
-    background:#00d52f;
+    background:#00d629;
 
     border-radius:50%;
 
-    left:21%;
-    top:24%;
+    left:22%;
+    top:28%;
 
-    border:4px solid #08781f;
+    border:5px solid #08781f;
 }
 
 /* ---------------- EYES ---------------- */
 
 .eye{
-
     position:absolute;
 
     width:18%;
@@ -235,21 +219,20 @@ body{
 
     border-radius:50%;
 
-    border:3px solid #08781f;
+    border:4px solid #08781f;
 
-    top:6%;
+    top:10%;
 }
 
 .eye.left{
-    left:22%;
+    left:24%;
 }
 
 .eye.right{
-    right:22%;
+    right:24%;
 }
 
 .pupil{
-
     position:absolute;
 
     width:38%;
@@ -266,36 +249,34 @@ body{
 /* ---------------- SMILE ---------------- */
 
 .smile{
-
     position:absolute;
 
-    width:22%;
+    width:20%;
     height:10%;
 
-    border-bottom:4px solid black;
+    border-bottom:5px solid black;
 
     border-radius:0 0 40px 40px;
 
-    left:39%;
-    top:45%;
+    left:40%;
+    top:48%;
 }
 
 /* ---------------- LEGS ---------------- */
 
 .leg{
-
     position:absolute;
 
     width:10%;
     height:20%;
 
-    background:#00d52f;
+    background:#00d629;
 
-    border:3px solid #08781f;
+    border:4px solid #08781f;
 
     border-radius:20px;
 
-    bottom:8%;
+    bottom:12%;
 }
 
 .leg.left{
@@ -309,15 +290,14 @@ body{
 /* ---------------- LEAVES ---------------- */
 
 .leaf{
-
     position:absolute;
 
-    width:clamp(145px,20vw,280px);
-    height:clamp(85px,11vw,165px);
+    width:300px;
+    height:170px;
 
-    background:#00e03b;
+    background:#00df3f;
 
-    border:5px solid #08752c;
+    border:6px solid #046b1d;
 
     border-radius:50%;
 
@@ -325,25 +305,23 @@ body{
     justify-content:center;
     align-items:center;
 
-    font-size:clamp(30px,4vw,72px);
+    font-size:78px;
 
     font-weight:bold;
 
     color:white;
 
-    text-shadow:0 3px 6px rgba(0,0,0,0.35);
+    text-shadow:0 3px 6px rgba(0,0,0,0.4);
 
-    box-shadow:0 8px 16px rgba(0,0,0,0.2);
-
-    user-select:none;
+    box-shadow:0 8px 18px rgba(0,0,0,0.3);
 
     cursor:pointer;
+
+    user-select:none;
 
     z-index:12;
 
     transition:0.2s;
-
-    padding-bottom:10px;
 }
 
 .leaf:active{
@@ -351,20 +329,19 @@ body{
 }
 
 .leaf::after{
-
     content:"";
 
     position:absolute;
 
-    width:26%;
+    width:22%;
     height:7%;
 
-    background:#08752c;
+    background:#046b1d;
 
     border-radius:20px;
 
     right:12%;
-    bottom:12%;
+    bottom:13%;
 
     transform:rotate(-20deg);
 }
@@ -372,31 +349,30 @@ body{
 /* ---------------- LEAF POSITIONS ---------------- */
 
 .left-leaf{
-    left:4%;
-    bottom:-6%;
+    left:-1%;
+    bottom:-3%;
 }
 
 .right-leaf{
-    right:4%;
-    bottom:-6%;
+    right:-1%;
+    bottom:-3%;
 }
 
-/* ---------------- JUMP POSITIONS ---------------- */
+/* ---------------- FROG LAND ---------------- */
 
 .jump-left{
-    left:24%;
+    left:22%;
     top:78%;
 }
 
 .jump-right{
-    left:76%;
+    left:78%;
     top:78%;
 }
 
 /* ---------------- FINAL SLIDE ---------------- */
 
 .final-slide{
-
     background:linear-gradient(
     to bottom,
     #69ecff,
@@ -407,7 +383,6 @@ body{
 }
 
 .final-text{
-
     position:absolute;
 
     width:100%;
@@ -428,11 +403,10 @@ body{
 /* ---------------- SMALL FROGS ---------------- */
 
 .small-frog{
-
     position:absolute;
 
-    width:80px;
-    height:80px;
+    width:90px;
+    height:90px;
 
     animation:smallJump 2s infinite ease-in-out;
 }
@@ -450,7 +424,7 @@ body{
     }
 
     50%{
-        transform:translateY(-40px);
+        transform:translateY(-60px);
     }
 
     100%{
@@ -458,92 +432,115 @@ body{
     }
 }
 
-/* ---------------- TABLETS ---------------- */
+/* ================================================= */
+/* ================== TABLETS ====================== */
+/* ================================================= */
 
-@media(max-width:900px){
+@media(max-width:1024px){
 
     .pond{
         width:96vw;
-        aspect-ratio:1.55/1;
+        height:68vh;
     }
 
     .leaf{
-        width:210px;
-        height:120px;
-        font-size:46px;
+        width:240px;
+        height:135px;
+        font-size:58px;
     }
 
     .frog{
-        width:145px;
-        height:145px;
+        width:150px;
+        height:150px;
     }
 }
 
-/* ---------------- MOBILE ---------------- */
+/* ================================================= */
+/* ================== MOBILE ======================= */
+/* ================================================= */
 
-@media(max-width:600px){
+@media(max-width:700px){
 
     .instruction{
-        font-size:16px;
-        padding-top:14px;
+        font-size:18px;
+        padding:14px 10px 0;
     }
 
     .pond{
 
-        width:96vw;
+        width:98vw;
+        height:60vh;
 
-        aspect-ratio:1.2/1;
+        border-width:10px;
 
-        margin-top:16px;
-
-        border-radius:35%;
+        border-radius:38%;
     }
 
     .frog{
         width:120px;
         height:120px;
-        top:44%;
+        top:48%;
+    }
+
+    .frog-body{
+        border-width:4px;
+    }
+
+    .eye{
+        border-width:3px;
+    }
+
+    .leg{
+        border-width:3px;
+    }
+
+    .smile{
+        border-bottom-width:4px;
     }
 
     .leaf{
 
-        width:150px;
-        height:92px;
+        width:180px;
+        height:100px;
 
-        font-size:34px;
+        font-size:48px;
 
-        bottom:-2%;
+        border-width:4px;
     }
 
     .left-leaf{
-        left:-3%;
+        left:-4%;
+        bottom:-2%;
     }
 
     .right-leaf{
-        right:-3%;
+        right:-4%;
+        bottom:-2%;
     }
 
     .jump-left{
-        left:25%;
-        top:76%;
+        left:24%;
+        top:78%;
     }
 
     .jump-right{
-        left:75%;
-        top:76%;
+        left:76%;
+        top:78%;
     }
 }
 
-/* ---------------- OLD SMALL PHONES ---------------- */
+/* ================================================= */
+/* ============== OLD SMALL PHONES ================= */
+/* ================================================= */
 
-@media(max-width:390px){
+@media(max-width:430px){
 
     .instruction{
-        font-size:14px;
+        font-size:16px;
     }
 
     .pond{
-        aspect-ratio:1.08/1;
+        height:56vh;
     }
 
     .frog{
@@ -553,10 +550,18 @@ body{
 
     .leaf{
 
-        width:128px;
+        width:145px;
         height:82px;
 
-        font-size:28px;
+        font-size:36px;
+    }
+
+    .left-leaf{
+        left:-5%;
+    }
+
+    .right-leaf{
+        right:-5%;
     }
 }
 
@@ -717,103 +722,9 @@ body{
 
     </div>
 
-    <!-- SLIDE 4 -->
+    <!-- FINAL SLIDE -->
 
-    <div class="slide game-slide" id="slide4">
-
-        <div class="instruction">
-            Help the frog to identify the sight words
-        </div>
-
-        <div class="pond">
-
-            <div class="water-circle w1"></div>
-            <div class="water-circle w2"></div>
-            <div class="water-circle w3"></div>
-
-            <div class="frog" id="frog4">
-
-                <div class="frog-body"></div>
-
-                <div class="eye left">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="eye right">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="smile"></div>
-
-                <div class="leg left"></div>
-                <div class="leg right"></div>
-
-            </div>
-
-            <div class="leaf left-leaf"
-            onclick="checkAnswer(4,false,'left')">
-                lid
-            </div>
-
-            <div class="leaf right-leaf"
-            onclick="checkAnswer(4,true,'right')">
-                she
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- SLIDE 5 -->
-
-    <div class="slide game-slide" id="slide5">
-
-        <div class="instruction">
-            Help the frog to identify the sight words
-        </div>
-
-        <div class="pond">
-
-            <div class="water-circle w1"></div>
-            <div class="water-circle w2"></div>
-            <div class="water-circle w3"></div>
-
-            <div class="frog" id="frog5">
-
-                <div class="frog-body"></div>
-
-                <div class="eye left">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="eye right">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="smile"></div>
-
-                <div class="leg left"></div>
-                <div class="leg right"></div>
-
-            </div>
-
-            <div class="leaf left-leaf"
-            onclick="checkAnswer(5,true,'left')">
-                are
-            </div>
-
-            <div class="leaf right-leaf"
-            onclick="checkAnswer(5,false,'right')">
-                van
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- FINAL -->
-
-    <div class="slide final-slide" id="slide6">
+    <div class="slide final-slide" id="slide4">
 
         <div class="final-text">
             Great Job!
@@ -843,8 +754,6 @@ body{
 
 </div>
 
-<!-- AUDIO -->
-
 <audio id="wrongSound"
 src="assets/wrong.mp3"></audio>
 
@@ -852,7 +761,7 @@ src="assets/wrong.mp3"></audio>
 
 let currentSlide = 0;
 
-/* ---------------- LOGO SCREEN ---------------- */
+/* ---------------- LOGO ---------------- */
 
 setTimeout(() => {
 
@@ -860,7 +769,7 @@ setTimeout(() => {
 
 },3000);
 
-/* ---------------- NEXT SLIDE ---------------- */
+/* ---------------- NEXT ---------------- */
 
 function nextSlide(){
 
@@ -887,7 +796,7 @@ function nextSlide(){
     }
 }
 
-/* ---------------- ANSWER CHECK ---------------- */
+/* ---------------- CHECK ANSWER ---------------- */
 
 function checkAnswer(
 slideNum,
@@ -922,7 +831,7 @@ side
 
             nextSlide();
 
-        },1200);
+        },1300);
 
     }
 
