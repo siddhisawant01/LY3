@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-/>
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Missing Letters Game</title>
 
 <style>
 
 /* =========================================
-   RESET
+RESET
 ========================================= */
 
 *{
@@ -28,41 +27,37 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:Arial, sans-serif;
-    background:#f5f5f5;
-    touch-action:manipulation;
+    background:#fff;
 }
 
 /* =========================================
-   SLIDES
+COMMON SLIDES
 ========================================= */
 
 .slide{
     position:absolute;
-    width:100%;
-    height:100vh;
-    top:0;
-    left:0;
-
+    inset:0;
     display:flex;
     justify-content:center;
     align-items:center;
     flex-direction:column;
-
-    transition:0.6s ease;
+    transition:.6s;
 }
 
 .hidden{
     opacity:0;
     pointer-events:none;
+    transform:scale(1.05);
 }
 
 .show{
     opacity:1;
     pointer-events:auto;
+    transform:scale(1);
 }
 
 /* =========================================
-   SLIDE 1
+SLIDE 1
 ========================================= */
 
 #slide1{
@@ -72,30 +67,34 @@ html,body{
 /* IMPORTANT FIX FOR LOGO */
 
 .logo{
-    width:min(70vw,350px);
-    max-width:350px;
+
+    width:min(75vw,420px);
+
+    max-width:420px;
+
     object-fit:contain;
+
     display:block;
 }
 
 /* =========================================
-   SLIDE 2
+SLIDE 2
 ========================================= */
 
 #slide2{
 
     background:
-    linear-gradient(rgba(255,255,255,0.90),
-    rgba(255,255,255,0.90)),
+    linear-gradient(rgba(255,255,255,.92),
+    rgba(255,255,255,.92)),
     url("assets/background1.png");
 
     background-size:cover;
     background-position:center;
 
-    padding:10px;
+    overflow:hidden;
 }
 
-/* GAME WRAPPER */
+/* MAIN WRAPPER */
 
 .game-wrapper{
 
@@ -104,64 +103,98 @@ html,body{
 
     display:flex;
     flex-direction:column;
-    justify-content:center;
+
+    justify-content:space-evenly;
     align-items:center;
+
+    padding:10px;
 }
 
 /* TITLE */
 
 .game-title{
 
-    font-size:clamp(24px,4vw,52px);
+    font-size:clamp(22px,4vw,44px);
+
     font-weight:bold;
+
     color:#ff006e;
 
-    margin-bottom:12px;
     text-align:center;
 }
 
-/* GRID */
+/* TABLE AREA */
+
+.table-area{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+/* MAIN GRID */
 
 .grid{
 
     display:grid;
-    grid-template-columns:repeat(4,70px);
 
-    gap:6px;
+    grid-template-columns:repeat(4,72px);
 
-    margin-bottom:16px;
+    grid-template-rows:repeat(6,72px);
+
+    gap:5px;
 }
 
-/* BOX */
+/* BOTTOM ROW */
 
-.box{
+.bottom-row{
 
-    width:70px;
-    height:70px;
+    display:grid;
 
-    border-radius:16px;
+    grid-template-columns:repeat(2,72px);
 
-    background:white;
+    gap:5px;
 
-    border:3px solid #ffb703;
+    margin-top:5px;
+}
+
+/* CELL */
+
+.cell{
+
+    width:72px;
+    height:72px;
+
+    border-radius:18px;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
-    font-size:30px;
+    font-size:48px;
     font-weight:bold;
 
-    color:#000;
+    background:white;
 
-    box-shadow:0 3px 8px rgba(0,0,0,0.2);
+    border:3px solid #ffb703;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.18);
+
+    color:#111;
 }
 
-/* EMPTY BOX */
+/* FIXED LETTERS */
+
+.fixed{
+
+    background:#ffffff;
+}
+
+/* BLANK CELLS */
 
 .blank{
 
-    background:#fff3cd;
+    background:#fff6cc;
 
     border:3px dashed #ff006e;
 
@@ -170,59 +203,54 @@ html,body{
     cursor:pointer;
 }
 
-/* INVISIBLE */
-
-.empty{
-
-    visibility:hidden;
-}
-
 /* HELP BOX */
 
 .help-box{
 
-    width:min(95vw,760px);
+    width:min(95vw,1000px);
 
     background:white;
 
     border-radius:24px;
 
-    padding:14px;
-
-    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+    padding:12px;
 
     display:flex;
-    justify-content:center;
-    align-items:center;
+
     flex-wrap:wrap;
 
+    justify-content:center;
+
     gap:10px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
 }
 
-/* OPTIONS */
+/* OPTION BUTTONS */
 
 .option{
 
-    width:52px;
-    height:52px;
+    width:54px;
+    height:54px;
 
     border:none;
+
     border-radius:14px;
+
+    color:white;
 
     font-size:30px;
     font-weight:bold;
 
-    color:white;
-
     cursor:pointer;
 
-    transition:0.2s;
+    box-shadow:0 4px 10px rgba(0,0,0,.2);
 
-    box-shadow:0 3px 8px rgba(0,0,0,0.2);
+    transition:.2s;
 }
 
 .option:active{
-    transform:scale(0.92);
+    transform:scale(.92);
 }
 
 .selected{
@@ -242,7 +270,7 @@ html,body{
 
 .feedback{
 
-    position:fixed;
+    position:absolute;
 
     top:50%;
     left:50%;
@@ -251,13 +279,13 @@ html,body{
 
     font-size:90px;
 
-    z-index:999;
+    z-index:100;
 
-    display:none;
+    pointer-events:none;
 }
 
 /* =========================================
-   SLIDE 3
+SLIDE 3
 ========================================= */
 
 #slide3{
@@ -265,17 +293,19 @@ html,body{
     overflow:hidden;
 
     background:
-    linear-gradient(rgba(255,255,255,0.15),
-    rgba(255,255,255,0.15)),
+    linear-gradient(rgba(255,255,255,.18),
+    rgba(255,255,255,.18)),
     url("assets/background2.png");
 
     background-size:cover;
     background-position:center;
 }
 
+/* AMAZING TEXT */
+
 .amazing{
 
-    font-size:clamp(48px,8vw,100px);
+    font-size:clamp(45px,9vw,110px);
 
     font-weight:bold;
 
@@ -283,11 +313,11 @@ html,body{
 
     text-shadow:
     3px 3px white,
-    6px 6px 10px rgba(0,0,0,0.2);
+    6px 6px 15px rgba(0,0,0,.25);
+
+    z-index:5;
 
     animation:bounce 1s infinite alternate;
-
-    z-index:10;
 }
 
 @keyframes bounce{
@@ -301,15 +331,15 @@ html,body{
     }
 }
 
-/* RAIN */
+/* LETTER RAIN */
 
 .rain-letter{
 
     position:absolute;
 
-    top:-50px;
+    top:-60px;
 
-    font-size:40px;
+    font-size:clamp(24px,5vw,60px);
 
     font-weight:bold;
 
@@ -326,46 +356,48 @@ html,body{
 }
 
 /* =========================================
-   MOBILE
+MOBILE
 ========================================= */
 
 @media(max-width:700px){
 
     .grid{
-        grid-template-columns:repeat(4,58px);
-        gap:5px;
+
+        grid-template-columns:repeat(4,54px);
+
+        grid-template-rows:repeat(6,54px);
     }
 
-    .box{
-        width:58px;
-        height:58px;
-        font-size:24px;
+    .bottom-row{
+
+        grid-template-columns:repeat(2,54px);
+    }
+
+    .cell{
+
+        width:54px;
+        height:54px;
+
+        font-size:34px;
+
+        border-radius:12px;
     }
 
     .option{
+
         width:44px;
         height:44px;
+
         font-size:24px;
     }
 
-    .game-title{
-        font-size:28px;
+    .feedback{
+        font-size:70px;
     }
 
     .help-box{
         gap:7px;
         padding:10px;
-    }
-}
-
-@media(max-height:700px){
-
-    .game-title{
-        margin-bottom:6px;
-    }
-
-    .grid{
-        margin-bottom:10px;
     }
 }
 
@@ -375,47 +407,32 @@ html,body{
 <body>
 
 <!-- =========================================
-     AUDIO
+AUDIO
 ========================================= -->
 
 <audio id="correctSound" src="assets/correct.mp3"></audio>
+
 <audio id="wrongSound" src="assets/wrong.mp3"></audio>
 
 <!-- =========================================
-     SLIDE 1
+SLIDE 1
 ========================================= -->
 
 <section id="slide1" class="slide show">
 
     <!-- IMPORTANT -->
-    <!-- KEEP THIS EXACT FILE NAME -->
+    <!-- YOUR FILE MUST BE NAMED EXACTLY -->
+    <!-- innovine-logo.png -->
 
     <img
-    src="./assets/logo.png"
+    src="assets/innovine-logo.png"
     class="logo"
-    alt="Innovine Logo"
-
-    onerror="
-    this.style.display='none';
-    document.getElementById('logoText').style.display='block';
-    ">
-
-    <!-- FALLBACK -->
-    <h1
-    id="logoText"
-    style="
-    display:none;
-    color:#ff006e;
-    font-size:60px;
-    font-weight:bold;
-    ">
-    INNOVINE
-    </h1>
+    alt="Innovine Logo">
 
 </section>
 
 <!-- =========================================
-     SLIDE 2
+SLIDE 2
 ========================================= -->
 
 <section id="slide2" class="slide hidden">
@@ -426,9 +443,15 @@ html,body{
             Identify the missing letters
         </div>
 
-        <!-- GRID -->
+        <!-- TABLE -->
 
-        <div class="grid" id="grid"></div>
+        <div class="table-area">
+
+            <div class="grid" id="grid"></div>
+
+            <div class="bottom-row" id="bottomRow"></div>
+
+        </div>
 
         <!-- HELP BOX -->
 
@@ -436,10 +459,14 @@ html,body{
 
     </div>
 
+    <!-- FEEDBACK -->
+
+    <div class="feedback" id="feedback"></div>
+
 </section>
 
 <!-- =========================================
-     SLIDE 3
+SLIDE 3
 ========================================= -->
 
 <section id="slide3" class="slide hidden">
@@ -450,24 +477,15 @@ html,body{
 
 </section>
 
-<!-- FEEDBACK -->
-
-<div class="feedback" id="feedback"></div>
-
 <script>
 
 /* =========================================
-   SLIDES
+SLIDES
 ========================================= */
 
-const slide1 =
-document.getElementById("slide1");
-
-const slide2 =
-document.getElementById("slide2");
-
-const slide3 =
-document.getElementById("slide3");
+const slide1 = document.getElementById("slide1");
+const slide2 = document.getElementById("slide2");
+const slide3 = document.getElementById("slide3");
 
 setTimeout(()=>{
 
@@ -480,45 +498,75 @@ setTimeout(()=>{
 },3000);
 
 /* =========================================
-   GAME DATA
+GAME TABLE DATA
 ========================================= */
+
+/*
+VISIBLE LETTERS:
+a d h i k p v w y
+*/
 
 const gridData = [
 
-"a","b","c","d",
-"e","f","g","h",
-"i","j","k","l",
-"m","n","o","p",
-"q","r","s","t",
-"u","v","w","x",
-"empty","y","z","empty"
+    ["a","","","d"],
+    ["e","","","h"],
+    ["i","","k",""],
+    ["","","","p"],
+    ["","","",""],
+    ["","v","w",""]
+
 ];
 
-/* ONLY THESE LETTERS VISIBLE */
+/* BOTTOM ROW */
 
-const visibleLetters = [
-"a","d","e","h","i",
-"k","p","v","w","y"
-];
+const bottomData = ["y",""];
 
-/* SHUFFLED HELP BOX */
+/* CORRECT ANSWERS */
+
+const answers = {
+
+    "0-1":"b",
+    "0-2":"c",
+
+    "1-1":"f",
+    "1-2":"g",
+
+    "2-1":"j",
+    "2-3":"l",
+
+    "3-0":"m",
+    "3-1":"n",
+    "3-2":"o",
+
+    "4-0":"q",
+    "4-1":"r",
+    "4-2":"s",
+    "4-3":"t",
+
+    "5-0":"u",
+    "5-3":"x",
+
+    "bottom-1":"z"
+};
+
+/* HELP BOX LETTERS */
 
 const helpLetters = [
 
-"q","b","m","u","g",
-"z","c","l","x","o",
-"n","f","s","r","j",
-"t"
+"b","c","f","g","j","l",
+"m","n","o","q","r","s",
+"t","u","x","z"
+
 ];
 
-let selectedLetter = null;
-
 /* =========================================
-   ELEMENTS
+ELEMENTS
 ========================================= */
 
-const grid =
-document.getElementById("grid");
+const grid = document.getElementById("grid");
+
+const bottomRow =
+document.getElementById("bottomRow");
 
 const helpBox =
 document.getElementById("helpBox");
@@ -532,53 +580,129 @@ document.getElementById("correctSound");
 const wrongSound =
 document.getElementById("wrongSound");
 
+let selectedLetter = null;
+let selectedButton = null;
+
 /* =========================================
-   CREATE GRID
+CREATE GRID
 ========================================= */
 
-gridData.forEach(letter=>{
+gridData.forEach((row,rowIndex)=>{
 
-    const box =
+    row.forEach((item,colIndex)=>{
+
+        const cell =
+        document.createElement("div");
+
+        cell.classList.add("cell");
+
+        if(item === ""){
+
+            cell.classList.add("blank");
+
+            cell.innerHTML="?";
+
+            cell.addEventListener("click",()=>{
+
+                if(!selectedLetter) return;
+
+                const key =
+                rowIndex + "-" + colIndex;
+
+                if(selectedLetter === answers[key]){
+
+                    cell.innerHTML =
+                    selectedLetter;
+
+                    cell.style.background =
+                    "#d8ffd8";
+
+                    cell.style.border =
+                    "3px solid green";
+
+                    selectedButton.remove();
+
+                    selectedLetter = null;
+                    selectedButton = null;
+
+                    playCorrect();
+
+                    feedback.innerHTML = "✅";
+
+                    setTimeout(()=>{
+                        feedback.innerHTML="";
+                    },700);
+
+                    checkComplete();
+
+                }else{
+
+                    playWrong();
+
+                    feedback.innerHTML = "❌";
+
+                    setTimeout(()=>{
+                        feedback.innerHTML="";
+                    },700);
+                }
+            });
+
+        }else{
+
+            cell.classList.add("fixed");
+
+            cell.innerHTML = item;
+        }
+
+        grid.appendChild(cell);
+
+    });
+
+});
+
+/* =========================================
+BOTTOM ROW
+========================================= */
+
+bottomData.forEach((item,index)=>{
+
+    const cell =
     document.createElement("div");
 
-    box.classList.add("box");
+    cell.classList.add("cell");
 
-    if(letter === "empty"){
+    if(item === ""){
 
-        box.classList.add("empty");
+        cell.classList.add("blank");
 
-    }else if(visibleLetters.includes(letter)){
+        cell.innerHTML="?";
 
-        box.innerHTML = letter;
-
-    }else{
-
-        box.innerHTML = "?";
-
-        box.dataset.answer = letter;
-
-        box.classList.add("blank");
-
-        box.addEventListener("click",()=>{
+        cell.addEventListener("click",()=>{
 
             if(!selectedLetter) return;
 
-            if(selectedLetter === box.dataset.answer){
+            if(selectedLetter === "z"){
 
-                box.innerHTML = selectedLetter;
+                cell.innerHTML = "z";
 
-                box.classList.remove("blank");
+                cell.style.background =
+                "#d8ffd8";
 
-                box.style.background = "#d8ffd8";
-                box.style.border = "3px solid green";
+                cell.style.border =
+                "3px solid green";
+
+                selectedButton.remove();
+
+                selectedLetter = null;
+                selectedButton = null;
 
                 playCorrect();
 
-                showFeedback("✅");
+                feedback.innerHTML = "✅";
 
-                removeHelpLetter(selectedLetter);
-
-                selectedLetter = null;
+                setTimeout(()=>{
+                    feedback.innerHTML="";
+                },700);
 
                 checkComplete();
 
@@ -586,16 +710,27 @@ gridData.forEach(letter=>{
 
                 playWrong();
 
-                showFeedback("❌");
+                feedback.innerHTML = "❌";
+
+                setTimeout(()=>{
+                    feedback.innerHTML="";
+                },700);
             }
         });
+
+    }else{
+
+        cell.classList.add("fixed");
+
+        cell.innerHTML = item;
     }
 
-    grid.appendChild(box);
+    bottomRow.appendChild(cell);
+
 });
 
 /* =========================================
-   HELP BOX
+CREATE HELP LETTERS
 ========================================= */
 
 helpLetters.forEach((letter,index)=>{
@@ -608,8 +743,6 @@ helpLetters.forEach((letter,index)=>{
 
     btn.innerHTML = letter;
 
-    btn.dataset.letter = letter;
-
     btn.addEventListener("click",()=>{
 
         document
@@ -621,46 +754,16 @@ helpLetters.forEach((letter,index)=>{
         btn.classList.add("selected");
 
         selectedLetter = letter;
+
+        selectedButton = btn;
     });
 
     helpBox.appendChild(btn);
+
 });
 
 /* =========================================
-   REMOVE HELP LETTER
-========================================= */
-
-function removeHelpLetter(letter){
-
-    const buttons =
-    document.querySelectorAll(".option");
-
-    buttons.forEach(btn=>{
-
-        if(btn.dataset.letter === letter){
-
-            btn.remove();
-        }
-    });
-}
-
-/* =========================================
-   FEEDBACK
-========================================= */
-
-function showFeedback(symbol){
-
-    feedback.style.display = "block";
-
-    feedback.innerHTML = symbol;
-
-    setTimeout(()=>{
-        feedback.style.display = "none";
-    },700);
-}
-
-/* =========================================
-   AUDIO
+AUDIO
 ========================================= */
 
 function playCorrect(){
@@ -678,15 +781,24 @@ function playWrong(){
 }
 
 /* =========================================
-   CHECK COMPLETE
+CHECK COMPLETE
 ========================================= */
 
 function checkComplete(){
 
-    const remaining =
+    const blanks =
     document.querySelectorAll(".blank");
 
-    if(remaining.length === 0){
+    let complete = true;
+
+    blanks.forEach(box=>{
+
+        if(box.innerHTML === "?"){
+            complete = false;
+        }
+    });
+
+    if(complete){
 
         setTimeout(()=>{
 
@@ -703,7 +815,7 @@ function checkComplete(){
 }
 
 /* =========================================
-   LETTER RAIN
+RAINING LETTERS
 ========================================= */
 
 function startRain(){
@@ -737,11 +849,11 @@ function startRain(){
             span.remove();
         },7000);
 
-    },180);
+    },150);
 }
 
 /* =========================================
-   RANDOM COLORS
+RANDOM COLORS
 ========================================= */
 
 function randomColor(){
