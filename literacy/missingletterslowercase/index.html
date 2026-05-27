@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-/>
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Missing Letters Game</title>
 
@@ -32,7 +31,7 @@ html,body{
 }
 
 /* =========================================
-SLIDES
+COMMON SLIDES
 ========================================= */
 
 .slide{
@@ -65,10 +64,17 @@ SLIDE 1
     background:white;
 }
 
+/* IMPORTANT FIX FOR LOGO */
+
 .logo{
-    width:min(70vw,380px);
-    max-width:380px;
+
+    width:min(75vw,420px);
+
+    max-width:420px;
+
     object-fit:contain;
+
+    display:block;
 }
 
 /* =========================================
@@ -84,22 +90,11 @@ SLIDE 2
 
     background-size:cover;
     background-position:center;
+
+    overflow:hidden;
 }
 
-.game-title{
-
-    margin-top:10px;
-
-    font-size:clamp(22px,4vw,42px);
-
-    color:#ff006e;
-
-    font-weight:bold;
-
-    text-align:center;
-}
-
-/* MAIN */
+/* MAIN WRAPPER */
 
 .game-wrapper{
 
@@ -115,7 +110,20 @@ SLIDE 2
     padding:10px;
 }
 
-/* TABLE */
+/* TITLE */
+
+.game-title{
+
+    font-size:clamp(22px,4vw,44px);
+
+    font-weight:bold;
+
+    color:#ff006e;
+
+    text-align:center;
+}
+
+/* TABLE AREA */
 
 .table-area{
 
@@ -124,68 +132,69 @@ SLIDE 2
     align-items:center;
 }
 
-/* GRID */
+/* MAIN GRID */
 
 .grid{
 
     display:grid;
 
-    grid-template-columns:repeat(4,70px);
+    grid-template-columns:repeat(4,72px);
 
-    grid-template-rows:repeat(6,70px);
+    grid-template-rows:repeat(6,72px);
 
-    gap:4px;
+    gap:5px;
 }
 
-/* LAST SMALL ROW */
+/* BOTTOM ROW */
 
 .bottom-row{
 
     display:grid;
 
-    grid-template-columns:repeat(2,70px);
+    grid-template-columns:repeat(2,72px);
 
-    gap:4px;
+    gap:5px;
 
-    margin-top:4px;
+    margin-top:5px;
 }
 
 /* CELL */
 
 .cell{
 
-    width:70px;
-    height:70px;
+    width:72px;
+    height:72px;
 
-    border-radius:16px;
-
-    background:white;
-
-    border:3px solid #ffb703;
+    border-radius:18px;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
-    font-size:46px;
+    font-size:48px;
     font-weight:bold;
 
-    color:#111;
+    background:white;
 
-    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    border:3px solid #ffb703;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.18);
+
+    color:#111;
 }
 
-/* FILLED LETTER */
+/* FIXED LETTERS */
 
 .fixed{
+
     background:#ffffff;
 }
 
-/* EMPTY */
+/* BLANK CELLS */
 
 .blank{
 
-    background:#fff7cc;
+    background:#fff6cc;
 
     border:3px dashed #ff006e;
 
@@ -202,28 +211,30 @@ SLIDE 2
 
     background:white;
 
-    border-radius:25px;
+    border-radius:24px;
 
     padding:12px;
 
-    box-shadow:0 4px 15px rgba(0,0,0,.15);
-
     display:flex;
+
     flex-wrap:wrap;
 
     justify-content:center;
 
     gap:10px;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
 }
 
-/* OPTIONS */
+/* OPTION BUTTONS */
 
 .option{
 
-    width:55px;
-    height:55px;
+    width:54px;
+    height:54px;
 
     border:none;
+
     border-radius:14px;
 
     color:white;
@@ -282,29 +293,29 @@ SLIDE 3
     overflow:hidden;
 
     background:
-    linear-gradient(rgba(255,255,255,.2),
-    rgba(255,255,255,.2)),
+    linear-gradient(rgba(255,255,255,.18),
+    rgba(255,255,255,.18)),
     url("assets/background2.png");
 
     background-size:cover;
     background-position:center;
 }
 
-/* AMAZING */
+/* AMAZING TEXT */
 
 .amazing{
 
     font-size:clamp(45px,9vw,110px);
 
-    color:#ff006e;
-
     font-weight:bold;
+
+    color:#ff006e;
 
     text-shadow:
     3px 3px white,
     6px 6px 15px rgba(0,0,0,.25);
 
-    z-index:10;
+    z-index:5;
 
     animation:bounce 1s infinite alternate;
 }
@@ -320,7 +331,7 @@ SLIDE 3
     }
 }
 
-/* RAIN */
+/* LETTER RAIN */
 
 .rain-letter{
 
@@ -333,6 +344,8 @@ SLIDE 3
     font-weight:bold;
 
     animation:fall linear forwards;
+
+    user-select:none;
 }
 
 @keyframes fall{
@@ -349,34 +362,42 @@ MOBILE
 @media(max-width:700px){
 
     .grid{
-        grid-template-columns:repeat(4,52px);
-        grid-template-rows:repeat(6,52px);
+
+        grid-template-columns:repeat(4,54px);
+
+        grid-template-rows:repeat(6,54px);
     }
 
     .bottom-row{
-        grid-template-columns:repeat(2,52px);
+
+        grid-template-columns:repeat(2,54px);
     }
 
     .cell{
-        width:52px;
-        height:52px;
+
+        width:54px;
+        height:54px;
+
         font-size:34px;
+
         border-radius:12px;
     }
 
     .option{
+
         width:44px;
         height:44px;
+
         font-size:24px;
+    }
+
+    .feedback{
+        font-size:70px;
     }
 
     .help-box{
         gap:7px;
         padding:10px;
-    }
-
-    .feedback{
-        font-size:70px;
     }
 }
 
@@ -385,9 +406,12 @@ MOBILE
 
 <body>
 
-<!-- AUDIO -->
+<!-- =========================================
+AUDIO
+========================================= -->
 
 <audio id="correctSound" src="assets/correct.mp3"></audio>
+
 <audio id="wrongSound" src="assets/wrong.mp3"></audio>
 
 <!-- =========================================
@@ -397,9 +421,11 @@ SLIDE 1
 <section id="slide1" class="slide show">
 
     <!-- IMPORTANT -->
-    <!-- KEEP THIS EXACT FILE NAME -->
+    <!-- YOUR FILE MUST BE NAMED EXACTLY -->
+    <!-- innovine-logo.png -->
+
     <img
-    src="./assets/logo.png"
+    src="assets/innovine-logo.png"
     class="logo"
     alt="Innovine Logo">
 
@@ -472,37 +498,36 @@ setTimeout(()=>{
 },3000);
 
 /* =========================================
-GAME DATA
+GAME TABLE DATA
 ========================================= */
 
 /*
 VISIBLE LETTERS:
-a d k i p s v y
+a d h i k p v w y
 */
 
 const gridData = [
 
     ["a","","","d"],
-    ["","","","h"],
+    ["e","","","h"],
     ["i","","k",""],
     ["","","","p"],
     ["","","",""],
-    ["","v","w",""],
+    ["","v","w",""]
 
 ];
 
-/* BOTTOM */
+/* BOTTOM ROW */
 
 const bottomData = ["y",""];
 
-/* ANSWERS */
+/* CORRECT ANSWERS */
 
 const answers = {
 
     "0-1":"b",
     "0-2":"c",
 
-    "1-0":"e",
     "1-1":"f",
     "1-2":"g",
 
@@ -524,11 +549,11 @@ const answers = {
     "bottom-1":"z"
 };
 
-/* HELP LETTERS */
+/* HELP BOX LETTERS */
 
 const helpLetters = [
 
-"b","c","e","f","g","j","l",
+"b","c","f","g","j","l",
 "m","n","o","q","r","s",
 "t","u","x","z"
 
@@ -539,13 +564,21 @@ ELEMENTS
 ========================================= */
 
 const grid = document.getElementById("grid");
-const bottomRow = document.getElementById("bottomRow");
-const helpBox = document.getElementById("helpBox");
 
-const feedback = document.getElementById("feedback");
+const bottomRow =
+document.getElementById("bottomRow");
 
-const correctSound = document.getElementById("correctSound");
-const wrongSound = document.getElementById("wrongSound");
+const helpBox =
+document.getElementById("helpBox");
+
+const feedback =
+document.getElementById("feedback");
+
+const correctSound =
+document.getElementById("correctSound");
+
+const wrongSound =
+document.getElementById("wrongSound");
 
 let selectedLetter = null;
 let selectedButton = null;
@@ -566,6 +599,7 @@ gridData.forEach((row,rowIndex)=>{
         if(item === ""){
 
             cell.classList.add("blank");
+
             cell.innerHTML="?";
 
             cell.addEventListener("click",()=>{
@@ -616,6 +650,7 @@ gridData.forEach((row,rowIndex)=>{
         }else{
 
             cell.classList.add("fixed");
+
             cell.innerHTML = item;
         }
 
@@ -686,7 +721,8 @@ bottomData.forEach((item,index)=>{
     }else{
 
         cell.classList.add("fixed");
-        cell.innerHTML=item;
+
+        cell.innerHTML = item;
     }
 
     bottomRow.appendChild(cell);
@@ -694,7 +730,7 @@ bottomData.forEach((item,index)=>{
 });
 
 /* =========================================
-HELP BOX
+CREATE HELP LETTERS
 ========================================= */
 
 helpLetters.forEach((letter,index)=>{
@@ -718,6 +754,7 @@ helpLetters.forEach((letter,index)=>{
         btn.classList.add("selected");
 
         selectedLetter = letter;
+
         selectedButton = btn;
     });
 
@@ -726,7 +763,7 @@ helpLetters.forEach((letter,index)=>{
 });
 
 /* =========================================
-SOUNDS
+AUDIO
 ========================================= */
 
 function playCorrect(){
@@ -749,12 +786,12 @@ CHECK COMPLETE
 
 function checkComplete(){
 
-    const remaining =
+    const blanks =
     document.querySelectorAll(".blank");
 
     let complete = true;
 
-    remaining.forEach(box=>{
+    blanks.forEach(box=>{
 
         if(box.innerHTML === "?"){
             complete = false;
@@ -778,7 +815,7 @@ function checkComplete(){
 }
 
 /* =========================================
-LETTER RAIN
+RAINING LETTERS
 ========================================= */
 
 function startRain(){
