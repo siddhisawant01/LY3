@@ -284,13 +284,15 @@ body{
 /* ---------------- FINAL SLIDE ---------------- */
 
 .final-slide{
-    background:linear-gradient(to bottom,#7ef6ff,#7df29f,#fff67a);
+    background:linear-gradient(to bottom,#2ed9e8,#67e890,#fff27a);
     overflow:hidden;
 }
 
+/* FINAL TEXT */
+
 .final-text{
     position:absolute;
-    top:18%;
+    top:10%;
     width:100%;
     text-align:center;
     font-size:clamp(44px,7vw,80px);
@@ -299,34 +301,63 @@ body{
     text-shadow:4px 4px 8px rgba(0,0,0,0.4);
 }
 
-/* ---------------- SMALL FROGS ---------------- */
+/* ---------------- MOVING FROGS ---------------- */
 
-.small-frog{
+.animated-frog{
     position:absolute;
-    width:90px;
-    height:90px;
-    animation:jumping 2s infinite ease-in-out;
+    width:120px;
+    height:120px;
+    animation:floatJump 2s infinite ease-in-out;
 }
 
-.sf1{ left:5%; bottom:10%; animation-delay:0s; }
-.sf2{ left:25%; bottom:20%; animation-delay:0.4s; }
-.sf3{ left:45%; bottom:8%; animation-delay:0.8s; }
-.sf4{ left:65%; bottom:18%; animation-delay:1.2s; }
-.sf5{ left:82%; bottom:10%; animation-delay:1.6s; }
+/* Different Positions */
 
-@keyframes jumping{
+.af1{
+    left:8%;
+    bottom:8%;
+    animation-delay:0s;
+}
+
+.af2{
+    left:28%;
+    bottom:20%;
+    animation-delay:0.4s;
+}
+
+.af3{
+    left:48%;
+    bottom:10%;
+    animation-delay:0.8s;
+}
+
+.af4{
+    left:68%;
+    bottom:22%;
+    animation-delay:1.2s;
+}
+
+.af5{
+    left:84%;
+    bottom:6%;
+    animation-delay:1.6s;
+}
+
+/* Up Down Animation */
+
+@keyframes floatJump{
 
     0%{
-        transform:translateY(0);
+        transform:translateY(0px);
     }
 
     50%{
-        transform:translateY(-80px);
+        transform:translateY(-70px);
     }
 
     100%{
-        transform:translateY(0);
+        transform:translateY(0px);
     }
+
 }
 
 /* ---------------- MOBILE ---------------- */
@@ -359,6 +390,11 @@ body{
         width:160px;
         height:100px;
         font-size:38px;
+    }
+
+    .animated-frog{
+        width:90px;
+        height:90px;
     }
 
 }
@@ -430,6 +466,11 @@ body{
     .right-leaf{
         right:2%;
         bottom:10%;
+    }
+
+    .animated-frog{
+        width:75px;
+        height:75px;
     }
 
 }
@@ -693,23 +734,25 @@ body{
             Great Job!
         </div>
 
-        <div class="small-frog sf1">
+        <!-- Animated Frogs -->
+
+        <div class="animated-frog af1">
             <div class="frog-body"></div>
         </div>
 
-        <div class="small-frog sf2">
+        <div class="animated-frog af2">
             <div class="frog-body"></div>
         </div>
 
-        <div class="small-frog sf3">
+        <div class="animated-frog af3">
             <div class="frog-body"></div>
         </div>
 
-        <div class="small-frog sf4">
+        <div class="animated-frog af4">
             <div class="frog-body"></div>
         </div>
 
-        <div class="small-frog sf5">
+        <div class="animated-frog af5">
             <div class="frog-body"></div>
         </div>
 
@@ -802,4 +845,4 @@ function checkAnswer(slideNum,isCorrect,side){
 </script>
 
 </body>
-</html> correct the code. after the 2nd slide the whole game is not working. there is a blank slide coming. i want the game to run properly for all the slides. give me only the corrected code which is required to be corrected. do not generate the entire code again.
+</html>
