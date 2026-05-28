@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport"
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
 <title>Full Empty Half Game</title>
@@ -28,8 +29,6 @@ body{
     touch-action:manipulation;
 }
 
-/* ---------------- MAIN ---------------- */
-
 .game-container{
     width:100vw;
     height:100vh;
@@ -48,29 +47,6 @@ body{
     justify-content:flex-start;
     padding:10px;
     overflow:hidden;
-    animation:fadeIn .4s ease;
-}
-
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:scale(1.02);
-    }
-    to{
-        opacity:1;
-        transform:scale(1);
-    }
-}
-
-/* ---------------- COLORFUL BACKGROUND ---------------- */
-
-.colorful-bg{
-    background:
-    radial-gradient(circle at top left,#ffd400 0%,#ffd400 18%,transparent 19%),
-    radial-gradient(circle at top right,#00c8ff 0%,#00c8ff 12%,transparent 13%),
-    radial-gradient(circle at bottom right,#ff5a1f 0%,#ff5a1f 25%,transparent 26%),
-    radial-gradient(circle at bottom left,#14b8ff 0%,#14b8ff 12%,transparent 13%),
-    radial-gradient(circle at center,#ffffff 0%,#f6f6f6 60%);
 }
 
 /* ---------------- INTRO ---------------- */
@@ -83,58 +59,98 @@ body{
 }
 
 .logo{
-    width:min(60vw,300px);
+    width:min(65vw,320px);
     object-fit:contain;
+}
+
+/* ---------------- BACKGROUND ---------------- */
+
+.colorful-bg{
+
+    background:
+    radial-gradient(circle at top left,#ffd400 0%,#ffd400 16%,transparent 17%),
+    radial-gradient(circle at top right,#00c8ff 0%,#00c8ff 10%,transparent 11%),
+    radial-gradient(circle at bottom right,#ff5a1f 0%,#ff5a1f 22%,transparent 23%),
+    radial-gradient(circle at bottom left,#1bbcff 0%,#1bbcff 12%,transparent 13%),
+    radial-gradient(circle at center,#ffffff 0%,#f4f4f4 65%);
+
 }
 
 /* ---------------- TEXT ---------------- */
 
 .instruction{
+
     width:95%;
     text-align:center;
-    background:rgba(255,255,255,0.92);
+
+    background:rgba(255,255,255,0.95);
+
     padding:14px;
-    margin-top:8px;
+
+    margin-top:10px;
+
     border-radius:20px;
+
     font-size:clamp(20px,3vw,34px);
+
     font-weight:900;
+
     color:#222;
-    box-shadow:0 5px 12px rgba(0,0,0,0.12);
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+
 }
 
 /* ---------------- OPTIONS ---------------- */
 
 .options{
+
     flex:1;
+
     width:100%;
+
     display:flex;
+
     justify-content:center;
+
     align-items:center;
+
     gap:18px;
+
     padding:15px;
-    flex-wrap:wrap;
+
+    flex-wrap:nowrap;
+
 }
 
 .option{
+
     width:min(28vw,220px);
+
     height:min(28vw,220px);
+
     min-width:95px;
+
     min-height:95px;
 
     background:white;
-    border-radius:28px;
+
+    border-radius:25px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    box-shadow:0 8px 16px rgba(0,0,0,0.18);
 
     border:6px solid #ffb300;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    transition:0.2s;
 
-    box-shadow:0 8px 18px rgba(0,0,0,0.18);
-
-    transition:.2s;
-    position:relative;
-    overflow:hidden;
 }
 
 .option:nth-child(2){
@@ -150,61 +166,95 @@ body{
 }
 
 .option img{
+
     width:85%;
     height:85%;
     object-fit:contain;
+
 }
 
 /* ---------------- FEEDBACK ---------------- */
 
 .feedback{
+
     position:absolute;
+
     top:50%;
+
     left:50%;
+
     transform:translate(-50%,-50%);
-    font-size:min(20vw,120px);
-    display:none;
+
+    font-size:min(22vw,130px);
+
     z-index:999;
+
+    display:none;
+
     animation:pop .4s ease;
+
 }
 
 @keyframes pop{
+
     from{
         transform:translate(-50%,-50%) scale(.2);
         opacity:0;
     }
+
     to{
         transform:translate(-50%,-50%) scale(1);
         opacity:1;
     }
+
 }
 
 /* ---------------- FINAL ---------------- */
 
 #finalSlide{
+
     justify-content:center;
+
     align-items:center;
+
     text-align:center;
+
 }
 
 .final-text{
-    font-size:clamp(38px,8vw,80px);
+
+    font-size:clamp(42px,8vw,85px);
+
     font-weight:900;
-    color:#ff4d00;
+
+    color:#ff4b00;
+
     text-shadow:3px 3px 0 white;
+
     z-index:5;
+
 }
 
 .replay-btn{
+
     margin-top:25px;
+
     padding:14px 28px;
+
     border:none;
+
     border-radius:20px;
+
     background:#00c853;
+
     color:white;
+
     font-size:22px;
+
     font-weight:bold;
+
     cursor:pointer;
+
 }
 
 .replay-btn:active{
@@ -214,18 +264,27 @@ body{
 /* ---------------- CONFETTI ---------------- */
 
 .confetti{
+
     position:absolute;
+
     width:12px;
+
     height:12px;
+
     top:-20px;
+
     opacity:.9;
+
     animation:fall linear forwards;
+
 }
 
 @keyframes fall{
+
     to{
         transform:translateY(110vh) rotate(720deg);
     }
+
 }
 
 /* ---------------- MOBILE ---------------- */
@@ -255,19 +314,18 @@ body{
 
 <div class="game-container">
 
-    <!-- SLIDE 1 -->
+    <!-- ---------------- SLIDE 1 ---------------- -->
 
     <div class="slide" id="slide1">
 
         <img
         class="logo"
         src="assets/innovine-logo.png"
-        alt="Innovine Logo"
-        onerror="this.src='https://via.placeholder.com/300x150?text=Innovine+Logo'">
+        alt="Innovine Logo">
 
     </div>
 
-    <!-- SLIDE 2 -->
+    <!-- ---------------- SLIDE 2 ---------------- -->
 
     <div class="slide colorful-bg" id="slide2">
 
@@ -276,8 +334,6 @@ body{
         </div>
 
         <div class="options">
-
-            <!-- CORRECT -->
 
             <div class="option"
             onclick="checkAnswer(true,3)">
@@ -307,7 +363,7 @@ body{
 
     </div>
 
-    <!-- SLIDE 3 -->
+    <!-- ---------------- SLIDE 3 ---------------- -->
 
     <div class="slide colorful-bg" id="slide3">
 
@@ -345,7 +401,7 @@ body{
 
     </div>
 
-    <!-- SLIDE 4 -->
+    <!-- ---------------- SLIDE 4 ---------------- -->
 
     <div class="slide colorful-bg" id="slide4">
 
@@ -383,7 +439,7 @@ body{
 
     </div>
 
-    <!-- SLIDE 5 -->
+    <!-- ---------------- SLIDE 5 ---------------- -->
 
     <div class="slide colorful-bg" id="slide5">
 
@@ -421,7 +477,7 @@ body{
 
     </div>
 
-    <!-- SLIDE 6 -->
+    <!-- ---------------- SLIDE 6 ---------------- -->
 
     <div class="slide colorful-bg" id="slide6">
 
@@ -459,7 +515,7 @@ body{
 
     </div>
 
-    <!-- FINAL -->
+    <!-- ---------------- FINAL SLIDE ---------------- -->
 
     <div class="slide colorful-bg" id="finalSlide">
 
@@ -482,7 +538,7 @@ body{
 
 </div>
 
-<!-- AUDIO -->
+<!-- ---------------- AUDIO ---------------- -->
 
 <audio id="correctSound" preload="auto">
     <source src="assets/correct.mp3" type="audio/mpeg">
@@ -494,80 +550,61 @@ body{
 
 <script>
 
-/* ---------------- PRELOAD ---------------- */
-
-const images = [
-'assets/jar_full.png',
-'assets/jar_half.png',
-'assets/jar_empty.png',
-'assets/bowl_empty.png',
-'assets/bowl_half.png',
-'assets/bowl_full.png',
-'assets/bottle_full.png',
-'assets/bottle_empty.png',
-'assets/bottle_half.png',
-'assets/pencil_full.png',
-'assets/pencil_empty.png',
-'assets/pencil_half.png',
-'assets/glass_empty.png',
-'assets/glass_half.png',
-'assets/glass_full.png'
-];
-
-images.forEach(src=>{
-    const img = new Image();
-    img.src = src;
-});
-
-/* ---------------- START ---------------- */
-
-window.onload = ()=>{
-
-    showSlide('slide1');
-
-    setTimeout(()=>{
-        showSlide('slide2');
-    },2000);
-
-};
-
 /* ---------------- SHOW SLIDE ---------------- */
 
-function showSlide(id){
+function showSlide(slideId){
 
-    document.querySelectorAll('.slide').forEach(slide=>{
-        slide.style.display='none';
+    const slides = document.querySelectorAll(".slide");
+
+    slides.forEach(slide=>{
+        slide.style.display = "none";
     });
 
-    document.getElementById(id).style.display='flex';
+    document.getElementById(slideId).style.display = "flex";
 
 }
 
-/* ---------------- ANSWERS ---------------- */
+/* ---------------- START GAME ---------------- */
+
+window.addEventListener("load",function(){
+
+    showSlide("slide1");
+
+    setTimeout(function(){
+
+        showSlide("slide2");
+
+    },2000);
+
+});
+
+/* ---------------- CHECK ANSWER ---------------- */
 
 function checkAnswer(correct,nextSlide){
 
-    const feedback = document.getElementById('feedback');
+    const feedback = document.getElementById("feedback");
 
     if(correct){
 
-        feedback.innerHTML='✅';
-        feedback.style.display='block';
+        feedback.innerHTML = "✅";
 
-        playSound('correctSound');
+        feedback.style.display = "block";
 
-        setTimeout(()=>{
+        playSound("correctSound");
 
-            feedback.style.display='none';
+        setTimeout(function(){
 
-            if(nextSlide === 'finalSlide'){
+            feedback.style.display = "none";
 
-                showSlide('finalSlide');
+            if(nextSlide === "finalSlide"){
+
+                showSlide("finalSlide");
+
                 launchConfetti();
 
             }else{
 
-                showSlide('slide'+nextSlide);
+                showSlide("slide" + nextSlide);
 
             }
 
@@ -575,28 +612,35 @@ function checkAnswer(correct,nextSlide){
 
     }else{
 
-        feedback.innerHTML='❌';
-        feedback.style.display='block';
+        feedback.innerHTML = "❌";
 
-        playSound('wrongSound');
+        feedback.style.display = "block";
 
-        setTimeout(()=>{
-            feedback.style.display='none';
+        playSound("wrongSound");
+
+        setTimeout(function(){
+
+            feedback.style.display = "none";
+
         },900);
 
     }
 
 }
 
-/* ---------------- SOUND ---------------- */
+/* ---------------- PLAY SOUND ---------------- */
 
 function playSound(id){
 
     const sound = document.getElementById(id);
 
-    sound.currentTime = 0;
+    if(sound){
 
-    sound.play().catch(()=>{});
+        sound.currentTime = 0;
+
+        sound.play().catch(function(){});
+
+    }
 
 }
 
@@ -606,26 +650,28 @@ function launchConfetti(){
 
     for(let i=0;i<120;i++){
 
-        const confetti=document.createElement('div');
+        const confetti = document.createElement("div");
 
-        confetti.classList.add('confetti');
+        confetti.classList.add("confetti");
 
-        confetti.style.left=Math.random()*100+'vw';
+        confetti.style.left = Math.random()*100 + "vw";
 
-        confetti.style.background=
-        `hsl(${Math.random()*360},100%,50%)`;
+        confetti.style.background =
+        "hsl(" + (Math.random()*360) + ",100%,50%)";
 
-        confetti.style.animationDuration=
-        (Math.random()*3+2)+'s';
+        confetti.style.animationDuration =
+        (Math.random()*3 + 2) + "s";
 
-        confetti.style.width=
-        confetti.style.height=
-        (Math.random()*10+8)+'px';
+        confetti.style.width =
+        confetti.style.height =
+        (Math.random()*10 + 8) + "px";
 
         document.body.appendChild(confetti);
 
-        setTimeout(()=>{
+        setTimeout(function(){
+
             confetti.remove();
+
         },5000);
 
     }
