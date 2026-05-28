@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Full Empty Half Game</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Arial',sans-serif;
+    background:#fff;
+}
+
+body{
+    touch-action:manipulation;
+}
+
+.game-container{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+}
+
+/* ---------- SLIDES ---------- */
+
+.slide{
+    width:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:12px;
+    overflow:hidden;
+}
+
+/* ---------- COLORFUL BACKGROUND ---------- */
+
+.colorful-bg{
+    background:
+    radial-gradient(circle at top left,#ffd400 0%,#ffd400 18%,transparent 19%),
+    radial-gradient(circle at top right,#ff1f1f 0%,#ff1f1f 10%,transparent 11%),
+    radial-gradient(circle at bottom right,#ff5a1f 0%,#ff5a1f 22%,transparent 23%),
+    radial-gradient(circle at bottom left,#1bbcff 0%,#1bbcff 12%,transparent 13%),
+    linear-gradient(135deg,#fffefc,#f4f4f4);
+    background-size:cover;
+}
+
+/* ---------- INTRO ---------- */
+
+#slide1{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#ffffff;
+}
+
+.logo{
+    width:min(65vw,280px);
+    max-height:40vh;
+    object-fit:contain;
+}
+
+/* ---------- INSTRUCTIONS ---------- */
+
+.instruction{
+    width:100%;
+    text-align:center;
+    font-size:clamp(20px,3vw,34px);
+    font-weight:900;
+    color:#222;
+    margin-top:8px;
+    margin-bottom:10px;
+    padding:10px;
+    background:rgba(255,255,255,0.9);
+    border-radius:18px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ---------- PROGRESS ---------- */
+
+.progress{
+    font-size:16px;
+    font-weight:bold;
+    color:#333;
+    margin-bottom:10px;
+}
+
+/* ---------- OPTIONS ---------- */
+
+.options{
+    flex:1;
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+    place-items:center;
+    padding:8px;
+    max-width:900px;
+}
+
+.option-card{
+    width:100%;
+    max-width:250px;
+    aspect-ratio:1/1;
+    background:white;
+    border-radius:25px;
+    border:6px solid #ffb300;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,0.15);
+    transition:0.2s;
+    overflow:hidden;
+}
+
+.option-card:active{
+    transform:scale(0.96);
+}
+
+.option-card img{
+    width:88%;
+    height:88%;
+    object-fit:contain;
+}
+
+/* ---------- FEEDBACK ---------- */
+
+.feedback{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:min(20vw,120px);
+    display:none;
+    z-index:50;
+    animation:pop 0.5s ease;
+}
+
+@keyframes pop{
+    0%{transform:translate(-50%,-50%) scale(0.3);}
+    100%{transform:translate(-50%,-50%) scale(1);}
+}
+
+/* ---------- FINAL ---------- */
+
+#finalSlide{
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.final-text{
+    font-size:clamp(36px,7vw,70px);
+    color:#ff4b00;
+    font-weight:900;
+    text-shadow:3px 3px 0 #fff;
+    z-index:5;
+}
+
+.replay-btn{
+    margin-top:25px;
+    padding:14px 30px;
+    border:none;
+    border-radius:18px;
+    background:#00c853;
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    cursor:pointer;
+    z-index:5;
+}
+
+.replay-btn:active{
+    transform:scale(0.96);
+}
+
+/* ---------- CONFETTI ---------- */
+
+.confetti{
+    position:absolute;
+    width:14px;
+    height:14px;
+    top:-20px;
+    opacity:0.9;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(720deg);
+    }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media(max-width:768px){
+
+    .options{
+        gap:12px;
+    }
+
+    .option-card{
+        max-width:160px;
+        border-width:5px;
+    }
+
+    .instruction{
+        font-size:22px;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="game-container">
+
+    <!-- SLIDE 1 -->
+    <div class="slide" id="slide1">
+        <img src="assets/innovine-logo.png"
+             class="logo"
+             onerror="this.src='https://via.placeholder.com/300x150?text=Innovine+Logo'">
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide colorful-bg" id="slide2">
+
+        <div class="instruction">
+            Identify the full jar
+        </div>
+
+        <div class="progress">1 / 5</div>
+
+        <div class="options">
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,true,3)">
+                <img src="assets/jar.png">
+            </div>
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,false,3)">
+                <img src="assets/jar.png" style="opacity:0.4;">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide colorful-bg" id="slide3">
+
+        <div class="instruction">
+            Identify the empty bowl
+        </div>
+
+        <div class="progress">2 / 5</div>
+
+        <div class="options">
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,true,4)">
+                <img src="assets/bowl.png" style="opacity:0.4;">
+            </div>
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,false,4)">
+                <img src="assets/bowl.png">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide colorful-bg" id="slide4">
+
+        <div class="instruction">
+            Identify the bottle that is half filled with juice
+        </div>
+
+        <div class="progress">3 / 5</div>
+
+        <div class="options">
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,true,5)">
+                <img src="assets/bottle.png">
+            </div>
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,false,5)">
+                <img src="assets/bottle.png" style="filter:brightness(1.4);">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide colorful-bg" id="slide5">
+
+        <div class="instruction">
+            Identify the empty pencil pouch
+        </div>
+
+        <div class="progress">4 / 5</div>
+
+        <div class="options">
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,true,6)">
+                <img src="assets/pencilpouch.png" style="opacity:0.4;">
+            </div>
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,false,6)">
+                <img src="assets/pencilpouch.png">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide colorful-bg" id="slide6">
+
+        <div class="instruction">
+            Identify the glass that is half filled with water
+        </div>
+
+        <div class="progress">5 / 5</div>
+
+        <div class="options">
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,true,'finalSlide')">
+                <img src="assets/glass.png">
+            </div>
+
+            <div class="option-card"
+                 onclick="checkAnswer(this,false,'finalSlide')">
+                <img src="assets/glass.png" style="opacity:0.5;">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FINAL SLIDE -->
+    <div class="slide colorful-bg" id="finalSlide">
+
+        <div class="final-text">
+            🎉 Fantastic! 🎉
+        </div>
+
+        <button class="replay-btn"
+                onclick="location.reload()">
+            Play Again
+        </button>
+
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="feedback" id="feedback"></div>
+
+</div>
+
+<!-- AUDIO -->
+
+<audio id="wrongSound" preload="auto">
+    <source src="assets/wrong.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="correctSound" preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=success-fanfare-trumpets-6185.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+let currentSlide = 1;
+
+/* ---------- START GAME ---------- */
+
+window.onload = () => {
+
+    document.getElementById("slide1").style.display = "flex";
+
+    setTimeout(() => {
+        showSlide(2);
+    },2000);
+
+};
+
+/* ---------- SHOW SLIDE ---------- */
+
+function showSlide(number){
+
+    document.querySelectorAll(".slide").forEach(slide=>{
+        slide.style.display = "none";
+    });
+
+    document.getElementById(
+        typeof number === "number" ?
+        "slide"+number :
+        number
+    ).style.display = "flex";
+
+}
+
+/* ---------- CHECK ANSWER ---------- */
+
+function checkAnswer(element,correct,nextSlide){
+
+    const feedback = document.getElementById("feedback");
+
+    if(correct){
+
+        feedback.innerHTML = "✅";
+        feedback.style.display = "block";
+
+        document.getElementById("correctSound").play();
+
+        setTimeout(()=>{
+
+            feedback.style.display = "none";
+
+            if(nextSlide === "finalSlide"){
+
+                showSlide("finalSlide");
+                launchConfetti();
+
+            }else{
+
+                showSlide(nextSlide);
+
+            }
+
+        },1200);
+
+    }else{
+
+        feedback.innerHTML = "❌";
+        feedback.style.display = "block";
+
+        const wrong = document.getElementById("wrongSound");
+        wrong.currentTime = 0;
+        wrong.play();
+
+        setTimeout(()=>{
+            feedback.style.display = "none";
+        },1000);
+
+    }
+
+}
+
+/* ---------- CONFETTI ---------- */
+
+function launchConfetti(){
+
+    for(let i=0;i<100;i++){
+
+        const confetti = document.createElement("div");
+
+        confetti.classList.add("confetti");
+
+        confetti.style.left = Math.random()*100 + "vw";
+
+        confetti.style.background =
+        `hsl(${Math.random()*360},100%,50%)`;
+
+        confetti.style.animationDuration =
+        (Math.random()*3 + 2) + "s";
+
+        confetti.style.width =
+        confetti.style.height =
+        (Math.random()*12 + 8) + "px";
+
+        document.body.appendChild(confetti);
+
+        setTimeout(()=>{
+            confetti.remove();
+        },5000);
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
