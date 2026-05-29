@@ -58,8 +58,8 @@ SLIDE 1
 }
 
 #logo{
-    width:min(45vw,320px);
-    max-width:320px;
+    width:min(40vw,280px);
+    max-width:280px;
     object-fit:contain;
 }
 
@@ -70,7 +70,7 @@ SLIDE 2
 #slide2{
     display:none;
     flex-direction:column;
-    padding:12px;
+    padding:8px;
     overflow:hidden;
 
     background-image:
@@ -94,17 +94,21 @@ SLIDE 2
     z-index:2;
 }
 
+/* ==========================
+TITLE
+========================== */
+
 .title{
     width:100%;
     text-align:center;
-    font-size:clamp(24px,3vw,44px);
+    font-size:clamp(18px,2vw,36px);
     font-weight:800;
     color:#5d4037;
     background:rgba(255,255,255,0.96);
-    padding:12px;
-    border-radius:20px;
-    box-shadow:0 5px 12px rgba(0,0,0,0.15);
-    margin-bottom:12px;
+    padding:8px;
+    border-radius:18px;
+    box-shadow:0 5px 10px rgba(0,0,0,0.12);
+    margin-bottom:8px;
 }
 
 /* ==========================
@@ -114,8 +118,9 @@ GAME LAYOUT
 .game-layout{
     flex:1;
     display:flex;
-    gap:16px;
+    gap:10px;
     overflow:hidden;
+    height:calc(100vh - 90px);
 }
 
 /* ==========================
@@ -125,34 +130,34 @@ LEFT PANEL
 .left-panel{
     width:48%;
     background:rgba(255,255,255,0.92);
-    border-radius:25px;
-    padding:18px;
-    overflow-y:auto;
+    border-radius:20px;
+    padding:10px;
+    overflow:hidden;
     box-shadow:0 5px 15px rgba(0,0,0,0.12);
 }
 
 .items-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:18px;
+    gap:10px;
+    height:100%;
 }
 
 .item{
     background:white;
-    border-radius:24px;
-    padding:10px;
+    border-radius:18px;
+    padding:6px;
     cursor:pointer;
     transition:0.25s;
-    min-height:210px;
 
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
 
-    border:6px solid #ff80ab;
+    border:5px solid #ff80ab;
 
-    box-shadow:0 5px 12px rgba(0,0,0,0.12);
+    box-shadow:0 5px 10px rgba(0,0,0,0.1);
 }
 
 .item:nth-child(2n){
@@ -168,8 +173,8 @@ LEFT PANEL
 }
 
 .item.selected{
-    transform:scale(1.08);
-    box-shadow:0 0 0 7px #ffd54f;
+    transform:scale(1.05);
+    box-shadow:0 0 0 5px #ffd54f;
 }
 
 /* ==========================
@@ -184,15 +189,15 @@ IMAGE SIZES
 /* normal images */
 
 .normal-img{
-    max-width:150px;
-    height:150px;
+    max-width:85px;
+    height:85px;
 }
 
-/* bigger empty images */
+/* empty images */
 
 .big-empty{
-    max-width:185px;
-    height:185px;
+    max-width:105px;
+    height:105px;
 }
 
 /* ==========================
@@ -201,7 +206,7 @@ LABELS
 
 .item-label{
     margin-top:2px;
-    font-size:34px;
+    font-size:18px;
     font-weight:800;
     color:#222;
     text-transform:lowercase;
@@ -216,30 +221,29 @@ RIGHT PANEL
 .right-panel{
     width:52%;
     display:flex;
-    gap:14px;
+    gap:10px;
 }
 
 .column{
     flex:1;
     background:rgba(255,255,255,0.94);
-    border-radius:25px;
-    padding:12px;
+    border-radius:20px;
+    padding:8px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    border:5px solid white;
-    overflow-y:auto;
-    box-shadow:0 5px 15px rgba(0,0,0,0.12);
+    overflow:hidden;
+    box-shadow:0 5px 12px rgba(0,0,0,0.12);
 }
 
 .column h2{
     width:100%;
     text-align:center;
     color:white;
-    font-size:clamp(24px,2vw,36px);
-    border-radius:16px;
-    padding:10px;
-    margin-bottom:14px;
+    font-size:clamp(18px,2vw,30px);
+    border-radius:14px;
+    padding:6px;
+    margin-bottom:8px;
     text-transform:lowercase;
     font-weight:800;
 }
@@ -258,22 +262,24 @@ RIGHT PANEL
 
 .drop-zone{
     width:100%;
-    min-height:520px;
+    flex:1;
 
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:14px;
+    gap:8px;
+
+    overflow:hidden;
 }
 
 .drop-zone img{
-    width:130px;
-    height:130px;
+    width:70px;
+    height:70px;
     object-fit:contain;
     background:white;
-    border-radius:18px;
-    padding:6px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    border-radius:12px;
+    padding:4px;
+    box-shadow:0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* ==========================
@@ -291,7 +297,7 @@ FEEDBACK
 }
 
 .feedback-icon{
-    font-size:130px;
+    font-size:100px;
     animation:pop 0.5s ease;
 }
 
@@ -334,7 +340,7 @@ SLIDE 3
 }
 
 #message{
-    font-size:clamp(50px,7vw,110px);
+    font-size:clamp(45px,6vw,90px);
     color:white;
     text-shadow:4px 4px 10px rgba(0,0,0,0.25);
     animation:bounce 1s infinite;
@@ -348,7 +354,7 @@ SLIDE 3
     }
 
     50%{
-        transform:translateY(-15px);
+        transform:translateY(-10px);
     }
 
 }
@@ -359,8 +365,8 @@ CONFETTI
 
 .confetti{
     position:absolute;
-    width:16px;
-    height:16px;
+    width:14px;
+    height:14px;
     opacity:0.9;
     animation:fall linear forwards;
 }
@@ -378,22 +384,45 @@ CONFETTI
 }
 
 /* ==========================
-MOBILE RESPONSIVE
+TABLETS
 ========================== */
 
 @media(max-width:900px){
 
-    body{
-        overflow:auto;
+    .title{
+        font-size:20px;
     }
 
-    #slide2{
-        overflow:auto;
+    .item-label{
+        font-size:15px;
     }
+
+    .normal-img{
+        width:70px;
+        height:70px;
+    }
+
+    .big-empty{
+        width:90px;
+        height:90px;
+    }
+
+    .drop-zone img{
+        width:55px;
+        height:55px;
+    }
+
+}
+
+/* ==========================
+MOBILE
+========================== */
+
+@media(max-width:700px){
 
     .game-layout{
         flex-direction:column;
-        overflow:auto;
+        height:calc(100vh - 80px);
     }
 
     .left-panel,
@@ -401,80 +430,43 @@ MOBILE RESPONSIVE
         width:100%;
     }
 
+    .left-panel{
+        height:48%;
+    }
+
     .right-panel{
-        flex-direction:column;
-    }
-
-    .drop-zone{
-        min-height:220px;
+        height:52%;
     }
 
     .items-grid{
-        grid-template-columns:repeat(2,1fr);
+        gap:6px;
     }
 
     .item{
-        min-height:190px;
+        padding:4px;
     }
 
     .normal-img{
-        max-width:120px;
-        height:120px;
+        width:58px;
+        height:58px;
     }
 
     .big-empty{
-        max-width:150px;
-        height:150px;
-    }
-
-    .drop-zone img{
-        width:100px;
-        height:100px;
+        width:75px;
+        height:75px;
     }
 
     .item-label{
-        font-size:26px;
-    }
-
-}
-
-/* ==========================
-VERY SMALL PHONES
-========================== */
-
-@media(max-width:480px){
-
-    .items-grid{
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
-    }
-
-    .item{
-        min-height:170px;
-        padding:8px;
-    }
-
-    .normal-img{
-        width:100px;
-        height:100px;
-    }
-
-    .big-empty{
-        width:130px;
-        height:130px;
+        font-size:14px;
     }
 
     .drop-zone img{
-        width:85px;
-        height:85px;
+        width:48px;
+        height:48px;
     }
 
-    .title{
-        font-size:22px;
-    }
-
-    .item-label{
-        font-size:22px;
+    .column h2{
+        font-size:18px;
     }
 
 }
@@ -679,7 +671,7 @@ const gameItems = [
 ];
 
 /* ==========================
-SHUFFLE IMAGES
+SHUFFLE
 ========================== */
 
 gameItems.sort(()=>Math.random()-0.5);
@@ -775,7 +767,7 @@ document
 
                     showFinalSlide();
 
-                },1200);
+                },1000);
 
             }
 
@@ -810,7 +802,7 @@ function showFeedback(correct){
 
         feedback.innerHTML = "";
 
-    },700);
+    },600);
 
 }
 
@@ -885,7 +877,7 @@ function createConfetti(){
 
         confetti.style.width =
         confetti.style.height =
-        (Math.random()*14 + 8) + "px";
+        (Math.random()*10 + 6) + "px";
 
         slide3.appendChild(confetti);
 
