@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
+
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Full Empty Half Game</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
 
 <style>
 
@@ -21,288 +24,393 @@ html,body{
     width:100%;
     height:100%;
     overflow:hidden;
-    font-family:Arial,sans-serif;
+    font-family:'Baloo 2',cursive;
     background:#fff;
 }
 
-body{
-    touch-action:manipulation;
-}
-
-.game-container{
-    width:100vw;
-    height:100vh;
-    position:relative;
-    overflow:hidden;
-}
-
-/* ---------------- SLIDES ---------------- */
+/* ==========================
+SLIDES
+========================== */
 
 .slide{
     position:absolute;
     inset:0;
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    padding:10px;
-    overflow:hidden;
+    width:100%;
+    height:100%;
 }
 
-/* ---------------- INTRO ---------------- */
+/* ==========================
+SLIDE 1
+========================== */
 
 #slide1{
+    background:white;
     display:flex;
     justify-content:center;
     align-items:center;
-    background:white;
+    z-index:20;
+    transition:1s ease;
 }
 
-.logo{
-    width:min(65vw,320px);
+#slide1.fade{
+    opacity:0;
+    visibility:hidden;
+}
+
+#logo{
+    width:min(45vw,300px);
+    max-width:300px;
     object-fit:contain;
 }
 
-/* ---------------- BACKGROUND ---------------- */
+/* ==========================
+SLIDE 2
+========================== */
 
-.colorful-bg{
-
-    background:
-    radial-gradient(circle at top left,#ffd400 0%,#ffd400 16%,transparent 17%),
-    radial-gradient(circle at top right,#00c8ff 0%,#00c8ff 10%,transparent 11%),
-    radial-gradient(circle at bottom right,#ff5a1f 0%,#ff5a1f 22%,transparent 23%),
-    radial-gradient(circle at bottom left,#1bbcff 0%,#1bbcff 12%,transparent 13%),
-    radial-gradient(circle at center,#ffffff 0%,#f4f4f4 65%);
-
-}
-
-/* ---------------- TEXT ---------------- */
-
-.instruction{
-
-    width:95%;
-    text-align:center;
-
-    background:rgba(255,255,255,0.95);
-
-    padding:14px;
-
-    margin-top:10px;
-
-    border-radius:20px;
-
-    font-size:clamp(20px,3vw,34px);
-
-    font-weight:900;
-
-    color:#222;
-
-    box-shadow:0 4px 12px rgba(0,0,0,0.15);
-
-}
-
-/* ---------------- OPTIONS ---------------- */
-
-.options{
-
-    flex:1;
-
-    width:100%;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:18px;
-
-    padding:15px;
-
-    flex-wrap:nowrap;
-
-}
-
-.option{
-
-    width:min(28vw,220px);
-
-    height:min(28vw,220px);
-
-    min-width:95px;
-
-    min-height:95px;
-
-    background:white;
-
-    border-radius:25px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
+#slide2{
+    display:none;
+    flex-direction:column;
+    padding:12px;
     overflow:hidden;
 
-    box-shadow:0 8px 16px rgba(0,0,0,0.18);
+    background-image:
+    url("assets/background.png");
 
-    border:6px solid #ffb300;
-
-    transition:0.2s;
-
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
 }
 
-.option:nth-child(2){
-    border-color:#00c853;
-}
+/* overlay */
 
-.option:nth-child(3){
-    border-color:#ff4081;
-}
-
-.option:active{
-    transform:scale(.95);
-}
-
-.option img{
-
-    width:85%;
-    height:85%;
-    object-fit:contain;
-
-}
-
-/* ---------------- FEEDBACK ---------------- */
-
-.feedback{
-
+#slide2::before{
+    content:"";
     position:absolute;
+    inset:0;
+    background:rgba(255,255,255,0.45);
+    z-index:0;
+}
 
-    top:50%;
+#slide2 *{
+    position:relative;
+    z-index:2;
+}
 
-    left:50%;
+.title{
+    width:100%;
+    text-align:center;
+    font-size:clamp(22px,3vw,42px);
+    font-weight:800;
+    color:#5d4037;
+    background:rgba(255,255,255,0.95);
+    padding:12px;
+    border-radius:20px;
+    box-shadow:0 5px 12px rgba(0,0,0,0.15);
+    margin-bottom:12px;
+}
 
-    transform:translate(-50%,-50%);
+/* ==========================
+GAME LAYOUT
+========================== */
 
-    font-size:min(22vw,130px);
+.game-layout{
+    flex:1;
+    display:flex;
+    gap:16px;
+    overflow:hidden;
+}
 
-    z-index:999;
+/* ==========================
+LEFT PANEL
+========================== */
 
-    display:none;
+.left-panel{
+    width:48%;
+    background:rgba(255,255,255,0.9);
+    border-radius:25px;
+    padding:12px;
+    overflow-y:auto;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
 
-    animation:pop .4s ease;
+.items-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
 
+.item{
+    background:white;
+    border-radius:22px;
+    padding:10px;
+    cursor:pointer;
+    transition:0.25s;
+    min-height:120px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border:5px solid #ff80ab;
+
+    box-shadow:0 5px 10px rgba(0,0,0,0.1);
+}
+
+.item:nth-child(2n){
+    border-color:#4fc3f7;
+}
+
+.item:nth-child(3n){
+    border-color:#81c784;
+}
+
+.item:nth-child(4n){
+    border-color:#ffca28;
+}
+
+.item.selected{
+    transform:scale(1.08);
+    box-shadow:0 0 0 6px #ffd54f;
+}
+
+.item img{
+    width:100%;
+    max-width:90px;
+    height:90px;
+    object-fit:contain;
+}
+
+/* ==========================
+RIGHT PANEL
+========================== */
+
+.right-panel{
+    width:52%;
+    display:flex;
+    gap:12px;
+}
+
+.column{
+    flex:1;
+    background:rgba(255,255,255,0.92);
+    border-radius:25px;
+    padding:10px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    border:5px solid white;
+    overflow-y:auto;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.column h2{
+    width:100%;
+    text-align:center;
+    color:white;
+    font-size:clamp(22px,2vw,34px);
+    border-radius:16px;
+    padding:8px;
+    margin-bottom:10px;
+    text-transform:lowercase;
+}
+
+.full h2{
+    background:#66bb6a;
+}
+
+.empty h2{
+    background:#ef5350;
+}
+
+.half h2{
+    background:#42a5f5;
+}
+
+.drop-zone{
+    width:100%;
+    min-height:420px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+}
+
+.drop-zone img{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    background:white;
+    border-radius:15px;
+    padding:5px;
+}
+
+/* ==========================
+FEEDBACK
+========================== */
+
+#feedback{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    pointer-events:none;
+    z-index:100;
+}
+
+.feedback-icon{
+    font-size:120px;
+    animation:pop 0.5s ease;
+}
+
+.correct{
+    color:#00c853;
+}
+
+.wrong{
+    color:#ff1744;
 }
 
 @keyframes pop{
 
-    from{
-        transform:translate(-50%,-50%) scale(.2);
+    0%{
+        transform:scale(0);
         opacity:0;
     }
 
-    to{
-        transform:translate(-50%,-50%) scale(1);
+    100%{
+        transform:scale(1);
         opacity:1;
     }
 
 }
 
-/* ---------------- FINAL ---------------- */
+/* ==========================
+SLIDE 3
+========================== */
 
-#finalSlide{
-
+#slide3{
+    display:none;
     justify-content:center;
-
     align-items:center;
+    flex-direction:column;
 
-    text-align:center;
+    background:
+    linear-gradient(135deg,#ffeb3b,#ff8a65,#4fc3f7,#81c784);
 
+    overflow:hidden;
 }
 
-.final-text{
-
-    font-size:clamp(42px,8vw,85px);
-
-    font-weight:900;
-
-    color:#ff4b00;
-
-    text-shadow:3px 3px 0 white;
-
-    z-index:5;
-
-}
-
-.replay-btn{
-
-    margin-top:25px;
-
-    padding:14px 28px;
-
-    border:none;
-
-    border-radius:20px;
-
-    background:#00c853;
-
+#message{
+    font-size:clamp(45px,7vw,100px);
     color:white;
+    text-shadow:4px 4px 10px rgba(0,0,0,0.25);
+    animation:bounce 1s infinite;
+    z-index:5;
+}
 
-    font-size:22px;
+@keyframes bounce{
 
-    font-weight:bold;
+    0%,100%{
+        transform:translateY(0);
+    }
 
-    cursor:pointer;
+    50%{
+        transform:translateY(-15px);
+    }
 
 }
 
-.replay-btn:active{
-    transform:scale(.95);
-}
-
-/* ---------------- CONFETTI ---------------- */
+/* ==========================
+CONFETTI
+========================== */
 
 .confetti{
-
     position:absolute;
-
-    width:12px;
-
-    height:12px;
-
-    top:-20px;
-
-    opacity:.9;
-
+    width:15px;
+    height:15px;
+    opacity:0.9;
     animation:fall linear forwards;
-
 }
 
 @keyframes fall{
 
-    to{
-        transform:translateY(110vh) rotate(720deg);
+    0%{
+        transform:translateY(-100px) rotate(0deg);
+    }
+
+    100%{
+        transform:translateY(120vh) rotate(720deg);
     }
 
 }
 
-/* ---------------- MOBILE ---------------- */
+/* ==========================
+MOBILE RESPONSIVE
+========================== */
 
-@media(max-width:768px){
+@media(max-width:900px){
 
-    .instruction{
-        font-size:22px;
-        padding:12px;
+    body{
+        overflow:auto;
     }
 
-    .options{
+    #slide2{
+        overflow:auto;
+    }
+
+    .game-layout{
+        flex-direction:column;
+        overflow:auto;
+    }
+
+    .left-panel,
+    .right-panel{
+        width:100%;
+    }
+
+    .right-panel{
+        flex-direction:column;
+    }
+
+    .drop-zone{
+        min-height:180px;
+    }
+
+    .items-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .item img{
+        max-width:75px;
+        height:75px;
+    }
+
+}
+
+/* very small phones */
+
+@media(max-width:480px){
+
+    .items-grid{
+        grid-template-columns:repeat(2,1fr);
         gap:10px;
     }
 
-    .option{
-        width:30vw;
-        height:30vw;
+    .item{
+        min-height:95px;
+        padding:6px;
+    }
+
+    .item img{
+        width:65px;
+        height:65px;
+    }
+
+    .drop-zone img{
+        width:65px;
+        height:65px;
     }
 
 }
@@ -312,367 +420,391 @@ body{
 
 <body>
 
-<div class="game-container">
-
-    <!-- ---------------- SLIDE 1 ---------------- -->
-
-    <div class="slide" id="slide1">
-
-        <img
-        class="logo"
-        src="assets/innovine-logo.png"
-        alt="Innovine Logo">
-
-    </div>
-
-    <!-- ---------------- SLIDE 2 ---------------- -->
-
-    <div class="slide colorful-bg" id="slide2">
-
-        <div class="instruction">
-            Identify the full jar
-        </div>
-
-        <div class="options">
-
-            <div class="option"
-            onclick="checkAnswer(true,3)">
-
-                <img src="assets/jar_full.png"
-                onerror="this.src='assets/jar.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(false,3)">
-
-                <img src="assets/jar_half.png"
-                onerror="this.src='assets/jar.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(false,3)">
-
-                <img src="assets/jar_empty.png"
-                onerror="this.src='assets/jar.png'">
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ---------------- SLIDE 3 ---------------- -->
-
-    <div class="slide colorful-bg" id="slide3">
-
-        <div class="instruction">
-            Identify the empty bowl
-        </div>
-
-        <div class="options">
-
-            <div class="option"
-            onclick="checkAnswer(true,4)">
-
-                <img src="assets/bowl_empty.png"
-                onerror="this.src='assets/bowl.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(false,4)">
-
-                <img src="assets/bowl_half.png"
-                onerror="this.src='assets/bowl.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(false,4)">
-
-                <img src="assets/bowl_full.png"
-                onerror="this.src='assets/bowl.png'">
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ---------------- SLIDE 4 ---------------- -->
-
-    <div class="slide colorful-bg" id="slide4">
-
-        <div class="instruction">
-            Identify the bottle that is half filled with juice
-        </div>
-
-        <div class="options">
-
-            <div class="option"
-            onclick="checkAnswer(false,5)">
-
-                <img src="assets/bottle_full.png"
-                onerror="this.src='assets/bottle.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(false,5)">
-
-                <img src="assets/bottle_empty.png"
-                onerror="this.src='assets/bottle.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(true,5)">
-
-                <img src="assets/bottle_half.png"
-                onerror="this.src='assets/bottle.png'">
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ---------------- SLIDE 5 ---------------- -->
-
-    <div class="slide colorful-bg" id="slide5">
-
-        <div class="instruction">
-            Identify the empty pencil pouch
-        </div>
-
-        <div class="options">
-
-            <div class="option"
-            onclick="checkAnswer(false,6)">
-
-                <img src="assets/pencil_full.png"
-                onerror="this.src='assets/pencilpouch.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(true,6)">
-
-                <img src="assets/pencil_empty.png"
-                onerror="this.src='assets/pencilpouch.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(false,6)">
-
-                <img src="assets/pencil_half.png"
-                onerror="this.src='assets/pencilpouch.png'">
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ---------------- SLIDE 6 ---------------- -->
-
-    <div class="slide colorful-bg" id="slide6">
-
-        <div class="instruction">
-            Identify the glass that is half filled with water
-        </div>
-
-        <div class="options">
-
-            <div class="option"
-            onclick="checkAnswer(false,'finalSlide')">
-
-                <img src="assets/glass_empty.png"
-                onerror="this.src='assets/glass.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(true,'finalSlide')">
-
-                <img src="assets/glass_half.png"
-                onerror="this.src='assets/glass.png'">
-
-            </div>
-
-            <div class="option"
-            onclick="checkAnswer(false,'finalSlide')">
-
-                <img src="assets/glass_full.png"
-                onerror="this.src='assets/glass.png'">
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ---------------- FINAL SLIDE ---------------- -->
-
-    <div class="slide colorful-bg" id="finalSlide">
-
-        <div class="final-text">
-            🎉 Fantastic! 🎉
-        </div>
-
-        <button class="replay-btn"
-        onclick="location.reload()">
-
-            Play Again
-
-        </button>
-
-    </div>
-
-    <!-- FEEDBACK -->
-
-    <div class="feedback" id="feedback"></div>
+<!-- ==========================
+SLIDE 1
+========================== -->
+
+<div id="slide1" class="slide">
+
+    <img
+    src="assets/innovine-logo.png"
+    alt="Innovine Logo"
+    id="logo">
 
 </div>
 
-<!-- ---------------- AUDIO ---------------- -->
+<!-- ==========================
+SLIDE 2
+========================== -->
 
-<audio id="correctSound" preload="auto">
-    <source src="assets/correct.mp3" type="audio/mpeg">
+<div id="slide2" class="slide">
+
+    <div class="title">
+        Place the container on the correct column.
+    </div>
+
+    <div class="game-layout">
+
+        <!-- LEFT -->
+
+        <div class="left-panel">
+
+            <div class="items-grid" id="itemsGrid"></div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="right-panel">
+
+            <!-- FULL -->
+
+            <div class="column full">
+
+                <h2>full</h2>
+
+                <div class="drop-zone" data-column="full"></div>
+
+            </div>
+
+            <!-- EMPTY -->
+
+            <div class="column empty">
+
+                <h2>empty</h2>
+
+                <div class="drop-zone" data-column="empty"></div>
+
+            </div>
+
+            <!-- HALF -->
+
+            <div class="column half">
+
+                <h2>half</h2>
+
+                <div class="drop-zone" data-column="half"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+SLIDE 3
+========================== -->
+
+<div id="slide3" class="slide">
+
+    <div id="message">
+        Fantastic!
+    </div>
+
+</div>
+
+<!-- ==========================
+FEEDBACK
+========================== -->
+
+<div id="feedback"></div>
+
+<!-- ==========================
+AUDIO
+========================== -->
+
+<audio id="correctSound">
+<source src="assets/correct.mp3" type="audio/mp3">
 </audio>
 
-<audio id="wrongSound" preload="auto">
-    <source src="assets/wrong.mp3" type="audio/mpeg">
+<audio id="wrongSound">
+<source src="assets/wrong.mp3" type="audio/mp3">
 </audio>
 
 <script>
 
-/* ---------------- SHOW SLIDE ---------------- */
+/* ==========================
+SPLASH SCREEN
+========================== */
 
-function showSlide(slideId){
+setTimeout(()=>{
 
-    const slides = document.querySelectorAll(".slide");
+    document
+    .getElementById("slide1")
+    .classList.add("fade");
 
-    slides.forEach(slide=>{
-        slide.style.display = "none";
-    });
+    setTimeout(()=>{
 
-    document.getElementById(slideId).style.display = "flex";
+        document
+        .getElementById("slide1")
+        .style.display="none";
 
+        document
+        .getElementById("slide2")
+        .style.display="flex";
+
+    },1000);
+
+},2000);
+
+/* ==========================
+GAME DATA
+========================== */
+
+const gameItems = [
+
+{
+    name:"half bottle",
+    image:"assets/halfbottle.png",
+    answer:"half"
+},
+
+{
+    name:"empty bottle",
+    image:"assets/emptybottle.png",
+    answer:"empty"
+},
+
+{
+    name:"full glass",
+    image:"assets/fullglass.png",
+    answer:"full"
+},
+
+{
+    name:"half bowl",
+    image:"assets/halfbowl.png",
+    answer:"half"
+},
+
+{
+    name:"empty bowl",
+    image:"assets/emptybowl.png",
+    answer:"empty"
+},
+
+{
+    name:"full jar",
+    image:"assets/fulljar.png",
+    answer:"full"
+},
+
+{
+    name:"half glass",
+    image:"assets/halfglass.png",
+    answer:"half"
+},
+
+{
+    name:"empty glass",
+    image:"assets/emptyglass.png",
+    answer:"empty"
+},
+
+{
+    name:"full bottle",
+    image:"assets/fullbottle.png",
+    answer:"full"
 }
 
-/* ---------------- START GAME ---------------- */
+];
 
-window.addEventListener("load",function(){
+/* ==========================
+CREATE ITEMS
+========================== */
 
-    showSlide("slide1");
+const itemsGrid = document.getElementById("itemsGrid");
 
-    setTimeout(function(){
+let selectedItem = null;
+let completed = 0;
 
-        showSlide("slide2");
+gameItems.forEach((item,index)=>{
 
-    },2000);
+    const div = document.createElement("div");
+
+    div.className = "item";
+
+    div.innerHTML = `
+    <img src="${item.image}" alt="${item.name}">
+    `;
+
+    div.addEventListener("click",()=>{
+
+        document.querySelectorAll(".item")
+        .forEach(i=>i.classList.remove("selected"));
+
+        div.classList.add("selected");
+
+        selectedItem = {
+            element:div,
+            data:item
+        };
+
+    });
+
+    itemsGrid.appendChild(div);
 
 });
 
-/* ---------------- CHECK ANSWER ---------------- */
+/* ==========================
+COLUMN CLICK
+========================== */
 
-function checkAnswer(correct,nextSlide){
+document
+.querySelectorAll(".drop-zone")
+.forEach(zone=>{
 
-    const feedback = document.getElementById("feedback");
+    zone.addEventListener("click",()=>{
 
-    if(correct){
+        if(!selectedItem) return;
 
-        feedback.innerHTML = "✅";
+        const chosenColumn =
+        zone.dataset.column;
 
-        feedback.style.display = "block";
+        const correctAnswer =
+        selectedItem.data.answer;
 
-        playSound("correctSound");
+        if(chosenColumn === correctAnswer){
 
-        setTimeout(function(){
+            showFeedback(true);
 
-            feedback.style.display = "none";
+            playCorrect();
 
-            if(nextSlide === "finalSlide"){
+            const img =
+            document.createElement("img");
 
-                showSlide("finalSlide");
+            img.src =
+            selectedItem.data.image;
 
-                launchConfetti();
+            zone.appendChild(img);
 
-            }else{
+            selectedItem.element.remove();
 
-                showSlide("slide" + nextSlide);
+            selectedItem = null;
+
+            completed++;
+
+            if(completed === gameItems.length){
+
+                setTimeout(()=>{
+
+                    showFinalSlide();
+
+                },1200);
 
             }
 
-        },1000);
+        }else{
 
-    }else{
+            showFeedback(false);
 
-        feedback.innerHTML = "❌";
+            playWrong();
 
-        feedback.style.display = "block";
+        }
 
-        playSound("wrongSound");
+    });
 
-        setTimeout(function(){
+});
 
-            feedback.style.display = "none";
+/* ==========================
+FEEDBACK
+========================== */
 
-        },900);
+function showFeedback(correct){
 
-    }
+    const feedback =
+    document.getElementById("feedback");
+
+    feedback.innerHTML = `
+    <div class="feedback-icon ${correct ? 'correct':'wrong'}">
+    ${correct ? '✔':'✖'}
+    </div>
+    `;
+
+    setTimeout(()=>{
+
+        feedback.innerHTML = "";
+
+    },700);
 
 }
 
-/* ---------------- PLAY SOUND ---------------- */
+/* ==========================
+AUDIO
+========================== */
 
-function playSound(id){
+function playCorrect(){
 
-    const sound = document.getElementById(id);
+    const audio =
+    document.getElementById("correctSound");
 
-    if(sound){
+    audio.currentTime = 0;
 
-        sound.currentTime = 0;
-
-        sound.play().catch(function(){});
-
-    }
+    audio.play();
 
 }
 
-/* ---------------- CONFETTI ---------------- */
+function playWrong(){
 
-function launchConfetti(){
+    const audio =
+    document.getElementById("wrongSound");
 
-    for(let i=0;i<120;i++){
+    audio.currentTime = 0;
 
-        const confetti = document.createElement("div");
+    audio.play();
+
+}
+
+/* ==========================
+FINAL SLIDE
+========================== */
+
+function showFinalSlide(){
+
+    document
+    .getElementById("slide2")
+    .style.display="none";
+
+    document
+    .getElementById("slide3")
+    .style.display="flex";
+
+    createConfetti();
+
+}
+
+/* ==========================
+CONFETTI
+========================== */
+
+function createConfetti(){
+
+    const slide3 =
+    document.getElementById("slide3");
+
+    for(let i=0;i<180;i++){
+
+        const confetti =
+        document.createElement("div");
 
         confetti.classList.add("confetti");
 
-        confetti.style.left = Math.random()*100 + "vw";
-
-        confetti.style.background =
-        "hsl(" + (Math.random()*360) + ",100%,50%)";
+        confetti.style.left =
+        Math.random()*100 + "vw";
 
         confetti.style.animationDuration =
         (Math.random()*3 + 2) + "s";
 
+        confetti.style.background =
+        `hsl(${Math.random()*360},100%,50%)`;
+
         confetti.style.width =
         confetti.style.height =
-        (Math.random()*10 + 8) + "px";
+        (Math.random()*14 + 8) + "px";
 
-        document.body.appendChild(confetti);
-
-        setTimeout(function(){
-
-            confetti.remove();
-
-        },5000);
+        slide3.appendChild(confetti);
 
     }
 
