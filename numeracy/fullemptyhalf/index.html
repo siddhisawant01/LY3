@@ -58,8 +58,8 @@ SLIDE 1
 }
 
 #logo{
-    width:min(45vw,300px);
-    max-width:300px;
+    width:min(45vw,320px);
+    max-width:320px;
     object-fit:contain;
 }
 
@@ -99,10 +99,10 @@ SLIDE 2
 .title{
     width:100%;
     text-align:center;
-    font-size:clamp(22px,3vw,42px);
+    font-size:clamp(24px,3vw,44px);
     font-weight:800;
     color:#5d4037;
-    background:rgba(255,255,255,0.95);
+    background:rgba(255,255,255,0.96);
     padding:12px;
     border-radius:20px;
     box-shadow:0 5px 12px rgba(0,0,0,0.15);
@@ -126,34 +126,34 @@ LEFT PANEL
 
 .left-panel{
     width:48%;
-    background:rgba(255,255,255,0.9);
+    background:rgba(255,255,255,0.92);
     border-radius:25px;
-    padding:12px;
+    padding:18px;
     overflow-y:auto;
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    box-shadow:0 5px 15px rgba(0,0,0,0.12);
 }
 
 .items-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:14px;
+    gap:18px;
 }
 
 .item{
     background:white;
-    border-radius:22px;
-    padding:10px;
+    border-radius:24px;
+    padding:14px;
     cursor:pointer;
     transition:0.25s;
-    min-height:120px;
+    min-height:180px;
 
     display:flex;
     justify-content:center;
     align-items:center;
 
-    border:5px solid #ff80ab;
+    border:6px solid #ff80ab;
 
-    box-shadow:0 5px 10px rgba(0,0,0,0.1);
+    box-shadow:0 5px 12px rgba(0,0,0,0.12);
 }
 
 .item:nth-child(2n){
@@ -170,13 +170,13 @@ LEFT PANEL
 
 .item.selected{
     transform:scale(1.08);
-    box-shadow:0 0 0 6px #ffd54f;
+    box-shadow:0 0 0 7px #ffd54f;
 }
 
 .item img{
     width:100%;
-    max-width:90px;
-    height:90px;
+    max-width:160px;
+    height:160px;
     object-fit:contain;
 }
 
@@ -187,30 +187,30 @@ RIGHT PANEL
 .right-panel{
     width:52%;
     display:flex;
-    gap:12px;
+    gap:14px;
 }
 
 .column{
     flex:1;
-    background:rgba(255,255,255,0.92);
+    background:rgba(255,255,255,0.94);
     border-radius:25px;
-    padding:10px;
+    padding:12px;
     display:flex;
     flex-direction:column;
     align-items:center;
     border:5px solid white;
     overflow-y:auto;
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    box-shadow:0 5px 15px rgba(0,0,0,0.12);
 }
 
 .column h2{
     width:100%;
     text-align:center;
     color:white;
-    font-size:clamp(22px,2vw,34px);
+    font-size:clamp(24px,2vw,36px);
     border-radius:16px;
-    padding:8px;
-    margin-bottom:10px;
+    padding:10px;
+    margin-bottom:14px;
     text-transform:lowercase;
 }
 
@@ -228,21 +228,22 @@ RIGHT PANEL
 
 .drop-zone{
     width:100%;
-    min-height:420px;
+    min-height:520px;
 
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:10px;
+    gap:14px;
 }
 
 .drop-zone img{
-    width:80px;
-    height:80px;
+    width:130px;
+    height:130px;
     object-fit:contain;
     background:white;
-    border-radius:15px;
-    padding:5px;
+    border-radius:18px;
+    padding:6px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* ==========================
@@ -260,7 +261,7 @@ FEEDBACK
 }
 
 .feedback-icon{
-    font-size:120px;
+    font-size:130px;
     animation:pop 0.5s ease;
 }
 
@@ -303,7 +304,7 @@ SLIDE 3
 }
 
 #message{
-    font-size:clamp(45px,7vw,100px);
+    font-size:clamp(50px,7vw,110px);
     color:white;
     text-shadow:4px 4px 10px rgba(0,0,0,0.25);
     animation:bounce 1s infinite;
@@ -328,8 +329,8 @@ CONFETTI
 
 .confetti{
     position:absolute;
-    width:15px;
-    height:15px;
+    width:16px;
+    height:16px;
     opacity:0.9;
     animation:fall linear forwards;
 }
@@ -375,21 +376,32 @@ MOBILE RESPONSIVE
     }
 
     .drop-zone{
-        min-height:180px;
+        min-height:220px;
     }
 
     .items-grid{
         grid-template-columns:repeat(2,1fr);
     }
 
+    .item{
+        min-height:150px;
+    }
+
     .item img{
-        max-width:75px;
-        height:75px;
+        max-width:120px;
+        height:120px;
+    }
+
+    .drop-zone img{
+        width:100px;
+        height:100px;
     }
 
 }
 
-/* very small phones */
+/* ==========================
+VERY SMALL PHONES
+========================== */
 
 @media(max-width:480px){
 
@@ -399,18 +411,22 @@ MOBILE RESPONSIVE
     }
 
     .item{
-        min-height:95px;
-        padding:6px;
+        min-height:130px;
+        padding:8px;
     }
 
     .item img{
-        width:65px;
-        height:65px;
+        width:95px;
+        height:95px;
     }
 
     .drop-zone img{
-        width:65px;
-        height:65px;
+        width:85px;
+        height:85px;
+    }
+
+    .title{
+        font-size:22px;
     }
 
 }
@@ -445,7 +461,7 @@ SLIDE 2
 
     <div class="game-layout">
 
-        <!-- LEFT -->
+        <!-- LEFT PANEL -->
 
         <div class="left-panel">
 
@@ -453,7 +469,7 @@ SLIDE 2
 
         </div>
 
-        <!-- RIGHT -->
+        <!-- RIGHT PANEL -->
 
         <div class="right-panel">
 
@@ -604,8 +620,8 @@ const gameItems = [
 },
 
 {
-    name:"full bottle",
-    image:"assets/fullbottle.png",
+    name:"full bowl",
+    image:"assets/fullbowl.png",
     answer:"full"
 }
 
@@ -620,7 +636,7 @@ const itemsGrid = document.getElementById("itemsGrid");
 let selectedItem = null;
 let completed = 0;
 
-gameItems.forEach((item,index)=>{
+gameItems.forEach((item)=>{
 
     const div = document.createElement("div");
 
@@ -632,7 +648,8 @@ gameItems.forEach((item,index)=>{
 
     div.addEventListener("click",()=>{
 
-        document.querySelectorAll(".item")
+        document
+        .querySelectorAll(".item")
         .forEach(i=>i.classList.remove("selected"));
 
         div.classList.add("selected");
@@ -719,7 +736,7 @@ function showFeedback(correct){
 
     feedback.innerHTML = `
     <div class="feedback-icon ${correct ? 'correct':'wrong'}">
-    ${correct ? '✔':'✖'}
+        ${correct ? '✔':'✖'}
     </div>
     `;
 
@@ -784,7 +801,7 @@ function createConfetti(){
     const slide3 =
     document.getElementById("slide3");
 
-    for(let i=0;i<180;i++){
+    for(let i=0;i<200;i++){
 
         const confetti =
         document.createElement("div");
