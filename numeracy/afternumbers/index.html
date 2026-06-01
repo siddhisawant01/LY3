@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>After Numbers Game</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Arial Rounded MT Bold", Arial, sans-serif;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+.screen{
+width:100%;
+height:100vh;
+display:none;
+position:absolute;
+top:0;
+left:0;
+}
+
+.screen.active{
+display:flex;
+}
+
+/* ---------------- Slide 1 ---------------- */
+
+#logoScreen{
+background:white;
+justify-content:center;
+align-items:center;
+}
+
+#logoScreen img{
+width:min(60vw,350px);
+height:auto;
+}
+
+/* ---------------- Slide 2 ---------------- */
+
+#gameScreen{
+flex-direction:column;
+align-items:center;
+justify-content:flex-start;
+padding:10px;
+background:
+linear-gradient(rgba(255,255,255,0.82),rgba(255,255,255,0.82)),
+url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1200');
+background-size:cover;
+background-position:center;
+}
+
+.title{
+font-size:clamp(18px,2.8vw,32px);
+font-weight:bold;
+text-align:center;
+color:#2c3e50;
+margin-top:5px;
+margin-bottom:10px;
+}
+
+.numberLineContainer{
+width:95%;
+max-width:1000px;
+background:white;
+border:4px solid #ff6b6b;
+border-radius:18px;
+padding:10px 5px;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.numberLine{
+display:grid;
+grid-template-columns:repeat(20,1fr);
+gap:4px;
+}
+
+.numberBtn{
+height:40px;
+border:none;
+border-radius:10px;
+background:#4fc3f7;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.numberBtn:hover{
+transform:scale(1.05);
+}
+
+.questions{
+width:95%;
+max-width:900px;
+margin-top:10px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.question{
+background:white;
+border-radius:18px;
+padding:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+box-shadow:0 3px 8px rgba(0,0,0,.15);
+font-size:28px;
+font-weight:bold;
+}
+
+.arrow{
+color:#ff5252;
+}
+
+.answerBox{
+width:65px;
+height:65px;
+border:4px solid #ff9800;
+border-radius:50%;
+background:#fffdf6;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+font-size:28px;
+font-weight:bold;
+}
+
+.answerBox.selected{
+box-shadow:0 0 0 6px #81d4fa;
+}
+
+.answerBox.correct{
+background:#c8f7c5;
+border-color:#4caf50;
+}
+
+.feedback{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:120px;
+font-weight:bold;
+display:none;
+z-index:100;
+pointer-events:none;
+}
+
+.tick{
+color:#2ecc71;
+}
+
+.cross{
+color:#e53935;
+}
+
+/* ---------------- Slide 3 ---------------- */
+
+#endScreen{
+justify-content:center;
+align-items:center;
+flex-direction:column;
+background:linear-gradient(135deg,#ffeb3b,#ff9800);
+overflow:hidden;
+}
+
+.goodJob{
+font-size:clamp(40px,8vw,90px);
+font-weight:bold;
+color:white;
+text-shadow:4px 4px 8px rgba(0,0,0,.3);
+z-index:10;
+}
+
+.rain{
+position:absolute;
+top:-50px;
+font-size:36px;
+font-weight:bold;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(120vh);
+}
+}
+
+@media(max-width:768px){
+
+.questions{
+grid-template-columns:1fr;
+gap:6px;
+}
+
+.question{
+font-size:22px;
+padding:8px;
+}
+
+.answerBox{
+width:55px;
+height:55px;
+font-size:24px;
+}
+
+.numberBtn{
+height:34px;
+font-size:15px;
+}
+}
+</style>
+</head>
+<body>
+
+<!-- Slide 1 -->
+
+<div id="logoScreen" class="screen active">
+<img src="assets/innovine-logo.png" alt="Innovine Logo">
+</div>
+
+<!-- Slide 2 -->
+
+<div id="gameScreen" class="screen">
+
+<div class="title">
+Write the number that comes after the given number.
+</div>
+
+<div class="numberLineContainer">
+<div class="numberLine" id="numberLine"></div>
+</div>
+
+<div class="questions">
+
+<div class="question">
+15
+<span class="arrow">→</span>
+<div class="answerBox" data-answer="16"></div>
+</div>
+
+<div class="question">
+8
+<span class="arrow">→</span>
+<div class="answerBox" data-answer="9"></div>
+</div>
+
+<div class="question">
+11
+<span class="arrow">→</span>
+<div class="answerBox" data-answer="12"></div>
+</div>
+
+<div class="question">
+19
+<span class="arrow">→</span>
+<div class="answerBox" data-answer="20"></div>
+</div>
+
+<div class="question">
+5
+<span class="arrow">→</span>
+<div class="answerBox" data-answer="6"></div>
+</div>
+
+<div class="question">
+10
+<span class="arrow">→</span>
+<div class="answerBox" data-answer="11"></div>
+</div>
+
+</div>
+
+</div>
+
+<!-- Feedback -->
+
+<div id="tick" class="feedback tick">✓</div>
+<div id="cross" class="feedback cross">✗</div>
+
+<!-- Slide 3 -->
+
+<div id="endScreen" class="screen">
+<div class="goodJob">Good Job!</div>
+</div>
+
+<audio id="wrongSound" preload="auto">
+<source src="assets/wrong.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* Logo Screen */
+
+setTimeout(()=>{
+document.getElementById("logoScreen").classList.remove("active");
+document.getElementById("gameScreen").classList.add("active");
+},3000);
+
+/* Number Line */
+
+const numberLine=document.getElementById("numberLine");
+
+for(let i=1;i<=20;i++){
+const btn=document.createElement("button");
+btn.className="numberBtn";
+btn.textContent=i;
+btn.dataset.value=i;
+numberLine.appendChild(btn);
+}
+
+let selectedBox=null;
+let completed=0;
+
+const answerBoxes=document.querySelectorAll(".answerBox");
+
+answerBoxes.forEach(box=>{
+
+box.addEventListener("click",()=>{
+
+if(box.classList.contains("correct")) return;
+
+answerBoxes.forEach(b=>b.classList.remove("selected"));
+selectedBox=box;
+box.classList.add("selected");
+});
+});
+
+document.querySelectorAll(".numberBtn").forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+if(!selectedBox) return;
+
+const selectedNumber=btn.dataset.value;
+const correctAnswer=selectedBox.dataset.answer;
+
+if(selectedNumber===correctAnswer){
+
+selectedBox.textContent=selectedNumber;
+selectedBox.classList.add("correct");
+selectedBox.classList.remove("selected");
+
+showTick();
+
+completed++;
+
+if(completed===6){
+
+setTimeout(()=>{
+showEndScreen();
+},1000);
+}
+
+selectedBox=null;
+
+}else{
+
+showCross();
+
+document.getElementById("wrongSound").currentTime=0;
+document.getElementById("wrongSound").play();
+}
+});
+});
+
+function showTick(){
+
+const tick=document.getElementById("tick");
+tick.style.display="block";
+
+setTimeout(()=>{
+tick.style.display="none";
+},800);
+}
+
+function showCross(){
+
+const cross=document.getElementById("cross");
+cross.style.display="block";
+
+setTimeout(()=>{
+cross.style.display="none";
+},800);
+}
+
+function showEndScreen(){
+
+document.getElementById("gameScreen").classList.remove("active");
+document.getElementById("endScreen").classList.add("active");
+
+createNumberRain();
+}
+
+function createNumberRain(){
+
+setInterval(()=>{
+
+const num=document.createElement("div");
+
+num.className="rain";
+num.textContent=Math.floor(Math.random()*20)+1;
+
+num.style.left=Math.random()*100+"vw";
+num.style.animationDuration=(Math.random()*3+2)+"s";
+
+document.getElementById("endScreen").appendChild(num);
+
+setTimeout(()=>{
+num.remove();
+},5000);
+
+},150);
+}
+
+</script>
+
+</body>
+</html>
