@@ -239,12 +239,18 @@ color:#ff1744;
 /* ---------------- COMPLETE ---------------- */
 
 #complete{
+display:none;
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
 background:white;
-display:flex;
 justify-content:center;
 align-items:center;
 flex-direction:column;
 overflow:hidden;
+z-index:500;
 }
 
 #complete h1{
@@ -385,7 +391,7 @@ Identify the in between number from the given options and put in the correct box
 
 <!-- COMPLETE -->
 
-<div id="complete" class="screen hidden">
+<div id="complete" class="screen">
 <h1>🎉 Well Done! 🎉</h1>
 </div>
 
@@ -505,8 +511,10 @@ showWrong();
 
 function showCompletion(){
 
-document.getElementById("game").classList.add("hidden");
-document.getElementById("complete").classList.remove("hidden");
+document.getElementById("game").style.display="none";
+
+const complete=document.getElementById("complete");
+complete.style.display="flex";
 
 for(let i=0;i<180;i++){
 
@@ -525,7 +533,7 @@ conf.style.animationDuration=
 conf.style.animationDelay=
 (Math.random()*2)+"s";
 
-document.getElementById("complete").appendChild(conf);
+complete.appendChild(conf);
 
 }
 
