@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>In Between Numbers Game</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial Rounded MT Bold, Arial, sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+.screen{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+}
+
+.hidden{
+display:none;
+}
+
+/* ---------------- SLIDE 1 ---------------- */
+
+#intro{
+background:white;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+#intro img{
+width:min(70vw,350px);
+max-width:90%;
+}
+
+/* ---------------- GAME ---------------- */
+
+#game{
+background:url("assets/661e7740-42e6-4257-b428-dbc283591824.png");
+background-size:cover;
+background-position:center;
+padding:10px;
+display:flex;
+flex-direction:column;
+}
+
+.title{
+text-align:center;
+font-weight:bold;
+font-size:clamp(16px,2vw,28px);
+background:rgba(255,255,255,.9);
+padding:10px;
+border-radius:15px;
+margin-bottom:10px;
+}
+
+.game-area{
+flex:1;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+}
+
+.question-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+flex:1;
+}
+
+.question{
+background:rgba(255,255,255,.92);
+border-radius:18px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:clamp(20px,2vw,34px);
+font-weight:bold;
+border:4px solid #ffb300;
+padding:10px;
+}
+
+.blank{
+width:70px;
+height:55px;
+border:3px dashed #ff4081;
+border-radius:12px;
+display:flex;
+justify-content:center;
+align-items:center;
+background:white;
+margin:0 10px;
+cursor:pointer;
+font-size:28px;
+}
+
+.options{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:8px;
+margin-top:10px;
+}
+
+.option{
+background:#4fc3f7;
+color:white;
+font-size:clamp(18px,2vw,28px);
+font-weight:bold;
+padding:12px;
+border-radius:16px;
+text-align:center;
+cursor:pointer;
+border:3px solid white;
+}
+
+.option.selected{
+transform:scale(1.08);
+background:#43a047;
+}
+
+.option.used{
+visibility:hidden;
+}
+
+.feedback{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:120px;
+font-weight:bold;
+display:none;
+z-index:1000;
+pointer-events:none;
+}
+
+.correct{
+color:#00c853;
+}
+
+.wrong{
+color:#ff1744;
+}
+
+/* ---------------- COMPLETION ---------------- */
+
+#complete{
+background:white;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+overflow:hidden;
+}
+
+#complete h1{
+font-size:clamp(40px,8vw,90px);
+color:#00c853;
+z-index:5;
+}
+
+.confetti{
+position:absolute;
+width:12px;
+height:12px;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+0%{
+transform:translateY(-100px) rotate(0deg);
+}
+100%{
+transform:translateY(120vh) rotate(720deg);
+}
+}
+
+@media(max-width:900px){
+
+.question-grid{
+grid-template-columns:1fr;
+}
+
+.question{
+font-size:24px;
+}
+
+.options{
+grid-template-columns:repeat(3,1fr);
+}
+
+.blank{
+width:60px;
+height:50px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+
+<div id="intro" class="screen">
+<img src="assets/innovine-logo.png" alt="Innovine">
+</div>
+
+<!-- GAME -->
+
+<div id="game" class="screen hidden">
+
+<div class="title">
+Identify the in between number from the given options and put in the correct box.
+</div>
+
+<div class="game-area">
+
+<div class="question-grid">
+
+<div class="question">
+25
+<div class="blank" data-answer="26"></div>
+27
+</div>
+
+<div class="question">
+11
+<div class="blank" data-answer="12"></div>
+13
+</div>
+
+<div class="question">
+21
+<div class="blank" data-answer="22"></div>
+23
+</div>
+
+<div class="question">
+18
+<div class="blank" data-answer="19"></div>
+20
+</div>
+
+<div class="question">
+14
+<div class="blank" data-answer="15"></div>
+16
+</div>
+
+<div class="question">
+28
+<div class="blank" data-answer="29"></div>
+30
+</div>
+
+</div>
+
+<div class="options">
+
+<div class="option">15</div>
+<div class="option">12</div>
+<div class="option">29</div>
+<div class="option">19</div>
+<div class="option">20</div>
+<div class="option">26</div>
+
+</div>
+
+</div>
+</div>
+
+<!-- COMPLETE -->
+
+<div id="complete" class="screen hidden">
+<h1>🎉 Well Done! 🎉</h1>
+</div>
+
+<div id="correctMark" class="feedback correct">✅</div>
+<div id="wrongMark" class="feedback wrong">❌</div>
+
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+
+<script>
+
+const intro=document.getElementById("intro");
+const game=document.getElementById("game");
+const complete=document.getElementById("complete");
+
+setTimeout(()=>{
+intro.classList.add("hidden");
+game.classList.remove("hidden");
+},3000);
+
+let selectedOption=null;
+let solved=0;
+
+const options=document.querySelectorAll(".option");
+const blanks=document.querySelectorAll(".blank");
+
+options.forEach(option=>{
+
+option.addEventListener("click",()=>{
+
+if(option.classList.contains("used")) return;
+
+options.forEach(o=>o.classList.remove("selected"));
+option.classList.add("selected");
+
+selectedOption=option;
+
+});
+
+});
+
+function showCorrect(){
+
+const tick=document.getElementById("correctMark");
+
+tick.style.display="block";
+
+setTimeout(()=>{
+tick.style.display="none";
+},800);
+
+}
+
+function showWrong(){
+
+const wrong=document.getElementById("wrongMark");
+
+wrong.style.display="block";
+
+document.getElementById("wrongSound").currentTime=0;
+document.getElementById("wrongSound").play();
+
+setTimeout(()=>{
+wrong.style.display="none";
+},800);
+
+}
+
+blanks.forEach(blank=>{
+
+blank.addEventListener("click",()=>{
+
+if(!selectedOption){
+return;
+}
+
+const chosen=selectedOption.textContent.trim();
+const correct=blank.dataset.answer;
+
+if(chosen===correct){
+
+blank.textContent=correct;
+blank.style.background="#c8e6c9";
+blank.style.border="3px solid #00c853";
+
+selectedOption.classList.add("used");
+selectedOption.classList.remove("selected");
+
+selectedOption=null;
+
+showCorrect();
+
+solved++;
+
+if(solved===6){
+
+setTimeout(()=>{
+game.classList.add("hidden");
+complete.classList.remove("hidden");
+startConfetti();
+},1000);
+
+}
+
+}else{
+
+showWrong();
+
+}
+
+});
+
+});
+
+function startConfetti(){
+
+for(let i=0;i<150;i++){
+
+const conf=document.createElement("div");
+
+conf.className="confetti";
+
+conf.style.left=Math.random()*100+"vw";
+
+conf.style.background=
+`hsl(${Math.random()*360},100%,50%)`;
+
+conf.style.animationDuration=
+(3+Math.random()*3)+"s";
+
+conf.style.animationDelay=
+(Math.random()*2)+"s";
+
+complete.appendChild(conf);
+
+}
+
+}
+</script>
+
+</body>
+</html>
