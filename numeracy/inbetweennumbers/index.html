@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>In Between Numbers Game</title>
 
@@ -11,7 +11,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial Rounded MT Bold, Arial, sans-serif;
+font-family:"Arial Rounded MT Bold", Arial, sans-serif;
 -webkit-tap-highlight-color:transparent;
 }
 
@@ -20,6 +20,12 @@ width:100%;
 height:100%;
 overflow:hidden;
 }
+
+body{
+background:#fff;
+}
+
+/* ---------------- SCREENS ---------------- */
 
 .screen{
 position:absolute;
@@ -33,118 +39,192 @@ height:100%;
 display:none;
 }
 
-/* ---------------- SLIDE 1 ---------------- */
+/* ---------------- INTRO ---------------- */
 
 #intro{
-background:white;
+background:#ffffff;
 display:flex;
 justify-content:center;
 align-items:center;
 }
 
 #intro img{
-width:min(70vw,350px);
+width:min(70vw,380px);
 max-width:90%;
+object-fit:contain;
 }
 
-/* ---------------- GAME ---------------- */
+/* ---------------- GAME SCREEN ---------------- */
 
 #game{
-background:url("assets/661e7740-42e6-4257-b428-dbc283591824.png");
-background-size:cover;
-background-position:center;
-padding:10px;
+overflow:hidden;
+}
+
+/* Colorful abstract background inspired by reference image */
+
+#game::before{
+content:"";
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 10% 15%, #ff5ba7 0 8%, transparent 8%),
+radial-gradient(circle at 88% 12%, #ffcc00 0 8%, transparent 8%),
+radial-gradient(circle at 82% 85%, #58d3ea 0 9%, transparent 9%),
+radial-gradient(circle at 20% 80%, #8bc34a 0 10%, transparent 10%),
+radial-gradient(circle at 55% 20%, #6a6ed1 0 8%, transparent 8%),
+linear-gradient(135deg,#ffffff,#fff8fd);
+z-index:0;
+}
+
+.shape{
+position:absolute;
+border-radius:25px;
+opacity:.95;
+z-index:0;
+}
+
+.s1{
+width:140px;
+height:140px;
+background:#5bc7eb;
+top:12%;
+left:-30px;
+transform:rotate(15deg);
+}
+
+.s2{
+width:120px;
+height:120px;
+background:#ff8a00;
+top:10%;
+right:-20px;
+}
+
+.s3{
+width:170px;
+height:70px;
+background:#9ac000;
+bottom:18%;
+left:15%;
+border-radius:60px;
+}
+
+.s4{
+width:150px;
+height:90px;
+background:#ff0040;
+bottom:10%;
+right:-40px;
+border-radius:80px;
+}
+
+.s5{
+width:130px;
+height:130px;
+background:#6d70d1;
+top:40%;
+left:40%;
+border-radius:50%;
+opacity:.25;
+}
+
+.game-content{
+position:relative;
+z-index:2;
+width:100%;
+height:100%;
 display:flex;
 flex-direction:column;
+padding:8px;
 }
 
 .title{
-text-align:center;
-font-weight:bold;
-font-size:clamp(16px,2vw,28px);
-background:rgba(255,255,255,.9);
+background:rgba(255,255,255,.95);
+border-radius:18px;
 padding:10px;
-border-radius:15px;
-margin-bottom:10px;
+text-align:center;
+font-weight:700;
+font-size:clamp(15px,2vw,24px);
+border:3px solid #ffb300;
+margin-bottom:8px;
 }
 
-.game-area{
+/* ---------------- QUESTIONS ---------------- */
+
+.questions{
 flex:1;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-}
-
-.question-grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:10px;
-flex:1;
+gap:8px;
 }
 
-.question{
-background:rgba(255,255,255,.92);
+.card{
+background:rgba(255,255,255,.96);
 border-radius:18px;
+border:4px solid #ffb300;
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:clamp(20px,2vw,34px);
+font-size:clamp(22px,2vw,34px);
 font-weight:bold;
-border:4px solid #ffb300;
-padding:10px;
+color:#333;
 }
 
 .blank{
-width:70px;
-height:55px;
+width:65px;
+height:52px;
+margin:0 8px;
 border:3px dashed #ff4081;
 border-radius:12px;
+background:#fff;
 display:flex;
 justify-content:center;
 align-items:center;
-background:white;
-margin:0 10px;
 cursor:pointer;
 font-size:28px;
 }
+
+/* ---------------- OPTIONS ---------------- */
 
 .options{
 display:grid;
 grid-template-columns:repeat(6,1fr);
 gap:8px;
-margin-top:10px;
+margin-top:8px;
 }
 
 .option{
-background:#4fc3f7;
-color:white;
-font-size:clamp(18px,2vw,28px);
-font-weight:bold;
+background:#29b6f6;
+color:#fff;
 padding:12px;
-border-radius:16px;
 text-align:center;
-cursor:pointer;
+font-size:clamp(20px,2vw,30px);
+font-weight:bold;
+border-radius:16px;
 border:3px solid white;
+cursor:pointer;
+transition:.2s;
 }
 
 .option.selected{
-transform:scale(1.08);
 background:#43a047;
+transform:scale(1.08);
 }
 
 .option.used{
 visibility:hidden;
 }
 
+/* ---------------- FEEDBACK ---------------- */
+
 .feedback{
 position:fixed;
 top:50%;
 left:50%;
 transform:translate(-50%,-50%);
-font-size:120px;
-font-weight:bold;
+font-size:110px;
 display:none;
-z-index:1000;
+z-index:999;
 pointer-events:none;
 }
 
@@ -156,7 +236,7 @@ color:#00c853;
 color:#ff1744;
 }
 
-/* ---------------- COMPLETION ---------------- */
+/* ---------------- COMPLETE ---------------- */
 
 #complete{
 background:white;
@@ -168,10 +248,12 @@ overflow:hidden;
 }
 
 #complete h1{
-font-size:clamp(40px,8vw,90px);
+font-size:clamp(50px,8vw,100px);
 color:#00c853;
-z-index:5;
+z-index:10;
 }
+
+/* ---------------- CONFETTI ---------------- */
 
 .confetti{
 position:absolute;
@@ -182,30 +264,41 @@ animation:fall linear forwards;
 
 @keyframes fall{
 0%{
-transform:translateY(-100px) rotate(0deg);
+transform:translateY(-120px) rotate(0deg);
+opacity:1;
 }
 100%{
 transform:translateY(120vh) rotate(720deg);
+opacity:1;
 }
 }
+
+/* ---------------- MOBILE ---------------- */
 
 @media(max-width:900px){
 
-.question-grid{
+.questions{
 grid-template-columns:1fr;
 }
 
-.question{
+.card{
 font-size:24px;
+min-height:60px;
+}
+
+.blank{
+width:55px;
+height:45px;
+font-size:22px;
 }
 
 .options{
 grid-template-columns:repeat(3,1fr);
 }
 
-.blank{
-width:60px;
-height:50px;
+.option{
+padding:10px;
+font-size:22px;
 }
 }
 </style>
@@ -216,52 +309,58 @@ height:50px;
 <!-- INTRO -->
 
 <div id="intro" class="screen">
-<img src="assets/innovine-logo.png" alt="Innovine">
+<img src="assets/innovine-logo.png" alt="Innovine Logo">
 </div>
 
 <!-- GAME -->
 
 <div id="game" class="screen hidden">
 
+<div class="shape s1"></div>
+<div class="shape s2"></div>
+<div class="shape s3"></div>
+<div class="shape s4"></div>
+<div class="shape s5"></div>
+
+<div class="game-content">
+
 <div class="title">
 Identify the in between number from the given options and put in the correct box.
 </div>
 
-<div class="game-area">
+<div class="questions">
 
-<div class="question-grid">
-
-<div class="question">
+<div class="card">
 25
 <div class="blank" data-answer="26"></div>
 27
 </div>
 
-<div class="question">
+<div class="card">
 11
 <div class="blank" data-answer="12"></div>
 13
 </div>
 
-<div class="question">
+<div class="card">
 21
 <div class="blank" data-answer="22"></div>
 23
 </div>
 
-<div class="question">
+<div class="card">
 18
 <div class="blank" data-answer="19"></div>
 20
 </div>
 
-<div class="question">
+<div class="card">
 14
 <div class="blank" data-answer="15"></div>
 16
 </div>
 
-<div class="question">
+<div class="card">
 28
 <div class="blank" data-answer="29"></div>
 30
@@ -281,6 +380,7 @@ Identify the in between number from the given options and put in the correct box
 </div>
 
 </div>
+
 </div>
 
 <!-- COMPLETE -->
@@ -292,18 +392,20 @@ Identify the in between number from the given options and put in the correct box
 <div id="correctMark" class="feedback correct">✅</div>
 <div id="wrongMark" class="feedback wrong">❌</div>
 
-<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+<audio id="wrongSound" preload="auto">
+<source src="assets/wrong.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 
-const intro=document.getElementById("intro");
-const game=document.getElementById("game");
-const complete=document.getElementById("complete");
+/* ---------------- INTRO ---------------- */
 
-setTimeout(()=>{
-intro.classList.add("hidden");
-game.classList.remove("hidden");
+setTimeout(() => {
+document.getElementById("intro").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
 },3000);
+
+/* ---------------- GAME LOGIC ---------------- */
 
 let selectedOption=null;
 let solved=0;
@@ -318,6 +420,7 @@ option.addEventListener("click",()=>{
 if(option.classList.contains("used")) return;
 
 options.forEach(o=>o.classList.remove("selected"));
+
 option.classList.add("selected");
 
 selectedOption=option;
@@ -334,22 +437,23 @@ tick.style.display="block";
 
 setTimeout(()=>{
 tick.style.display="none";
-},800);
+},700);
 
 }
 
 function showWrong(){
 
-const wrong=document.getElementById("wrongMark");
+const cross=document.getElementById("wrongMark");
 
-wrong.style.display="block";
+cross.style.display="block";
 
-document.getElementById("wrongSound").currentTime=0;
-document.getElementById("wrongSound").play();
+const sound=document.getElementById("wrongSound");
+sound.currentTime=0;
+sound.play();
 
 setTimeout(()=>{
-wrong.style.display="none";
-},800);
+cross.style.display="none";
+},700);
 
 }
 
@@ -357,16 +461,16 @@ blanks.forEach(blank=>{
 
 blank.addEventListener("click",()=>{
 
-if(!selectedOption){
-return;
-}
+if(blank.textContent!=="") return;
+
+if(!selectedOption) return;
 
 const chosen=selectedOption.textContent.trim();
-const correct=blank.dataset.answer;
+const answer=blank.dataset.answer;
 
-if(chosen===correct){
+if(chosen===answer){
 
-blank.textContent=correct;
+blank.textContent=answer;
 blank.style.background="#c8e6c9";
 blank.style.border="3px solid #00c853";
 
@@ -382,9 +486,7 @@ solved++;
 if(solved===6){
 
 setTimeout(()=>{
-game.classList.add("hidden");
-complete.classList.remove("hidden");
-startConfetti();
+showCompletion();
 },1000);
 
 }
@@ -399,9 +501,14 @@ showWrong();
 
 });
 
-function startConfetti(){
+/* ---------------- COMPLETION ---------------- */
 
-for(let i=0;i<150;i++){
+function showCompletion(){
+
+document.getElementById("game").classList.add("hidden");
+document.getElementById("complete").classList.remove("hidden");
+
+for(let i=0;i<180;i++){
 
 const conf=document.createElement("div");
 
@@ -413,16 +520,17 @@ conf.style.background=
 `hsl(${Math.random()*360},100%,50%)`;
 
 conf.style.animationDuration=
-(3+Math.random()*3)+"s";
+(3+Math.random()*4)+"s";
 
 conf.style.animationDelay=
 (Math.random()*2)+"s";
 
-complete.appendChild(conf);
+document.getElementById("complete").appendChild(conf);
 
 }
 
 }
+
 </script>
 
 </body>
