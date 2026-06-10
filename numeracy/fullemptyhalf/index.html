@@ -606,6 +606,9 @@ AUDIO
 <source src="assets/wrong.mp3" type="audio/mp3">
 </audio>
 
+<audio id="clapSound">
+<source src="assets/clap.mp3" type="audio/mp3">
+</audio>    
 <script>
 
 /* ==========================
@@ -865,6 +868,16 @@ function playWrong(){
 
 }
 
+ function playClap(){
+
+    const audio =
+    document.getElementById("clapSound");
+
+    audio.currentTime = 0;
+
+    audio.play();
+
+}   
 /* ==========================
 FINAL SLIDE
 ========================== */
@@ -880,6 +893,8 @@ function showFinalSlide(){
     .style.display="flex";
 
     createConfetti();
+
+    playClap();
 
 }
 
