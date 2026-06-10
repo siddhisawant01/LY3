@@ -2,562 +2,181 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no,
-viewport-fit=cover">
-
-<title>Frog Sight Words Game</title>
+<title>Sight Words Game</title>
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:Arial,sans-serif;
-    background:#b7ddeb;
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:"Arial Rounded MT Bold",Arial,sans-serif;
 }
 
 body{
-    touch-action:manipulation;
+background:#fff;
 }
 
-/* ---------------- GAME ---------------- */
-
-#game{
-    width:100vw;
-    height:100vh;
-    position:relative;
-    overflow:hidden;
-}
-
-/* ---------------- SLIDES ---------------- */
+/* SLIDES */
 
 .slide{
-    position:absolute;
-    width:100%;
-    height:100%;
-    top:0;
-    left:100%;
-    transition:0.5s;
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
 }
 
 .slide.active{
-    left:0;
+display:flex;
 }
 
-.slide.previous{
-    left:-100%;
+/* LOGO SCREEN */
+
+.logo-screen{
+background:white;
 }
 
-/* ---------------- LOGO ---------------- */
-
-#slide0{
-    background:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.logo-screen img{
+max-width:70%;
+max-height:50%;
+object-fit:contain;
 }
 
-.logo{
-    width:min(300px,75%);
+/* GAME SCREENS */
+
+.game-screen{
+background-image:
+linear-gradient(rgba(255,255,255,.12),rgba(255,255,255,.12)),
+url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop");
+background-size:cover;
+background-position:center;
+padding:20px;
 }
-
-/* ---------------- GAME SLIDES ---------------- */
-
-.game-slide{
-    background:#b7ddeb;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
-
-/* ---------------- INSTRUCTION ---------------- */
 
 .instruction{
-
-    width:100%;
-    text-align:center;
-
-    font-weight:bold;
-    color:#000;
-
-    padding-top:12px;
-
-    font-size:clamp(18px,2.6vw,56px);
-
-    z-index:20;
+font-size:clamp(24px,4vw,40px);
+font-weight:bold;
+color:#111;
+text-align:center;
+margin-bottom:40px;
+background:white;
+padding:12px 20px;
+border-radius:20px;
+box-shadow:0 4px 12px rgba(0,0,0,.15);
 }
 
-/* ---------------- POND ---------------- */
-
-.pond{
-
-    position:relative;
-
-    width:min(92vw,1150px);
-
-    aspect-ratio:1.9/1;
-
-    margin-top:12px;
-
-    background:linear-gradient(#14bde9,#25b8eb);
-
-    border-radius:42%;
-
-    border:clamp(8px,1vw,14px)
-    solid #7ed04f;
-
-    overflow:visible;
+.words{
+display:flex;
+gap:25px;
+justify-content:center;
+align-items:center;
+flex-wrap:wrap;
 }
 
-/* ---------------- WATER CIRCLES ---------------- */
-
-.water-circle{
-    position:absolute;
-    border-radius:50%;
-    background:rgba(255,255,255,0.14);
+.word-btn{
+min-width:130px;
+padding:22px 28px;
+font-size:clamp(30px,5vw,48px);
+font-weight:bold;
+border:none;
+border-radius:25px;
+background:white;
+cursor:pointer;
+transition:.2s;
+box-shadow:0 6px 15px rgba(0,0,0,.15);
 }
 
-.w1{
-    width:18%;
-    aspect-ratio:1;
-    top:18%;
-    left:14%;
+.word-btn:active{
+transform:scale(.95);
 }
 
-.w2{
-    width:14%;
-    aspect-ratio:1;
-    top:32%;
-    right:16%;
+.border1{
+border:8px solid #ff4d6d;
 }
 
-.w3{
-    width:25%;
-    aspect-ratio:1;
-    bottom:10%;
-    left:50%;
-    transform:translateX(-50%);
+.border2{
+border:8px solid #00b894;
 }
 
-/* ---------------- FROG ---------------- */
-
-.frog{
-
-    position:absolute;
-
-    width:clamp(95px,12vw,180px);
-    height:clamp(95px,12vw,180px);
-
-    left:50%;
-    top:45%;
-
-    transform:translate(-50%,-50%);
-
-    z-index:15;
-
-    transition:
-    left 0.8s ease,
-    top 0.8s ease,
-    transform 0.8s ease;
+.border3{
+border:8px solid #6c5ce7;
 }
 
-/* ---------------- JUMP ---------------- */
-
-.frog.jump{
-    animation:frogJump 0.9s ease;
+.border4{
+border:8px solid #fdcb6e;
 }
 
-@keyframes frogJump{
-
-    0%{
-        transform:translate(-50%,-50%) translateY(0);
-    }
-
-    25%{
-        transform:translate(-50%,-50%) translateY(-40px) scale(1.08);
-    }
-
-    50%{
-        transform:translate(-50%,-50%) translateY(-80px) scale(1.15);
-    }
-
-    75%{
-        transform:translate(-50%,-50%) translateY(-40px);
-    }
-
-    100%{
-        transform:translate(-50%,-50%) translateY(0);
-    }
+.border5{
+border:8px solid #00cec9;
 }
 
-/* ---------------- FROG BODY ---------------- */
-
-.frog-body{
-
-    position:absolute;
-
-    width:58%;
-    height:58%;
-
-    background:#00d52f;
-
-    border-radius:50%;
-
-    left:21%;
-    top:24%;
-
-    border:4px solid #08781f;
+.border6{
+border:8px solid #e17055;
 }
 
-/* ---------------- EYES ---------------- */
+/* FEEDBACK */
 
-.eye{
-
-    position:absolute;
-
-    width:18%;
-    height:18%;
-
-    background:white;
-
-    border-radius:50%;
-
-    border:3px solid #08781f;
-
-    top:6%;
+.feedback{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:min(25vw,160px);
+font-weight:bold;
+display:none;
+z-index:999;
+pointer-events:none;
 }
 
-.eye.left{
-    left:22%;
+.correct{
+color:#00c853;
 }
 
-.eye.right{
-    right:22%;
+.wrong{
+color:#ff1744;
 }
 
-.pupil{
+/* FINAL SCREEN */
 
-    position:absolute;
-
-    width:38%;
-    height:38%;
-
-    background:black;
-
-    border-radius:50%;
-
-    top:31%;
-    left:31%;
+.final-screen{
+background:
+linear-gradient(135deg,#ff9ff3,#feca57,#48dbfb,#1dd1a1);
+overflow:hidden;
 }
 
-/* ---------------- SMILE ---------------- */
-
-.smile{
-
-    position:absolute;
-
-    width:22%;
-    height:10%;
-
-    border-bottom:4px solid black;
-
-    border-radius:0 0 40px 40px;
-
-    left:39%;
-    top:45%;
+.amazing{
+font-size:clamp(50px,10vw,100px);
+font-weight:bold;
+color:white;
+text-shadow:4px 4px 10px rgba(0,0,0,.25);
+z-index:5;
 }
 
-/* ---------------- LEGS ---------------- */
-
-.leg{
-
-    position:absolute;
-
-    width:10%;
-    height:20%;
-
-    background:#00d52f;
-
-    border:3px solid #08781f;
-
-    border-radius:20px;
-
-    bottom:8%;
+.rain{
+position:absolute;
+top:-50px;
+font-weight:bold;
+animation:fall linear forwards;
 }
 
-.leg.left{
-    left:38%;
+@keyframes fall{
+to{
+transform:translateY(120vh) rotate(360deg);
 }
-
-.leg.right{
-    right:38%;
-}
-
-/* ---------------- LEAVES ---------------- */
-
-.leaf{
-
-    position:absolute;
-
-    width:clamp(145px,20vw,280px);
-    height:clamp(85px,11vw,165px);
-
-    background:#00e03b;
-
-    border:5px solid #08752c;
-
-    border-radius:50%;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-size:clamp(30px,4vw,72px);
-
-    font-weight:bold;
-
-    color:white;
-
-    text-shadow:0 3px 6px rgba(0,0,0,0.35);
-
-    box-shadow:0 8px 16px rgba(0,0,0,0.2);
-
-    user-select:none;
-
-    cursor:pointer;
-
-    z-index:12;
-
-    transition:0.2s;
-
-    padding-bottom:10px;
-}
-
-.leaf:active{
-    transform:scale(0.95);
-}
-
-.leaf::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:26%;
-    height:7%;
-
-    background:#08752c;
-
-    border-radius:20px;
-
-    right:12%;
-    bottom:12%;
-
-    transform:rotate(-20deg);
-}
-
-/* ---------------- LEAF POSITIONS ---------------- */
-
-.left-leaf{
-    left:4%;
-    bottom:-6%;
-}
-
-.right-leaf{
-    right:4%;
-    bottom:-6%;
-}
-
-/* ---------------- JUMP POSITIONS ---------------- */
-
-.jump-left{
-    left:24%;
-    top:78%;
-}
-
-.jump-right{
-    left:76%;
-    top:78%;
-}
-
-/* ---------------- FINAL SLIDE ---------------- */
-
-.final-slide{
-
-    background:linear-gradient(
-    to bottom,
-    #69ecff,
-    #5af0a0,
-    #fff173);
-
-    overflow:hidden;
-}
-
-.final-text{
-
-    position:absolute;
-
-    width:100%;
-
-    top:15%;
-
-    text-align:center;
-
-    font-size:clamp(42px,7vw,90px);
-
-    font-weight:bold;
-
-    color:white;
-
-    text-shadow:4px 4px 8px rgba(0,0,0,0.3);
-}
-
-/* ---------------- SMALL FROGS ---------------- */
-
-.small-frog{
-
-    position:absolute;
-
-    width:80px;
-    height:80px;
-
-    animation:smallJump 2s infinite ease-in-out;
-}
-
-.sf1{ left:8%; bottom:8%; animation-delay:0s; }
-.sf2{ left:26%; bottom:18%; animation-delay:0.3s; }
-.sf3{ left:45%; bottom:10%; animation-delay:0.6s; }
-.sf4{ left:64%; bottom:20%; animation-delay:0.9s; }
-.sf5{ left:82%; bottom:10%; animation-delay:1.2s; }
-
-@keyframes smallJump{
-
-    0%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-40px);
-    }
-
-    100%{
-        transform:translateY(0);
-    }
-}
-
-/* ---------------- TABLETS ---------------- */
-
-@media(max-width:900px){
-
-    .pond{
-        width:96vw;
-        aspect-ratio:1.55/1;
-    }
-
-    .leaf{
-        width:210px;
-        height:120px;
-        font-size:46px;
-    }
-
-    .frog{
-        width:145px;
-        height:145px;
-    }
-}
-
-/* ---------------- MOBILE ---------------- */
-
-@media(max-width:600px){
-
-    .instruction{
-        font-size:16px;
-        padding-top:14px;
-    }
-
-    .pond{
-
-        width:96vw;
-
-        aspect-ratio:1.2/1;
-
-        margin-top:16px;
-
-        border-radius:35%;
-    }
-
-    .frog{
-        width:120px;
-        height:120px;
-        top:44%;
-    }
-
-    .leaf{
-
-        width:150px;
-        height:92px;
-
-        font-size:34px;
-
-        bottom:-2%;
-    }
-
-    .left-leaf{
-        left:-3%;
-    }
-
-    .right-leaf{
-        right:-3%;
-    }
-
-    .jump-left{
-        left:25%;
-        top:76%;
-    }
-
-    .jump-right{
-        left:75%;
-        top:76%;
-    }
-}
-
-/* ---------------- OLD SMALL PHONES ---------------- */
-
-@media(max-width:390px){
-
-    .instruction{
-        font-size:14px;
-    }
-
-    .pond{
-        aspect-ratio:1.08/1;
-    }
-
-    .frog{
-        width:100px;
-        height:100px;
-    }
-
-    .leaf{
-
-        width:128px;
-        height:82px;
-
-        font-size:28px;
-    }
 }
 
 </style>
@@ -565,382 +184,216 @@ body{
 
 <body>
 
-<div id="game">
+<audio id="clapSound" src="assets/clap.mp3" preload="auto"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3" preload="auto"></audio>
 
-    <!-- LOGO -->
+<div id="feedbackTick" class="feedback correct">✓</div>
+<div id="feedbackCross" class="feedback wrong">✗</div>
 
-    <div class="slide active" id="slide0">
+<!-- Slide 1 -->
 
-        <img src="assets/innovine-logo.png"
-        class="logo">
-
-    </div>
-
-    <!-- SLIDE 1 -->
-
-    <div class="slide game-slide active2" id="slide1">
-
-        <div class="instruction">
-            Help the frog to identify the sight words
-        </div>
-
-        <div class="pond">
-
-            <div class="water-circle w1"></div>
-            <div class="water-circle w2"></div>
-            <div class="water-circle w3"></div>
-
-            <div class="frog" id="frog1">
-
-                <div class="frog-body"></div>
-
-                <div class="eye left">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="eye right">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="smile"></div>
-
-                <div class="leg left"></div>
-                <div class="leg right"></div>
-
-            </div>
-
-            <div class="leaf left-leaf"
-            onclick="checkAnswer(1,true,'left')">
-                this
-            </div>
-
-            <div class="leaf right-leaf"
-            onclick="checkAnswer(1,false,'right')">
-                star
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- SLIDE 2 -->
-
-    <div class="slide game-slide" id="slide2">
-
-        <div class="instruction">
-            Help the frog to identify the sight words
-        </div>
-
-        <div class="pond">
-
-            <div class="water-circle w1"></div>
-            <div class="water-circle w2"></div>
-            <div class="water-circle w3"></div>
-
-            <div class="frog" id="frog2">
-
-                <div class="frog-body"></div>
-
-                <div class="eye left">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="eye right">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="smile"></div>
-
-                <div class="leg left"></div>
-                <div class="leg right"></div>
-
-            </div>
-
-            <div class="leaf left-leaf"
-            onclick="checkAnswer(2,false,'left')">
-                cat
-            </div>
-
-            <div class="leaf right-leaf"
-            onclick="checkAnswer(2,true,'right')">
-                you
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- SLIDE 3 -->
-
-    <div class="slide game-slide" id="slide3">
-
-        <div class="instruction">
-            Help the frog to identify the sight words
-        </div>
-
-        <div class="pond">
-
-            <div class="water-circle w1"></div>
-            <div class="water-circle w2"></div>
-            <div class="water-circle w3"></div>
-
-            <div class="frog" id="frog3">
-
-                <div class="frog-body"></div>
-
-                <div class="eye left">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="eye right">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="smile"></div>
-
-                <div class="leg left"></div>
-                <div class="leg right"></div>
-
-            </div>
-
-            <div class="leaf left-leaf"
-            onclick="checkAnswer(3,true,'left')">
-                the
-            </div>
-
-            <div class="leaf right-leaf"
-            onclick="checkAnswer(3,false,'right')">
-                sun
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- SLIDE 4 -->
-
-    <div class="slide game-slide" id="slide4">
-
-        <div class="instruction">
-            Help the frog to identify the sight words
-        </div>
-
-        <div class="pond">
-
-            <div class="water-circle w1"></div>
-            <div class="water-circle w2"></div>
-            <div class="water-circle w3"></div>
-
-            <div class="frog" id="frog4">
-
-                <div class="frog-body"></div>
-
-                <div class="eye left">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="eye right">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="smile"></div>
-
-                <div class="leg left"></div>
-                <div class="leg right"></div>
-
-            </div>
-
-            <div class="leaf left-leaf"
-            onclick="checkAnswer(4,false,'left')">
-                lid
-            </div>
-
-            <div class="leaf right-leaf"
-            onclick="checkAnswer(4,true,'right')">
-                she
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- SLIDE 5 -->
-
-    <div class="slide game-slide" id="slide5">
-
-        <div class="instruction">
-            Help the frog to identify the sight words
-        </div>
-
-        <div class="pond">
-
-            <div class="water-circle w1"></div>
-            <div class="water-circle w2"></div>
-            <div class="water-circle w3"></div>
-
-            <div class="frog" id="frog5">
-
-                <div class="frog-body"></div>
-
-                <div class="eye left">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="eye right">
-                    <div class="pupil"></div>
-                </div>
-
-                <div class="smile"></div>
-
-                <div class="leg left"></div>
-                <div class="leg right"></div>
-
-            </div>
-
-            <div class="leaf left-leaf"
-            onclick="checkAnswer(5,true,'left')">
-                are
-            </div>
-
-            <div class="leaf right-leaf"
-            onclick="checkAnswer(5,false,'right')">
-                van
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- FINAL -->
-
-    <div class="slide final-slide" id="slide6">
-
-        <div class="final-text">
-            Great Job!
-        </div>
-
-        <div class="small-frog sf1">
-            <div class="frog-body"></div>
-        </div>
-
-        <div class="small-frog sf2">
-            <div class="frog-body"></div>
-        </div>
-
-        <div class="small-frog sf3">
-            <div class="frog-body"></div>
-        </div>
-
-        <div class="small-frog sf4">
-            <div class="frog-body"></div>
-        </div>
-
-        <div class="small-frog sf5">
-            <div class="frog-body"></div>
-        </div>
-
-    </div>
-
+<div class="slide active logo-screen" id="slide0">
+<img src="assets/innovine-logo.png" alt="Innovine Logo">
 </div>
 
-<!-- AUDIO -->
+<!-- Slide 2 -->
 
-<audio id="wrongSound"
-src="assets/wrong.mp3"></audio>
+<div class="slide game-screen">
+<div class="instruction">Identify the sight word</div>
+
+<div class="words">
+<button class="word-btn border1" onclick="checkAnswer(this,true)">I</button>
+<button class="word-btn border2" onclick="checkAnswer(this,false)">mat</button>
+</div>
+</div>
+
+<!-- Slide 3 -->
+
+<div class="slide game-screen">
+<div class="instruction">Identify the sight word</div>
+
+<div class="words">
+<button class="word-btn border3" onclick="checkAnswer(this,false)">hen</button>
+<button class="word-btn border4" onclick="checkAnswer(this,true)">this</button>
+</div>
+</div>
+
+<!-- Slide 4 -->
+
+<div class="slide game-screen">
+<div class="instruction">Identify the sight word</div>
+
+<div class="words">
+<button class="word-btn border5" onclick="checkAnswer(this,true)">the</button>
+<button class="word-btn border6" onclick="checkAnswer(this,false)">sit</button>
+</div>
+</div>
+
+<!-- Slide 5 -->
+
+<div class="slide game-screen">
+<div class="instruction">Identify the sight word</div>
+
+<div class="words">
+<button class="word-btn border2" onclick="checkAnswer(this,false)">cat</button>
+<button class="word-btn border1" onclick="checkAnswer(this,true)">are</button>
+</div>
+</div>
+
+<!-- Slide 6 -->
+
+<div class="slide game-screen">
+<div class="instruction">Identify the sight word</div>
+
+<div class="words">
+<button class="word-btn border4" onclick="checkAnswer(this,true)">to</button>
+<button class="word-btn border3" onclick="checkAnswer(this,false)">tap</button>
+</div>
+</div>
+
+<!-- Slide 7 -->
+
+<div class="slide game-screen">
+<div class="instruction">Identify the sight word</div>
+
+<div class="words">
+<button class="word-btn border6" onclick="checkAnswer(this,true)">my</button>
+<button class="word-btn border5" onclick="checkAnswer(this,false)">hat</button>
+</div>
+</div>
+
+<!-- Slide 8 -->
+
+<div class="slide game-screen">
+<div class="instruction">Identify the sight word</div>
+
+<div class="words">
+<button class="word-btn border1" onclick="checkAnswer(this,false)">fit</button>
+<button class="word-btn border2" onclick="checkAnswer(this,true)">that</button>
+</div>
+</div>
+
+<!-- Slide 9 -->
+
+<div class="slide final-screen" id="finalScreen">
+<div class="amazing">Amazing!</div>
+</div>
 
 <script>
 
-let currentSlide = 0;
+const slides=document.querySelectorAll(".slide");
+const clap=document.getElementById("clapSound");
+const wrong=document.getElementById("wrongSound");
 
-/* ---------------- LOGO SCREEN ---------------- */
+let currentSlide=0;
 
-setTimeout(() => {
+/* logo screen */
 
-    nextSlide();
+setTimeout(()=>{
+goToSlide(1);
+},2500);
 
-},3000);
+function goToSlide(index){
 
-/* ---------------- NEXT SLIDE ---------------- */
+slides.forEach(slide=>slide.classList.remove("active"));
 
-function nextSlide(){
-
-    const current =
-    document.getElementById(
-    "slide"+currentSlide);
-
-    if(current){
-
-        current.classList.remove("active");
-
-        current.classList.add("previous");
-    }
-
-    currentSlide++;
-
-    const next =
-    document.getElementById(
-    "slide"+currentSlide);
-
-    if(next){
-
-        next.classList.add("active");
-    }
+if(index<slides.length){
+slides[index].classList.add("active");
+currentSlide=index;
 }
 
-/* ---------------- ANSWER CHECK ---------------- */
+if(index===slides.length-1){
+startRain();
+}
 
-function checkAnswer(
-slideNum,
-isCorrect,
-side
-){
+}
 
-    const frog =
-    document.getElementById(
-    "frog"+slideNum);
+function showTick(){
 
-    if(isCorrect){
+const tick=document.getElementById("feedbackTick");
 
-        frog.classList.add("jump");
+tick.style.display="block";
 
-        setTimeout(()=>{
+setTimeout(()=>{
+tick.style.display="none";
+},1000);
 
-            if(side === "left"){
+}
 
-                frog.classList.add(
-                "jump-left");
+function showCross(){
 
-            }else{
+const cross=document.getElementById("feedbackCross");
 
-                frog.classList.add(
-                "jump-right");
-            }
+cross.style.display="block";
 
-        },400);
+setTimeout(()=>{
+cross.style.display="none";
+},1000);
 
-        setTimeout(()=>{
+}
 
-            nextSlide();
+function checkAnswer(button,isCorrect){
 
-        },1200);
+if(isCorrect){
 
-    }
+clap.currentTime=0;
+clap.play();
 
-    else{
+showTick();
 
-        document.getElementById(
-        "wrongSound").play();
+button.disabled=true;
 
-        frog.style.transform =
-        "translate(-50%,-50%) scale(0.85)";
+setTimeout(()=>{
+goToSlide(currentSlide+1);
+},1200);
 
-        setTimeout(()=>{
+}else{
 
-            frog.style.transform =
-            "translate(-50%,-50%) scale(1)";
+wrong.currentTime=0;
+wrong.play();
 
-        },250);
-    }
+showCross();
+
+}
+
+}
+
+/* Amazing screen letters */
+
+function startRain(){
+
+const final=document.getElementById("finalScreen");
+
+const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+setInterval(()=>{
+
+const letter=document.createElement("div");
+
+letter.className="rain";
+
+letter.innerHTML=
+letters[Math.floor(Math.random()*letters.length)];
+
+letter.style.left=Math.random()*100+"vw";
+
+letter.style.fontSize=
+(20+Math.random()*35)+"px";
+
+letter.style.color=
+`hsl(${Math.random()*360},90%,55%)`;
+
+letter.style.animationDuration=
+(3+Math.random()*3)+"s";
+
+final.appendChild(letter);
+
+setTimeout(()=>{
+letter.remove();
+},6000);
+
+},120);
+
 }
 
 </script>
