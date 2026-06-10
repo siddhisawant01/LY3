@@ -388,6 +388,8 @@ AUDIO
 
 <audio id="wrongSound" src="assets/wrong.mp3"></audio>
 
+<audio id="clapSound" src="assets/clap.mp3"></audio>
+
 <!-- =========================================
 SLIDE 1
 ========================================= -->
@@ -539,6 +541,8 @@ document.getElementById("correctSound");
 const wrongSound =
 document.getElementById("wrongSound");
 
+const clapSound =
+document.getElementById("clapSound");
 let selectedLetter = null;
 let selectedButton = null;
 
@@ -693,21 +697,23 @@ function checkComplete(){
             complete = false;
         }
     });
+if(complete){
 
-    if(complete){
+    setTimeout(()=>{
 
-        setTimeout(()=>{
+        slide2.classList.remove("show");
+        slide2.classList.add("hidden");
 
-            slide2.classList.remove("show");
-            slide2.classList.add("hidden");
+        slide3.classList.remove("hidden");
+        slide3.classList.add("show");
 
-            slide3.classList.remove("hidden");
-            slide3.classList.add("show");
+        clapSound.currentTime = 0;
+        clapSound.play().catch(()=>{});
 
-            startRain();
+        startRain();
 
-        },1200);
-    }
+    },1200);
+}
 }
 
 /* =========================================
