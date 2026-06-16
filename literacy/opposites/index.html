@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Opposites Game</title>
 
 <style>
@@ -11,43 +11,46 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial, sans-serif;
 }
 
 body{
 overflow:hidden;
+background:#fdf2ff;
 }
 
 .slide{
 display:none;
 width:100vw;
 height:100vh;
-flex-direction:column;
-align-items:center;
-justify-content:center;
+background-image:url('https://i.pinimg.com/736x/66/f6/e7/66f6e798da43af44e4cf7b1c85f2af41.jpg');
+background-size:cover;
+background-position:center;
 padding:10px;
+text-align:center;
 }
 
 .active{
 display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+align-items:center;
 }
 
 .logo-slide{
 background:white;
 }
 
-.game-slide{
-background-image:url('background.jpg');
-background-size:cover;
-background-position:center;
+.logo-slide img{
+max-width:70%;
+max-height:70%;
 }
 
-h2{
-text-align:center;
-margin-bottom:10px;
-font-size:clamp(16px,3vw,28px);
+.instruction{
+font-size:clamp(18px,3vw,28px);
+font-weight:bold;
 background:white;
-padding:8px 15px;
+padding:10px 20px;
 border-radius:20px;
 }
 
@@ -56,97 +59,130 @@ display:flex;
 align-items:center;
 justify-content:center;
 gap:20px;
-margin:15px;
 }
 
-.main-image,
-.answer-slot{
-width:min(28vw,180px);
-height:min(28vw,180px);
-border:8px solid #ff69b4;
+.target-box,
+.answer-box{
+width:min(25vw,180px);
+height:min(25vw,180px);
+border:8px solid #ff66b3;
 border-radius:25px;
 background:white;
 display:flex;
+flex-direction:column;
 justify-content:center;
 align-items:center;
-overflow:hidden;
 }
 
-.main-image img,
-.answer-slot img{
-width:100%;
-height:100%;
+.target-box img,
+.answer-box img{
+width:80%;
+height:80%;
 object-fit:contain;
 }
 
 .options{
 display:flex;
 justify-content:center;
-gap:12px;
+gap:15px;
 width:100%;
 }
 
 .option{
-width:min(25vw,150px);
-height:min(25vw,150px);
-background:white;
-border:8px solid orange;
+width:min(25vw,170px);
+height:min(25vw,170px);
+border:8px solid;
 border-radius:25px;
+background:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 cursor:pointer;
-overflow:hidden;
+}
+
+.option:nth-child(1){
+border-color:#ff6b6b;
+}
+
+.option:nth-child(2){
+border-color:#4ecdc4;
+}
+
+.option:nth-child(3){
+border-color:#f7b731;
 }
 
 .option img{
-width:100%;
-height:100%;
+width:75%;
+height:75%;
 object-fit:contain;
 }
 
-.feedback{
+.label{
+font-size:clamp(16px,2vw,24px);
+font-weight:bold;
+text-transform:lowercase;
+}
+
+.popup{
 position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
 font-size:120px;
 display:none;
 z-index:999;
 }
 
-.tick{
-color:green;
+.final-slide{
+text-align:center;
 }
 
-.cross{
-color:red;
+.final-slide h1{
+font-size:60px;
+color:#ff4081;
 }
 
-#finalSlide{
-background-image:url('background.jpg');
-background-size:cover;
-background-position:center;
-}
-
-.goodjob{
-font-size:50px;
-font-weight:bold;
-color:#ff1493;
-background:white;
-padding:20px;
-border-radius:20px;
-}
-
-.playAgain{
+.play-btn{
 margin-top:20px;
-padding:15px 30px;
-font-size:24px;
-background:#00c853;
-color:white;
+padding:15px 40px;
+font-size:28px;
 border:none;
 border-radius:20px;
+background:#4caf50;
+color:white;
 cursor:pointer;
 }
 
 .confetti{
-position:absolute;
-inset:0;
-pointer-events:none;
+font-size:100px;
+animation:spin 3s infinite linear;
+}
+
+@keyframes spin{
+100%{
+transform:rotate(360deg);
+}
+}
+
+@media(max-width:768px){
+
+.question-area{
+gap:10px;
+}
+
+.option{
+width:28vw;
+height:28vw;
+}
+
+.target-box,
+.answer-box{
+width:28vw;
+height:28vw;
+}
+
 }
 
 </style>
@@ -154,119 +190,151 @@ pointer-events:none;
 
 <body>
 
-<audio id="clap" src="audio/clap.mp3"></audio>
-<audio id="wrong" src="audio/wrong.mp3"></audio>
+<audio id="correctSound" src="audio/clap.mp3"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
 
-<div class="feedback tick" id="tick">✔</div>
-<div class="feedback cross" id="cross">✖</div>
+<div id="popup" class="popup"></div>
 
 <!-- Slide 1 -->
+<section class="slide active logo-slide">
+<img src="assets/innovine-logo.png">
+</section>
 
-<div class="slide active logo-slide" id="slide1">
-<img src="assets/innovine-logo.png" style="max-width:80%;">
-</div>
-
-<!-- Slides Container -->
-<div id="slidesContainer"></div>
+<div id="gameContainer"></div>
 
 <!-- Final Slide -->
-
-<div class="slide" id="finalSlide">
-<div class="confetti" id="confetti"></div>
-
-<div class="goodjob">
-🎉 Good Job! 🎉
-</div>
-
-<button class="playAgain" onclick="location.reload()">
-PLAY AGAIN
-</button>
-</div>
+<section class="slide final-slide" id="finalSlide">
+<div class="confetti">🎉🎊🎉</div>
+<h1>Good Job!</h1>
+<button class="play-btn" onclick="location.reload()">PLAY AGAIN</button>
+</section>
 
 <script>
 
 const questions = [
 
 {
-question:"front",
+target:"front",
+targetImg:"assets/front.png",
 correct:"back",
-options:["night","back","dirty"]
+options:[
+{name:"night",img:"assets/night.png"},
+{name:"back",img:"assets/back.png"},
+{name:"dirty",img:"assets/dirty.png"}
+]
 },
 
 {
-question:"soft",
+target:"soft",
+targetImg:"assets/soft.png",
 correct:"hard",
-options:["hard","empty","open"]
+options:[
+{name:"hard",img:"assets/hard.jpeg"},
+{name:"empty",img:"assets/empty.png"},
+{name:"open",img:"assets/open.png"}
+]
 },
 
 {
-question:"happy",
+target:"happy",
+targetImg:"assets/happy.png",
 correct:"sad",
-options:["back","old","sad"]
+options:[
+{name:"back",img:"assets/back.png"},
+{name:"old",img:"assets/old.png"},
+{name:"sad",img:"assets/sad.png"}
+]
 },
 
 {
-question:"thick",
+target:"thick",
+targetImg:"assets/thick.png",
 correct:"thin",
-options:["thin","night","full"]
+options:[
+{name:"thin",img:"assets/thin.png"},
+{name:"night",img:"assets/night.png"},
+{name:"full",img:"assets/full.png"}
+]
 },
 
 {
-question:"day",
+target:"day",
+targetImg:"assets/day.png",
 correct:"night",
-options:["front","happy","night"]
+options:[
+{name:"front",img:"assets/front.png"},
+{name:"happy",img:"assets/happy.png"},
+{name:"night",img:"assets/night.png"}
+]
 },
 
 {
-question:"young",
+target:"young",
+targetImg:"assets/young.png",
 correct:"old",
-options:["soft","old","empty"]
+options:[
+{name:"soft",img:"assets/soft.png"},
+{name:"old",img:"assets/old.png"},
+{name:"empty",img:"assets/empty.png"}
+]
 },
 
 {
-question:"empty",
+target:"empty",
+targetImg:"assets/empty.png",
 correct:"full",
-options:["full","sad","clean"]
+options:[
+{name:"full",img:"assets/full.png"},
+{name:"sad",img:"assets/sad.png"},
+{name:"clean",img:"assets/clean.png"}
+]
 },
 
 {
-question:"dirty",
+target:"dirty",
+targetImg:"assets/dirty.png",
 correct:"clean",
-options:["clean","old","young"]
+options:[
+{name:"clean",img:"assets/clean.png"},
+{name:"old",img:"assets/old.png"},
+{name:"young",img:"assets/young.png"}
+]
 },
 
 {
-question:"close",
+target:"close",
+targetImg:"assets/close.png",
 correct:"open",
-options:["happy","open","empty"]
+options:[
+{name:"happy",img:"assets/happy.png"},
+{name:"open",img:"assets/open.png"},
+{name:"empty",img:"assets/empty.png"}
+]
 }
 
 ];
 
-const container=document.getElementById("slidesContainer");
+const gameContainer=document.getElementById("gameContainer");
 
 questions.forEach((q,index)=>{
 
-const slide=document.createElement("div");
-
-slide.className="slide game-slide";
-
-slide.id="slide"+(index+2);
+const slide=document.createElement("section");
+slide.className="slide";
 
 slide.innerHTML=`
 
-<h2>
+<div class="instruction">
 Identify the given image and select correct opposite.
-</h2>
+</div>
 
 <div class="question-area">
 
-<div class="main-image">
-<img src="assets/${q.question}.png">
+<div class="target-box">
+<img src="${q.targetImg}">
+<div class="label">${q.target}</div>
 </div>
 
-<div class="answer-slot"
-id="answer${index}">
+<div class="answer-box" id="answer${index}">
 </div>
 
 </div>
@@ -276,132 +344,82 @@ id="answer${index}">
 ${q.options.map(opt=>`
 
 <div class="option"
-onclick="checkAnswer(this,'${opt}','${q.correct}',${index})">
-
-<img src="assets/${opt}${opt==='hard'?'.jpeg':'.png'}">
-
+onclick="checkAnswer('${opt.name}','${q.correct}','${opt.img}',${index},this)">
+<img src="${opt.img}">
+<div class="label">${opt.name}</div>
 </div>
 
-`).join("")}
+`).join('')}
 
 </div>
 
 `;
 
-container.appendChild(slide);
+gameContainer.appendChild(slide);
 
 });
 
-let currentSlide=1;
+const slides=document.querySelectorAll(".slide");
+let current=0;
 
 setTimeout(()=>{
-document.getElementById("slide1").classList.remove("active");
-document.getElementById("slide2").classList.add("active");
+slides[0].classList.remove("active");
+slides[1].classList.add("active");
+current=1;
 },2500);
 
-function showFeedback(correct){
+function checkAnswer(selected,correct,img,index,element){
 
-const tick=document.getElementById("tick");
-const cross=document.getElementById("cross");
-
-if(correct){
-
-tick.style.display="block";
-
-document.getElementById("clap").play();
-
-setTimeout(()=>{
-tick.style.display="none";
-},1200);
-
-}else{
-
-cross.style.display="block";
-
-document.getElementById("wrong").play();
-
-setTimeout(()=>{
-cross.style.display="none";
-},1200);
-
-}
-}
-
-function checkAnswer(element,selected,correct,index){
+const popup=document.getElementById("popup");
 
 if(selected===correct){
 
-showFeedback(true);
+document.getElementById("correctSound").play();
 
-const slot=document.getElementById("answer"+index);
+popup.innerHTML="✅";
+popup.style.display="block";
 
-slot.innerHTML=element.innerHTML;
+setTimeout(()=>{
+popup.style.display="none";
+},1000);
+
+const answerBox=document.getElementById("answer"+index);
+
+answerBox.innerHTML=`
+<img src="${img}">
+<div class="label">${correct}</div>
+`;
 
 element.style.visibility="hidden";
 
 setTimeout(()=>{
+slides[current].classList.remove("active");
+current++;
 
-document.getElementById("slide"+(index+2)).classList.remove("active");
-
-if(index===questions.length-1){
-
+if(current<slides.length-1){
+slides[current].classList.add("active");
+}
+else{
 document.getElementById("finalSlide").classList.add("active");
-
-launchConfetti();
-
-}else{
-
-document.getElementById("slide"+(index+3)).classList.add("active");
-
 }
 
 },1800);
 
-}else{
+}
+else{
 
-showFeedback(false);
+document.getElementById("wrongSound").play();
+
+popup.innerHTML="❌";
+popup.style.display="block";
+
+setTimeout(()=>{
+popup.style.display="none";
+},1000);
 
 }
 
 }
-
-function launchConfetti(){
-
-const confetti=document.getElementById("confetti");
-
-for(let i=0;i<120;i++){
-
-let piece=document.createElement("div");
-
-piece.style.position="absolute";
-piece.style.left=Math.random()*100+"%";
-piece.style.top="-20px";
-piece.style.width="10px";
-piece.style.height="10px";
-piece.style.background=`hsl(${Math.random()*360},100%,50%)`;
-piece.style.animation=`fall ${3+Math.random()*2}s linear forwards`;
-
-confetti.appendChild(piece);
-
-}
-
-}
-
-const style=document.createElement("style");
-
-style.innerHTML=`
-
-@keyframes fall{
-
-to{
-transform:translateY(120vh) rotate(720deg);
-}
-
-}
-
-`;
-
-document.head.appendChild(style);
 
 </script>
 
