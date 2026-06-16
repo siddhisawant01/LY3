@@ -190,8 +190,13 @@ height:28vw;
 
 <body>
 
-<audio id="correctSound" src="audio/clap.mp3"></audio>
-<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+<audio id="correctSound" preload="auto">
+    <source src="audio/clap.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="wrongSound" preload="auto">
+    <source src="assets/wrong.mp3" type="audio/mpeg">
+</audio>
 
 <div id="popup" class="popup"></div>
 
@@ -374,7 +379,15 @@ const popup=document.getElementById("popup");
 
 if(selected===correct){
 
-document.getElementById("correctSound").play();
+const clap=document.getElementById("correctSound");
+
+clap.currentTime=0;
+
+clap.play().then(()=>{
+console.log("Clap sound played");
+}).catch(error=>{
+console.log("Audio error:",error);
+});
 
 popup.innerHTML="✅";
 popup.style.display="block";
@@ -393,6 +406,7 @@ answerBox.innerHTML=`
 element.style.visibility="hidden";
 
 setTimeout(()=>{
+
 slides[current].classList.remove("active");
 current++;
 
@@ -408,7 +422,11 @@ document.getElementById("finalSlide").classList.add("active");
 }
 else{
 
-document.getElementById("wrongSound").play();
+const wrong=document.getElementById("wrongSound");
+
+wrong.currentTime=0;
+
+wrong.play();
 
 popup.innerHTML="❌";
 popup.style.display="block";
