@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shape Matching Game</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Comic Sans MS',sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+body{
+background:#f8f8f8;
+}
+
+.screen{
+width:100vw;
+height:100vh;
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:10px;
+position:relative;
+overflow:hidden;
+}
+
+.active{
+display:flex;
+}
+
+.game-bg{
+background-image:url("assets/background.png");
+background-size:cover;
+background-position:center;
+}
+
+.logo-screen{
+background:white;
+}
+
+.logo{
+max-width:80%;
+max-height:50%;
+object-fit:contain;
+}
+
+.instruction{
+font-size:clamp(18px,2.5vw,28px);
+font-weight:bold;
+text-align:center;
+background:white;
+padding:10px 15px;
+border-radius:15px;
+margin-bottom:10px;
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+
+.match-area{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:20px;
+margin:10px 0 20px;
+}
+
+.shape-box,
+.answer-box{
+width:140px;
+height:140px;
+background:white;
+border:6px solid #ff7f50;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+.shape-box img,
+.answer-box img{
+max-width:90%;
+max-height:90%;
+object-fit:contain;
+}
+
+.options{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+width:100%;
+max-width:900px;
+}
+
+.option{
+background:white;
+border:6px solid;
+border-radius:20px;
+padding:8px;
+width:30%;
+max-width:170px;
+min-width:90px;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
+
+.option:hover{
+transform:scale(1.05);
+}
+
+.option img{
+width:100%;
+height:90px;
+object-fit:contain;
+}
+
+.label{
+text-align:center;
+font-weight:bold;
+font-size:18px;
+text-transform:lowercase;
+margin-top:5px;
+}
+
+.border1{border-color:#ff6b6b;}
+.border2{border-color:#4ecdc4;}
+.border3{border-color:#ffd93d;}
+
+.popup{
+position:absolute;
+font-size:120px;
+display:none;
+z-index:100;
+animation:pop .8s ease;
+}
+
+.tick{
+color:#00c853;
+}
+
+.cross{
+color:#ff1744;
+}
+
+@keyframes pop{
+0%{
+transform:scale(0);
+opacity:0;
+}
+50%{
+transform:scale(1.3);
+opacity:1;
+}
+100%{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.good-job{
+font-size:60px;
+font-weight:bold;
+color:#ff4081;
+text-align:center;
+margin-bottom:30px;
+text-shadow:2px 2px white;
+}
+
+.play-btn{
+padding:15px 35px;
+font-size:24px;
+border:none;
+border-radius:15px;
+background:#4caf50;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.rain{
+position:absolute;
+font-size:40px;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+0%{
+transform:translateY(-100px);
+}
+100%{
+transform:translateY(110vh);
+}
+}
+
+@media(max-width:768px){
+
+.shape-box,
+.answer-box{
+width:110px;
+height:110px;
+}
+
+.option{
+width:31%;
+}
+
+.option img{
+height:70px;
+}
+
+.label{
+font-size:15px;
+}
+
+.popup{
+font-size:90px;
+}
+
+.good-job{
+font-size:42px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="clap" preload="auto">
+<source src="assets/clap.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="wrong" preload="auto">
+<source src="assets/wrong.mp3" type="audio/mpeg">
+</audio>
+
+<!-- LOGO SCREEN -->
+<div class="screen logo-screen active" id="screen0">
+<img src="assets/innovine-logo.png" class="logo">
+</div>
+
+<div id="gameContainer"></div>
+
+<!-- FINAL SCREEN -->
+<div class="screen game-bg" id="finalScreen">
+<div class="good-job">🎉 Good Job! 🎉</div>
+<button class="play-btn" onclick="restartGame()">PLAY AGAIN</button>
+</div>
+
+<script>
+
+const clap=document.getElementById("clap");
+const wrong=document.getElementById("wrong");
+
+function playClap(){
+clap.pause();
+clap.currentTime=0;
+clap.play().catch(()=>{});
+}
+
+function playWrong(){
+wrong.pause();
+wrong.currentTime=0;
+wrong.play().catch(()=>{});
+}
+
+const slides=[
+{
+shape:"square",
+correct:"clock",
+options:["clock","donut","nachos"]
+},
+{
+shape:"triangle",
+correct:"nachos",
+options:["rainbow","nachos","donut"]
+},
+{
+shape:"star",
+correct:"starfish",
+options:["laptop","egg","starfish"]
+},
+{
+shape:"circle",
+correct:"donut",
+options:["donut","nachos","rainbow"]
+},
+{
+shape:"rectangle",
+correct:"laptop",
+options:["laptop","clock","egg"]
+},
+{
+shape:"semicircle",
+correct:"rainbow",
+options:["starfish","rainbow","nachos"]
+},
+{
+shape:"oval",
+correct:"egg",
+options:["egg","laptop","starfish"]
+}
+];
+
+let currentSlide=0;
+
+const gameContainer=document.getElementById("gameContainer");
+
+function createSlides(){
+
+slides.forEach((slide,index)=>{
+
+const screen=document.createElement("div");
+screen.className="screen game-bg";
+screen.id="screen"+(index+1);
+
+screen.innerHTML=`
+<div class="instruction">
+Identify the given shape and match it to the correct object.
+</div>
+
+<div class="match-area">
+
+<div class="shape-box">
+<img src="assets/${slide.shape}.png">
+</div>
+
+<div class="answer-box" id="answer${index}">
+</div>
+
+</div>
+
+<div class="options">
+
+${slide.options.map((item,i)=>`
+<div class="option border${(i%3)+1}" onclick="checkAnswer(${index},'${item}',this)">
+<img src="assets/${item}.png">
+<div class="label">${item}</div>
+</div>
+`).join("")}
+
+</div>
+
+<div class="popup tick" id="tick${index}">✔</div>
+<div class="popup cross" id="cross${index}">✖</div>
+`;
+
+gameContainer.appendChild(screen);
+
+});
+
+}
+
+createSlides();
+
+function showScreen(id){
+
+document.querySelectorAll(".screen").forEach(screen=>{
+screen.classList.remove("active");
+});
+
+document.getElementById(id).classList.add("active");
+
+}
+
+function checkAnswer(index,item,element){
+
+const slide=slides[index];
+
+if(item===slide.correct){
+
+playClap();
+
+const tick=document.getElementById("tick"+index);
+
+tick.style.display="block";
+
+setTimeout(()=>{
+tick.style.display="none";
+},1000);
+
+const answerBox=document.getElementById("answer"+index);
+
+answerBox.innerHTML=`
+<img src="assets/${item}.png">
+`;
+
+element.style.visibility="hidden";
+
+setTimeout(()=>{
+
+if(index<slides.length-1){
+
+showScreen("screen"+(index+2));
+
+}else{
+
+showFinal();
+
+}
+
+},2000);
+
+}else{
+
+playWrong();
+
+const cross=document.getElementById("cross"+index);
+
+cross.style.display="block";
+
+setTimeout(()=>{
+cross.style.display="none";
+},800);
+
+}
+
+}
+
+function showFinal(){
+
+showScreen("finalScreen");
+
+createRain();
+
+}
+
+function createRain(){
+
+const final=document.getElementById("finalScreen");
+
+for(let i=0;i<40;i++){
+
+const div=document.createElement("div");
+
+div.className="rain";
+
+const icons=[
+"⭐","🔷","🔶","🟢","🔺","🟣","🟡"
+];
+
+div.innerHTML=icons[Math.floor(Math.random()*icons.length)];
+
+div.style.left=Math.random()*100+"vw";
+
+div.style.animationDuration=(3+Math.random()*4)+"s";
+
+div.style.animationDelay=Math.random()*2+"s";
+
+final.appendChild(div);
+
+}
+
+}
+
+function restartGame(){
+
+location.reload();
+
+}
+
+setTimeout(()=>{
+showScreen("screen1");
+},2500);
+
+</script>
+
+</body>
+</html>
