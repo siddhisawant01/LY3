@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Thick and Thin Game</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+body{
+background:url('assets/bg.jpg') center center/cover no-repeat;
+}
+
+.slide{
+display:none;
+width:100vw;
+height:100vh;
+position:absolute;
+top:0;
+left:0;
+}
+
+.active{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+.logo-slide{
+background:white;
+}
+
+.logo-slide img{
+max-width:70%;
+max-height:50%;
+}
+
+.instruction{
+font-size:clamp(24px,4vw,42px);
+font-weight:bold;
+color:#222;
+background:white;
+padding:15px 30px;
+border-radius:20px;
+margin-bottom:25px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+.options{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:4vw;
+width:95%;
+}
+
+.card{
+width:38vw;
+max-width:380px;
+height:42vh;
+background:white;
+border:10px solid;
+border-radius:30px;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+transition:.3s;
+box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+.card:nth-child(1){
+border-color:#ff6ec7;
+}
+
+.card:nth-child(2){
+border-color:#00cfff;
+}
+
+.card:hover{
+transform:scale(1.05);
+}
+
+.card img{
+max-width:90%;
+max-height:90%;
+object-fit:contain;
+}
+
+.feedback{
+position:absolute;
+font-size:140px;
+font-weight:bold;
+display:none;
+z-index:999;
+animation:pop .5s ease;
+}
+
+.correct{
+color:#00c853;
+}
+
+.wrong{
+color:#ff1744;
+}
+
+@keyframes pop{
+0%{transform:scale(0);}
+100%{transform:scale(1);}
+}
+
+.final-slide{
+text-align:center;
+color:white;
+font-size:clamp(40px,7vw,80px);
+font-weight:bold;
+}
+
+.confetti{
+position:absolute;
+width:12px;
+height:12px;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+0%{
+transform:translateY(-100px) rotate(0deg);
+}
+100%{
+transform:translateY(110vh) rotate(720deg);
+}
+}
+
+@media(max-width:768px){
+
+.options{
+gap:15px;
+}
+
+.card{
+width:44vw;
+height:35vh;
+}
+
+.feedback{
+font-size:100px;
+}
+
+}
+</style>
+</head>
+<body>
+
+<audio id="clap" preload="auto">
+<source src="assets/clap.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="wrong" preload="auto">
+<source src="assets/wrong.mp3" type="audio/mpeg">
+</audio>
+
+<div id="tick" class="feedback correct">✓</div>
+<div id="cross" class="feedback wrong">✗</div>
+
+<!-- Slide 1 -->
+<div class="slide active logo-slide" id="slide0">
+<img src="assets/innovine-logo.png">
+</div>
+
+<!-- Slide 2 -->
+<div class="slide" id="slide1">
+<div class="instruction">Identify the Thick Rope</div>
+<div class="options">
+<div class="card" onclick="checkAnswer(this,true)">
+<img src="assets/thickrope.png">
+</div>
+<div class="card" onclick="checkAnswer(this,false)">
+<img src="assets/thinrope.png">
+</div>
+</div>
+</div>
+
+<!-- Slide 3 -->
+<div class="slide" id="slide2">
+<div class="instruction">Identify the Thick Paintbrush</div>
+<div class="options">
+<div class="card" onclick="checkAnswer(this,false)">
+<img src="assets/thinpaintbrush.png">
+</div>
+<div class="card" onclick="checkAnswer(this,true)">
+<img src="assets/thickpaintbrush.png">
+</div>
+</div>
+</div>
+
+<!-- Slide 4 -->
+<div class="slide" id="slide3">
+<div class="instruction">Identify the Thin Pencil</div>
+<div class="options">
+<div class="card" onclick="checkAnswer(this,true)">
+<img src="assets/thinpencil.png">
+</div>
+<div class="card" onclick="checkAnswer(this,false)">
+<img src="assets/thickpencil.png">
+</div>
+</div>
+</div>
+
+<!-- Slide 5 -->
+<div class="slide" id="slide4">
+<div class="instruction">Identify the Thin Book</div>
+<div class="options">
+<div class="card" onclick="checkAnswer(this,false)">
+<img src="assets/thickbook.png">
+</div>
+<div class="card" onclick="checkAnswer(this,true)">
+<img src="assets/thinbook.png">
+</div>
+</div>
+</div>
+
+<!-- Slide 6 -->
+<div class="slide" id="slide5">
+<div class="instruction">Identify the Thick Candle</div>
+<div class="options">
+<div class="card" onclick="checkAnswer(this,false)">
+<img src="assets/thincandle.png">
+</div>
+<div class="card" onclick="checkAnswer(this,true)">
+<img src="assets/thickcandle.png">
+</div>
+</div>
+</div>
+
+<!-- Slide 7 -->
+<div class="slide" id="slide6">
+<div class="instruction">Identify the Thin Marker</div>
+<div class="options">
+<div class="card" onclick="checkAnswer(this,false)">
+<img src="assets/thickmarker.png">
+</div>
+<div class="card" onclick="checkAnswer(this,true)">
+<img src="assets/thinmarker.png">
+</div>
+</div>
+</div>
+
+<!-- Slide 8 -->
+<div class="slide final-slide" id="slide7">
+<h1>🎉 Good Job! 🎉</h1>
+</div>
+
+<script>
+
+let currentSlide=0;
+
+setTimeout(()=>{
+showSlide(1);
+},2000);
+
+function showSlide(index){
+
+document.querySelectorAll('.slide').forEach(slide=>{
+slide.classList.remove('active');
+});
+
+document.getElementById('slide'+index).classList.add('active');
+currentSlide=index;
+
+if(index===7){
+createConfetti();
+}
+}
+
+function playAudio(audio){
+
+audio.pause();
+audio.currentTime=0;
+
+let promise=audio.play();
+
+if(promise!==undefined){
+promise.catch(()=>{});
+}
+}
+
+function checkAnswer(element,isCorrect){
+
+if(isCorrect){
+
+showTick();
+
+playAudio(document.getElementById('clap'));
+
+setTimeout(()=>{
+showSlide(currentSlide+1);
+},1500);
+
+}else{
+
+showCross();
+
+playAudio(document.getElementById('wrong'));
+}
+}
+
+function showTick(){
+
+let tick=document.getElementById('tick');
+
+tick.style.display='block';
+
+setTimeout(()=>{
+tick.style.display='none';
+},1000);
+}
+
+function showCross(){
+
+let cross=document.getElementById('cross');
+
+cross.style.display='block';
+
+setTimeout(()=>{
+cross.style.display='none';
+},1000);
+}
+
+function createConfetti(){
+
+for(let i=0;i<150;i++){
+
+let conf=document.createElement('div');
+
+conf.className='confetti';
+
+conf.style.left=Math.random()*100+'vw';
+conf.style.top='-20px';
+
+conf.style.background=
+`hsl(${Math.random()*360},100%,50%)`;
+
+conf.style.animationDuration=
+(Math.random()*3+2)+'s';
+
+document.body.appendChild(conf);
+}
+}
+</script>
+
+</body>
+</html>
