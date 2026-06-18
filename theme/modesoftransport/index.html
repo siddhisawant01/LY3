@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Modes of Transport</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    overflow:hidden;
+    background:#fff;
+}
+
+.slide{
+    width:100vw;
+    height:100vh;
+    display:none;
+    position:relative;
+    overflow:hidden;
+}
+
+.active{
+    display:flex;
+}
+
+/* ---------- SLIDE 1 ---------- */
+#slide1{
+    justify-content:center;
+    align-items:center;
+    background:white;
+}
+
+.logo{
+    width:min(60vw,300px);
+    max-height:250px;
+    object-fit:contain;
+}
+
+/* ---------- SLIDE 2 ---------- */
+#slide2{
+    flex-direction:column;
+    background:url('assets/background.png') center center/cover no-repeat;
+    padding:6px;
+}
+
+.instruction{
+    text-align:center;
+    font-size:clamp(16px,2vw,26px);
+    font-weight:bold;
+    color:#1a237e;
+    background:white;
+    border-radius:12px;
+    padding:8px;
+    margin-bottom:6px;
+}
+
+.upper-section{
+    height:40%;
+    display:flex;
+    gap:8px;
+}
+
+.lower-section{
+    height:60%;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+    padding-top:6px;
+}
+
+.category-box,
+.vehicle-box{
+    background:white;
+    border:4px solid;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.category-box{
+    flex:1;
+}
+
+.category-box:nth-child(1){border-color:#ff6b6b;}
+.category-box:nth-child(2){border-color:#4ecdc4;}
+.category-box:nth-child(3){border-color:#ffa726;}
+
+.vehicle-box:nth-child(odd){border-color:#42a5f5;}
+.vehicle-box:nth-child(even){border-color:#ab47bc;}
+
+.category-box img{
+    width:70%;
+    height:55%;
+    object-fit:contain;
+}
+
+.vehicle-box img{
+    width:70%;
+    height:60%;
+    object-fit:contain;
+}
+
+.label{
+    text-transform:lowercase;
+    font-weight:bold;
+    font-size:clamp(10px,1.2vw,16px);
+    text-align:center;
+}
+
+.drop-area{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:4px;
+    width:100%;
+    height:40%;
+}
+
+.small-added{
+    width:42px !important;
+    height:42px !important;
+}
+
+.selected{
+    box-shadow:0 0 0 5px gold inset;
+}
+
+/* ---------- FEEDBACK ---------- */
+.feedback{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:90px;
+    z-index:999;
+    display:none;
+}
+
+.tick{
+    color:green;
+}
+
+.cross{
+    color:red;
+}
+
+/* ---------- SLIDE 3 ---------- */
+#slide3{
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:url('assets/background.png') center center/cover no-repeat;
+}
+
+.goodjob{
+    font-size:clamp(28px,5vw,60px);
+    font-weight:bold;
+    color:#2e7d32;
+    background:white;
+    padding:15px 25px;
+    border-radius:20px;
+    z-index:10;
+}
+
+.animation-area{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+
+.road{
+    position:absolute;
+    bottom:8%;
+    left:-80px;
+    width:70px;
+    animation:runCar 7s linear infinite;
+}
+
+.ship{
+    position:absolute;
+    bottom:28%;
+    left:-80px;
+    width:70px;
+    animation:sailShip 10s linear infinite;
+}
+
+.balloon{
+    position:absolute;
+    bottom:-80px;
+    right:12%;
+    width:70px;
+    animation:flyBalloon 8s linear infinite;
+}
+
+@keyframes runCar{
+    from{left:-80px;}
+    to{left:110%;}
+}
+
+@keyframes sailShip{
+    from{left:-100px;}
+    to{left:110%;}
+}
+
+@keyframes flyBalloon{
+    from{bottom:-80px;}
+    to{bottom:110%;}
+}
+
+/* Mobile */
+@media(max-width:768px){
+
+.lower-section{
+    grid-template-columns:repeat(5,1fr);
+}
+
+.vehicle-box{
+    min-height:85px;
+}
+
+.category-box{
+    min-height:130px;
+}
+
+.feedback{
+    font-size:70px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUDIO -->
+<audio id="correctSound" src="assets/clap.mp3"></audio>
+
+<!-- wrong sound -->
+<audio id="wrongSound">
+<source src="data:audio/wav;base64,UklGRhQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=">
+</audio>
+
+<!-- FEEDBACK -->
+<div id="tick" class="feedback tick">✔</div>
+<div id="cross" class="feedback cross">✖</div>
+
+<!-- SLIDE 1 -->
+<div class="slide active" id="slide1">
+    <img src="assets/innovine-logo.png" class="logo">
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide" id="slide2">
+
+<div class="instruction">
+Identify the given vehicles and put them in the correct ways
+</div>
+
+<div class="upper-section">
+
+    <div class="category-box category" data-category="air">
+        <img src="assets/air.png">
+        <div class="label">air ways</div>
+        <div class="drop-area"></div>
+    </div>
+
+    <div class="category-box category" data-category="water">
+        <img src="assets/water.png">
+        <div class="label">water ways</div>
+        <div class="drop-area"></div>
+    </div>
+
+    <div class="category-box category" data-category="road">
+        <img src="assets/road.png">
+        <div class="label">road ways</div>
+        <div class="drop-area"></div>
+    </div>
+
+</div>
+
+<div class="lower-section" id="vehicles"></div>
+
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide" id="slide3">
+
+<div class="animation-area">
+
+<img src="assets/car.png" class="road">
+<img src="assets/ship.png" class="ship">
+<img src="assets/hotairballoon.png" class="balloon">
+
+</div>
+
+<div class="goodjob">
+Good job!
+</div>
+
+</div>
+
+<script>
+
+const vehiclesData = [
+{file:'aeroplane.png',label:'aeroplane',answer:'air'},
+{file:'bicycle.png',label:'bicycle',answer:'road'},
+{file:'boat.png',label:'boat',answer:'water'},
+{file:'car.png',label:'car',answer:'road'},
+{file:'helicopter.png',label:'helicopter',answer:'air'},
+{file:'hotairballoon.png',label:'hot air balloon',answer:'air'},
+{file:'sailboat.png',label:'sailboat',answer:'water'},
+{file:'scooty.png',label:'scooty',answer:'road'},
+{file:'train.png',label:'train',answer:'road'},
+{file:'ship.png',label:'ship',answer:'water'}
+];
+
+const vehicleContainer = document.getElementById("vehicles");
+
+vehiclesData.forEach((item,index)=>{
+
+const div=document.createElement("div");
+div.className="vehicle-box vehicle";
+div.dataset.answer=item.answer;
+div.dataset.id=index;
+
+div.innerHTML=`
+<img src="assets/${item.file}">
+<div class="label">${item.label}</div>
+`;
+
+vehicleContainer.appendChild(div);
+
+});
+
+let selectedVehicle=null;
+let solved=0;
+
+document.querySelectorAll(".vehicle").forEach(vehicle=>{
+
+vehicle.addEventListener("click",()=>{
+
+document.querySelectorAll(".vehicle").forEach(v=>v.classList.remove("selected"));
+
+selectedVehicle=vehicle;
+vehicle.classList.add("selected");
+
+});
+
+});
+
+document.querySelectorAll(".category").forEach(category=>{
+
+category.addEventListener("click",()=>{
+
+if(!selectedVehicle) return;
+
+const answer=selectedVehicle.dataset.answer;
+const chosen=category.dataset.category;
+
+if(answer===chosen){
+
+showTick();
+
+document.getElementById("correctSound").play();
+
+const img=selectedVehicle.querySelector("img").cloneNode(true);
+img.classList.add("small-added");
+
+category.querySelector(".drop-area").appendChild(img);
+
+selectedVehicle.remove();
+
+selectedVehicle=null;
+solved++;
+
+if(solved===10){
+
+setTimeout(()=>{
+document.getElementById("slide2").classList.remove("active");
+document.getElementById("slide3").classList.add("active");
+},1200);
+
+}
+
+}else{
+
+showCross();
+
+document.getElementById("wrongSound").play();
+
+}
+
+});
+
+});
+
+function showTick(){
+
+const tick=document.getElementById("tick");
+tick.style.display="block";
+
+setTimeout(()=>{
+tick.style.display="none";
+},800);
+
+}
+
+function showCross(){
+
+const cross=document.getElementById("cross");
+cross.style.display="block";
+
+setTimeout(()=>{
+cross.style.display="none";
+},800);
+
+}
+
+/* Slide 1 -> Slide 2 */
+
+setTimeout(()=>{
+
+document.getElementById("slide1").classList.remove("active");
+document.getElementById("slide2").classList.add("active");
+
+},2500);
+
+</script>
+
+</body>
+</html>
