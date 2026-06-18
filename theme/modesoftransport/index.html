@@ -3,393 +3,449 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Modes of Transport</title>
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
 }
 
-body{
-    overflow:hidden;
-    background:#fff;
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+background:#f5f5f5;
 }
 
 .slide{
-    width:100vw;
-    height:100vh;
-    display:none;
-    position:relative;
-    overflow:hidden;
+width:100vw;
+height:100vh;
+display:none;
+position:relative;
+overflow:hidden;
 }
 
-.active{
-    display:flex;
+.slide.active{
+display:flex;
 }
 
-/* ---------- SLIDE 1 ---------- */
+/* Slide 1 */
+
 #slide1{
-    justify-content:center;
-    align-items:center;
-    background:white;
+justify-content:center;
+align-items:center;
+background:white;
 }
 
 .logo{
-    width:min(60vw,300px);
-    max-height:250px;
-    object-fit:contain;
+max-width:70%;
+max-height:70%;
+object-fit:contain;
 }
 
-/* ---------- SLIDE 2 ---------- */
+/* Slide 2 */
+
 #slide2{
-    flex-direction:column;
-    background:url('assets/background.png') center center/cover no-repeat;
-    padding:6px;
+flex-direction:column;
+background-image:url('assets/background.png');
+background-size:cover;
+background-position:center;
+padding:0.5vh;
 }
 
 .instruction{
-    text-align:center;
-    font-size:clamp(16px,2vw,26px);
-    font-weight:bold;
-    color:#1a237e;
-    background:white;
-    border-radius:12px;
-    padding:8px;
-    margin-bottom:6px;
+height:8%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:clamp(14px,2vw,26px);
+font-weight:bold;
+color:#333;
+text-align:center;
 }
 
-.upper-section{
-    height:40%;
-    display:flex;
-    gap:8px;
+.topSection{
+height:38%;
+display:flex;
+gap:0.5%;
 }
 
-.lower-section{
-    height:60%;
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:6px;
-    padding-top:6px;
+.bottomSection{
+height:54%;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+grid-template-rows:repeat(2,1fr);
+gap:0.4%;
+padding-top:0.3%;
 }
 
-.category-box,
-.vehicle-box{
-    background:white;
-    border:4px solid;
-    border-radius:18px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    overflow:hidden;
+.category{
+position:relative;
+display:flex;
+flex-direction:column;
+border-radius:18px;
+overflow:hidden;
+border:6px solid;
+background:white;
 }
 
-.category-box{
-    flex:1;
+.airBorder{
+border-color:#ff6ec7;
 }
 
-.category-box:nth-child(1){border-color:#ff6b6b;}
-.category-box:nth-child(2){border-color:#4ecdc4;}
-.category-box:nth-child(3){border-color:#ffa726;}
-
-.vehicle-box:nth-child(odd){border-color:#42a5f5;}
-.vehicle-box:nth-child(even){border-color:#ab47bc;}
-
-.category-box img{
-    width:70%;
-    height:55%;
-    object-fit:contain;
+.waterBorder{
+border-color:#00bfff;
 }
 
-.vehicle-box img{
-    width:70%;
-    height:60%;
-    object-fit:contain;
+.roadBorder{
+border-color:#32cd32;
+}
+
+.categoryImage{
+height:84%;
+width:100%;
+object-fit:cover;
 }
 
 .label{
-    text-transform:lowercase;
-    font-weight:bold;
-    font-size:clamp(10px,1.2vw,16px);
-    text-align:center;
+height:16%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-weight:bold;
+font-size:clamp(10px,1.2vw,20px);
+background:white;
+text-transform:lowercase;
 }
 
-.drop-area{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    align-items:center;
-    gap:4px;
-    width:100%;
-    height:40%;
+.vehicle{
+position:relative;
+display:flex;
+flex-direction:column;
+border-radius:15px;
+overflow:hidden;
+border:4px solid #ff9800;
+background:white;
 }
 
-.small-added{
-    width:42px !important;
-    height:42px !important;
+.vehicle img{
+height:80%;
+width:100%;
+object-fit:contain;
+padding:2px;
 }
 
-.selected{
-    box-shadow:0 0 0 5px gold inset;
+.vehicleLabel{
+height:20%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:clamp(9px,1vw,18px);
+font-weight:bold;
+text-transform:lowercase;
 }
 
-/* ---------- FEEDBACK ---------- */
-.feedback{
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    font-size:90px;
-    z-index:999;
-    display:none;
+.vehicle.selected{
+transform:scale(1.05);
+box-shadow:0 0 12px gold;
+}
+
+.tickCross{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+font-size:100px;
+display:none;
+z-index:9999;
+pointer-events:none;
 }
 
 .tick{
-    color:green;
+color:green;
 }
 
 .cross{
-    color:red;
+color:red;
 }
 
-/* ---------- SLIDE 3 ---------- */
+.placed{
+width:60px;
+height:60px;
+object-fit:contain;
+position:absolute;
+z-index:5;
+}
+
+/* Slide 3 */
+
 #slide3{
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    background:url('assets/background.png') center center/cover no-repeat;
+background:linear-gradient(#87ceeb,#dff6ff);
+flex-direction:column;
+justify-content:center;
+align-items:center;
+overflow:hidden;
 }
 
 .goodjob{
-    font-size:clamp(28px,5vw,60px);
-    font-weight:bold;
-    color:#2e7d32;
-    background:white;
-    padding:15px 25px;
-    border-radius:20px;
-    z-index:10;
+font-size:clamp(30px,5vw,70px);
+font-weight:bold;
+color:#ff5722;
+margin-bottom:40px;
 }
 
-.animation-area{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
+.animationArea{
+position:relative;
+width:100%;
+height:60%;
 }
 
 .road{
-    position:absolute;
-    bottom:8%;
-    left:-80px;
-    width:70px;
-    animation:runCar 7s linear infinite;
+position:absolute;
+bottom:0;
+width:100%;
+height:80px;
+background:#555;
 }
 
-.ship{
-    position:absolute;
-    bottom:28%;
-    left:-80px;
-    width:70px;
-    animation:sailShip 10s linear infinite;
+.road::after{
+content:"";
+position:absolute;
+top:36px;
+width:100%;
+height:8px;
+background:repeating-linear-gradient(
+to right,
+white 0px,
+white 30px,
+transparent 30px,
+transparent 60px
+);
 }
 
-.balloon{
-    position:absolute;
-    bottom:-80px;
-    right:12%;
-    width:70px;
-    animation:flyBalloon 8s linear infinite;
+.carAnim{
+position:absolute;
+bottom:30px;
+width:90px;
+animation:drive 6s linear infinite;
 }
 
-@keyframes runCar{
-    from{left:-80px;}
-    to{left:110%;}
+.shipAnim{
+position:absolute;
+bottom:120px;
+width:90px;
+animation:sail 10s linear infinite;
 }
 
-@keyframes sailShip{
-    from{left:-100px;}
-    to{left:110%;}
+.balloonAnim{
+position:absolute;
+top:40px;
+width:90px;
+animation:fly 8s linear infinite;
 }
 
-@keyframes flyBalloon{
-    from{bottom:-80px;}
-    to{bottom:110%;}
+@keyframes drive{
+0%{left:-100px;}
+100%{left:100%;}
 }
 
-/* Mobile */
-@media(max-width:768px){
-
-.lower-section{
-    grid-template-columns:repeat(5,1fr);
+@keyframes sail{
+0%{left:100%;}
+100%{left:-120px;}
 }
 
-.vehicle-box{
-    min-height:85px;
-}
-
-.category-box{
-    min-height:130px;
-}
-
-.feedback{
-    font-size:70px;
-}
+@keyframes fly{
+0%{left:-100px;}
+100%{left:100%;}
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO -->
-<audio id="correctSound" src="assets/clap.mp3"></audio>
+<!-- Slide 1 -->
 
-<!-- wrong sound -->
-<audio id="wrongSound">
-<source src="data:audio/wav;base64,UklGRhQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=">
-</audio>
-
-<!-- FEEDBACK -->
-<div id="tick" class="feedback tick">✔</div>
-<div id="cross" class="feedback cross">✖</div>
-
-<!-- SLIDE 1 -->
-<div class="slide active" id="slide1">
-    <img src="assets/innovine-logo.png" class="logo">
+<div id="slide1" class="slide active">
+<img class="logo" src="assets/innovine-logo.png">
 </div>
 
-<!-- SLIDE 2 -->
-<div class="slide" id="slide2">
+<!-- Slide 2 -->
+
+<div id="slide2" class="slide">
 
 <div class="instruction">
 Identify the given vehicles and put them in the correct ways
 </div>
 
-<div class="upper-section">
+<div class="topSection">
 
-    <div class="category-box category" data-category="air">
-        <img src="assets/air.png">
-        <div class="label">air ways</div>
-        <div class="drop-area"></div>
-    </div>
+<div class="category airBorder category" data-category="air">
+<img src="assets/air.png" class="categoryImage">
+<div class="label">air ways</div>
+</div>
 
-    <div class="category-box category" data-category="water">
-        <img src="assets/water.png">
-        <div class="label">water ways</div>
-        <div class="drop-area"></div>
-    </div>
+<div class="category waterBorder category" data-category="water">
+<img src="assets/water.png" class="categoryImage">
+<div class="label">water ways</div>
+</div>
 
-    <div class="category-box category" data-category="road">
-        <img src="assets/road.png">
-        <div class="label">road ways</div>
-        <div class="drop-area"></div>
-    </div>
+<div class="category roadBorder category" data-category="road">
+<img src="assets/road.png" class="categoryImage">
+<div class="label">road ways</div>
+</div>
 
 </div>
 
-<div class="lower-section" id="vehicles"></div>
+<div class="bottomSection" id="vehicleContainer">
+
+<div class="vehicle" data-answer="air">
+<img src="assets/aeroplane.png">
+<div class="vehicleLabel">aeroplane</div>
+</div>
+
+<div class="vehicle" data-answer="road">
+<img src="assets/bicycle.png">
+<div class="vehicleLabel">bicycle</div>
+</div>
+
+<div class="vehicle" data-answer="water">
+<img src="assets/boat.png">
+<div class="vehicleLabel">boat</div>
+</div>
+
+<div class="vehicle" data-answer="road">
+<img src="assets/car.png">
+<div class="vehicleLabel">car</div>
+</div>
+
+<div class="vehicle" data-answer="air">
+<img src="assets/helicopter.png">
+<div class="vehicleLabel">helicopter</div>
+</div>
+
+<div class="vehicle" data-answer="air">
+<img src="assets/hotairballoon.png">
+<div class="vehicleLabel">hot air balloon</div>
+</div>
+
+<div class="vehicle" data-answer="water">
+<img src="assets/sailboat.png">
+<div class="vehicleLabel">sailboat</div>
+</div>
+
+<div class="vehicle" data-answer="road">
+<img src="assets/scooty.png">
+<div class="vehicleLabel">scooty</div>
+</div>
+
+<div class="vehicle" data-answer="road">
+<img src="assets/train.png">
+<div class="vehicleLabel">train</div>
+</div>
+
+<div class="vehicle" data-answer="water">
+<img src="assets/ship.png">
+<div class="vehicleLabel">ship</div>
+</div>
 
 </div>
 
-<!-- SLIDE 3 -->
-<div class="slide" id="slide3">
-
-<div class="animation-area">
-
-<img src="assets/car.png" class="road">
-<img src="assets/ship.png" class="ship">
-<img src="assets/hotairballoon.png" class="balloon">
+<div id="tick" class="tickCross tick">✓</div>
+<div id="cross" class="tickCross cross">✗</div>
 
 </div>
+
+<!-- Slide 3 -->
+
+<div id="slide3" class="slide">
 
 <div class="goodjob">
 Good job!
 </div>
 
+<div class="animationArea">
+
+<img src="assets/car.png" class="carAnim">
+<img src="assets/ship.png" class="shipAnim">
+<img src="assets/hotairballoon.png" class="balloonAnim">
+
+<div class="road"></div>
+
 </div>
+
+</div>
+
+<audio id="correctSound" src="assets/clap.mp3"></audio>
 
 <script>
 
-const vehiclesData = [
-{file:'aeroplane.png',label:'aeroplane',answer:'air'},
-{file:'bicycle.png',label:'bicycle',answer:'road'},
-{file:'boat.png',label:'boat',answer:'water'},
-{file:'car.png',label:'car',answer:'road'},
-{file:'helicopter.png',label:'helicopter',answer:'air'},
-{file:'hotairballoon.png',label:'hot air balloon',answer:'air'},
-{file:'sailboat.png',label:'sailboat',answer:'water'},
-{file:'scooty.png',label:'scooty',answer:'road'},
-{file:'train.png',label:'train',answer:'road'},
-{file:'ship.png',label:'ship',answer:'water'}
-];
+setTimeout(()=>{
+document.getElementById('slide1').classList.remove('active');
+document.getElementById('slide2').classList.add('active');
+},3000);
 
-const vehicleContainer = document.getElementById("vehicles");
-
-vehiclesData.forEach((item,index)=>{
-
-const div=document.createElement("div");
-div.className="vehicle-box vehicle";
-div.dataset.answer=item.answer;
-div.dataset.id=index;
-
-div.innerHTML=`
-<img src="assets/${item.file}">
-<div class="label">${item.label}</div>
-`;
-
-vehicleContainer.appendChild(div);
-
-});
+const vehicles=document.querySelectorAll('.vehicle');
+const categories=document.querySelectorAll('.category');
 
 let selectedVehicle=null;
-let solved=0;
+let completed=0;
 
-document.querySelectorAll(".vehicle").forEach(vehicle=>{
+vehicles.forEach(vehicle=>{
 
-vehicle.addEventListener("click",()=>{
+vehicle.addEventListener('click',()=>{
 
-document.querySelectorAll(".vehicle").forEach(v=>v.classList.remove("selected"));
+document.querySelectorAll('.vehicle').forEach(v=>{
+v.classList.remove('selected');
+});
 
 selectedVehicle=vehicle;
-vehicle.classList.add("selected");
+vehicle.classList.add('selected');
 
 });
 
 });
 
-document.querySelectorAll(".category").forEach(category=>{
+categories.forEach(category=>{
 
-category.addEventListener("click",()=>{
+category.addEventListener('click',()=>{
 
 if(!selectedVehicle) return;
 
 const answer=selectedVehicle.dataset.answer;
-const chosen=category.dataset.category;
+const target=category.dataset.category;
 
-if(answer===chosen){
+if(answer===target){
 
 showTick();
 
-document.getElementById("correctSound").play();
+document.getElementById('correctSound').play();
 
-const img=selectedVehicle.querySelector("img").cloneNode(true);
-img.classList.add("small-added");
+const img=selectedVehicle.querySelector('img').cloneNode(true);
+img.className='placed';
 
-category.querySelector(".drop-area").appendChild(img);
+const x=Math.random()*120+20;
+const y=Math.random()*120+20;
 
-selectedVehicle.remove();
+img.style.left=x+'px';
+img.style.top=y+'px';
 
-selectedVehicle=null;
-solved++;
+category.appendChild(img);
 
-if(solved===10){
+selectedVehicle.style.visibility='hidden';
+selectedVehicle.style.pointerEvents='none';
+
+completed++;
+
+if(completed===10){
 
 setTimeout(()=>{
-document.getElementById("slide2").classList.remove("active");
-document.getElementById("slide3").classList.add("active");
-},1200);
+document.getElementById('slide2').classList.remove('active');
+document.getElementById('slide3').classList.add('active');
+},1500);
 
 }
 
@@ -397,9 +453,14 @@ document.getElementById("slide3").classList.add("active");
 
 showCross();
 
-document.getElementById("wrongSound").play();
+const wrongAudio=new Audio();
+wrongAudio.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
+wrongAudio.play();
 
 }
+
+selectedVehicle.classList.remove('selected');
+selectedVehicle=null;
 
 });
 
@@ -407,35 +468,27 @@ document.getElementById("wrongSound").play();
 
 function showTick(){
 
-const tick=document.getElementById("tick");
-tick.style.display="block";
+const tick=document.getElementById('tick');
+
+tick.style.display='block';
 
 setTimeout(()=>{
-tick.style.display="none";
+tick.style.display='none';
 },800);
 
 }
 
 function showCross(){
 
-const cross=document.getElementById("cross");
-cross.style.display="block";
+const cross=document.getElementById('cross');
+
+cross.style.display='block';
 
 setTimeout(()=>{
-cross.style.display="none";
+cross.style.display='none';
 },800);
 
 }
-
-/* Slide 1 -> Slide 2 */
-
-setTimeout(()=>{
-
-document.getElementById("slide1").classList.remove("active");
-document.getElementById("slide2").classList.add("active");
-
-},2500);
-
 </script>
 
 </body>
