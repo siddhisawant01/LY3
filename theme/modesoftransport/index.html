@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 
 <title>Modes of Transport</title>
 
@@ -12,19 +12,16 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+font-family:Arial, sans-serif;
 }
 
-html,body{
-width:100%;
-height:100%;
+body{
 overflow:hidden;
-font-family:Arial, Helvetica, sans-serif;
 background:#ffffff;
 }
 
 .slide{
-width:100%;
+width:100vw;
 height:100vh;
 display:none;
 }
@@ -33,419 +30,444 @@ display:none;
 display:flex;
 }
 
-button{
-cursor:pointer;
-border:none;
-}
+/* ---------- Slide 1 ---------- */
 
-/* -------------------- */
-/* Slide 1 */
-/* -------------------- */
-
-#welcome{
+#slide1{
 justify-content:center;
 align-items:center;
 background:white;
-flex-direction:column;
 }
 
-.logo{
+#slide1 img{
 max-width:70%;
-max-height:45vh;
-object-fit:contain;
+max-height:60%;
 }
 
-.startBtn{
-margin-top:30px;
-padding:16px 40px;
-font-size:28px;
-font-weight:bold;
-border-radius:20px;
-background:#ff9800;
-color:white;
-}
+/* ---------- Slide 2 ---------- */
 
-/* -------------------- */
-/* Slide 2 */
-/* -------------------- */
-
-#gameSlide{
+#slide2{
 flex-direction:column;
-height:100vh;
-padding:0.5vh;
-background:white;
+padding:8px;
+background:#f5fbff;
 }
 
 .instruction{
-height:8%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:clamp(18px,2.6vw,30px);
-font-weight:bold;
-color:#222;
 text-align:center;
+font-size:clamp(14px,2vw,24px);
+font-weight:bold;
+margin-bottom:8px;
+color:#003366;
 }
 
-.topSection{
-height:40%;
+.top-section{
+height:42%;
 display:flex;
-gap:0.8%;
-}
-
-.bottomSection{
-height:52%;
-display:grid;
-grid-template-columns:repeat(5,1fr);
-grid-template-rows:repeat(2,1fr);
-gap:0.8%;
-padding-top:0.5%;
+gap:8px;
 }
 
 .category{
-position:relative;
+flex:1;
+border:6px solid;
 border-radius:20px;
 overflow:hidden;
-border:6px solid;
 display:flex;
 flex-direction:column;
+background:white;
+position:relative;
 }
 
-.airBorder{
-border-color:#00bcd4;
+.air{
+border-color:#ff7f50;
 }
 
-.waterBorder{
-border-color:#2196f3;
+.water{
+border-color:#1e90ff;
 }
 
-.roadBorder{
-border-color:#ff9800;
+.road{
+border-color:#32cd32;
 }
 
-.category img{
+.category-image{
+height:70%;
 width:100%;
-height:85%;
 object-fit:cover;
 display:block;
 }
 
-.label{
-height:15%;
+.category-label{
+height:30%;
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
+font-size:clamp(14px,2vw,22px);
 font-weight:bold;
-font-size:clamp(14px,1.6vw,22px);
-background:white;
 text-transform:lowercase;
 }
 
+.matched-container{
+position:absolute;
+top:10px;
+left:10px;
+right:10px;
+bottom:40px;
+display:flex;
+flex-wrap:wrap;
+gap:4px;
+align-content:flex-start;
+pointer-events:none;
+}
+
+.matched-container img{
+width:60px;
+height:60px;
+object-fit:contain;
+}
+
+.bottom-section{
+height:58%;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:6px;
+padding-top:8px;
+}
+
 .vehicle{
-position:relative;
-border-radius:18px;
+border:4px solid;
+border-radius:15px;
 overflow:hidden;
-border:4px solid #9c27b0;
 background:white;
 display:flex;
 flex-direction:column;
+cursor:pointer;
+transition:.2s;
 }
 
-.vehicle img{
-width:100%;
-height:80%;
-object-fit:contain;
-padding:2px;
+.vehicle:nth-child(odd){
+border-color:#ff69b4;
 }
 
-.vehicle .label{
-height:20%;
-font-size:clamp(11px,1.2vw,18px);
+.vehicle:nth-child(even){
+border-color:#00bfff;
 }
 
 .vehicle.selected{
 transform:scale(1.05);
-border-color:red;
 }
 
-.tick,
-.cross{
-position:fixed;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
-font-size:100px;
-font-weight:bold;
-display:none;
-z-index:9999;
-pointer-events:none;
-}
-
-.tick{
-color:#00c853;
-}
-
-.cross{
-color:#ff1744;
-}
-
-/* -------------------- */
-/* Placed items */
-/* -------------------- */
-
-.placed{
-width:60px;
-height:60px;
+.vehicle img{
+width:100%;
+height:70%;
 object-fit:contain;
-position:absolute;
 }
 
-/* -------------------- */
-/* Slide 3 */
-/* -------------------- */
+.vehicle span{
+height:30%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+font-weight:bold;
+text-transform:lowercase;
+text-align:center;
+padding:2px;
+}
 
-#finalSlide{
-background:linear-gradient(#87ceeb 0%, #87ceeb 60%, #66bb6a 60%);
+.feedback{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:90px;
+display:none;
+z-index:999;
+}
+
+/* ---------- Slide 3 ---------- */
+
+#slide3{
+background:linear-gradient(#87ceeb,#dff6ff);
+flex-direction:column;
 position:relative;
 overflow:hidden;
-justify-content:center;
-align-items:flex-start;
 }
 
-.goodJob{
-position:absolute;
-top:4%;
-width:100%;
+.goodjob{
 text-align:center;
-font-size:clamp(30px,5vw,60px);
+font-size:40px;
 font-weight:bold;
-color:#ff5722;
-animation:bounce 1s infinite;
+color:#004080;
+margin-top:20px;
 }
 
-@keyframes bounce{
-50%{transform:translateY(-10px);}
+.sun{
+position:absolute;
+top:20px;
+right:40px;
+width:90px;
+height:90px;
+border-radius:50%;
+background:gold;
 }
 
-.road{
+.road-strip{
 position:absolute;
 bottom:0;
-height:18%;
 width:100%;
-background:#555;
+height:120px;
+background:#444;
 }
 
-.track{
+.road-strip:before{
+content:"";
 position:absolute;
-bottom:18%;
-height:5%;
+top:55px;
 width:100%;
-background:#7f8c8d;
+height:10px;
+background:repeating-linear-gradient(
+to right,
+white 0px,
+white 40px,
+transparent 40px,
+transparent 80px
+);
 }
 
-.trainAnim{
+.car{
 position:absolute;
-bottom:18%;
-left:-200px;
+bottom:40px;
+font-size:45px;
+animation:carMove 6s linear infinite;
+}
+
+.train{
+position:absolute;
+bottom:125px;
 font-size:50px;
-animation:trainRun 8s linear infinite;
+animation:trainMove 9s linear infinite;
 }
 
-@keyframes trainRun{
-from{left:-200px;}
-to{left:110%;}
-}
-
-.carAnim{
+.ship{
 position:absolute;
-bottom:6%;
-left:-100px;
+bottom:170px;
 font-size:50px;
-animation:carRun 6s linear infinite;
-}
-
-@keyframes carRun{
-from{left:-100px;}
-to{left:110%;}
-}
-
-.ship1{
-position:absolute;
-top:55%;
-left:-150px;
-font-size:60px;
-animation:shipMove 12s linear infinite;
-}
-
-.ship2{
-position:absolute;
-top:45%;
-left:-300px;
-font-size:50px;
-animation:shipMove 15s linear infinite;
-}
-
-@keyframes shipMove{
-from{left:-200px;}
-to{left:120%;}
+animation:shipMove 10s linear infinite;
 }
 
 .balloon{
 position:absolute;
-font-size:60px;
-left:15%;
-bottom:-100px;
-animation:balloonFly 12s linear infinite;
+font-size:50px;
+animation:balloonMove 12s linear infinite;
 }
 
-@keyframes balloonFly{
-from{
-bottom:-100px;
+@keyframes carMove{
+from{left:-60px;}
+to{left:110%;}
 }
-to{
-bottom:100%;
+
+@keyframes trainMove{
+from{left:110%;}
+to{left:-120px;}
+}
+
+@keyframes shipMove{
+from{left:-80px;}
+to{left:110%;}
+}
+
+@keyframes balloonMove{
+0%{
+left:-50px;
+top:250px;
+}
+100%{
+left:110%;
+top:60px;
 }
 }
 
-.waterArea{
-position:absolute;
-top:38%;
-height:22%;
-width:100%;
-background:#42a5f5;
+@media(max-width:700px){
+
+.bottom-section{
+grid-template-columns:repeat(5,1fr);
+}
+
+.vehicle span{
+font-size:10px;
+}
+
+.matched-container img{
+width:40px;
+height:40px;
+}
 }
 
 </style>
 </head>
-
 <body>
 
-<!-- AUDIO -->
-<audio id="clapSound" preload="auto">
-<source src="assets/clap.mp3" type="audio/mpeg">
-</audio>
+<!-- Slide 1 -->
 
-<audio id="wrongSound" preload="auto">
-<source src="assets/indext.html" type="audio/mpeg">
-</audio>
-
-<!-- SLIDE 1 -->
-
-<div class="slide active" id="welcome">
-
-<img class="logo"
-src="assets/innovine-logo.png">
-
-<button class="startBtn" onclick="startGame()">Start</button>
-
+<div class="slide active" id="slide1">
+<img src="assets/innovine-logo.png">
 </div>
 
-<!-- SLIDE 2 -->
+<!-- Slide 2 -->
 
-<div class="slide" id="gameSlide">
+<div class="slide" id="slide2">
 
 <div class="instruction">
 Identify the given vehicles and put them in the correct ways
 </div>
 
-<div class="topSection">
+<div class="top-section">
 
-<div class="category airBorder" data-category="air">
-<img src="assets/air.png">
-<div class="label">air ways</div>
+<div class="category air" data-type="air">
+<img class="category-image" src="assets/air.png">
+<div class="matched-container" id="airMatched"></div>
+<div class="category-label">air ways</div>
 </div>
 
-<div class="category waterBorder" data-category="water">
-<img src="assets/water.png">
-<div class="label">water ways</div>
+<div class="category water" data-type="water">
+<img class="category-image" src="assets/water.png">
+<div class="matched-container" id="waterMatched"></div>
+<div class="category-label">water ways</div>
 </div>
 
-<div class="category roadBorder" data-category="road">
-<img src="assets/road.png">
-<div class="label">road ways</div>
-</div>
-
-</div>
-
-<div class="bottomSection" id="vehicleArea">
-
+<div class="category road" data-type="road">
+<img class="category-image" src="assets/road.png">
+<div class="matched-container" id="roadMatched"></div>
+<div class="category-label">road ways</div>
 </div>
 
 </div>
 
-<!-- SLIDE 3 -->
+<div class="bottom-section" id="vehicleArea"></div>
 
-<div class="slide" id="finalSlide">
+</div>
 
-<div class="goodJob">Good job!</div>
+<!-- Slide 3 -->
 
-<div class="waterArea"></div>
+<div class="slide" id="slide3">
+
+<div class="sun"></div>
+
+<div class="goodjob">
+Good job!
+</div>
 
 <div class="balloon">🎈</div>
+<div class="ship">🚢</div>
+<div class="train">🚂</div>
+<div class="car">🚗</div>
 
-<div class="ship1">🚢</div>
-
-<div class="ship2">⛵</div>
-
-<div class="trainAnim">🚂🚃🚃</div>
-
-<div class="carAnim">🚗 🚕 🚌</div>
-
-<div class="track"></div>
-
-<div class="road"></div>
+<div class="road-strip"></div>
 
 </div>
 
-<div class="tick" id="tick">✓</div>
-<div class="cross" id="cross">✗</div>
+<div id="feedback" class="feedback"></div>
+
+<audio id="clapSound" src="assets/clap.mp3"></audio>
 
 <script>
 
-const vehicles = [
+setTimeout(()=>{
+document.getElementById('slide1').classList.remove('active');
+document.getElementById('slide2').classList.add('active');
+},2500);
 
-{name:"aeroplane", img:"assets/aeroplane.png", answer:"air"},
-{name:"bicycle", img:"assets/bicycle.png", answer:"road"},
-{name:"boat", img:"assets/boat.png", answer:"water"},
-{name:"car", img:"assets/car.png", answer:"road"},
-{name:"helicopter", img:"assets/helicopter.png", answer:"air"},
-{name:"hot air balloon", img:"assets/hotairballoon.png", answer:"air"},
-{name:"sailboat", img:"assets/sailboat.png", answer:"water"},
-{name:"scooty", img:"assets/scooty.png", answer:"road"},
-{name:"train", img:"assets/train.png", answer:"road"},
-{name:"ship", img:"assets/ship.png", answer:"water"}
+const vehicles=[
+
+{
+name:"aeroplane",
+file:"aeroplane.png",
+answer:"air"
+},
+
+{
+name:"bicycle",
+file:"bicycle.png",
+answer:"road"
+},
+
+{
+name:"boat",
+file:"boat.png",
+answer:"water"
+},
+
+{
+name:"car",
+file:"car.png",
+answer:"road"
+},
+
+{
+name:"helicopter",
+file:"helicopter.png",
+answer:"air"
+},
+
+{
+name:"hot air balloon",
+file:"hotairballoon.png",
+answer:"air"
+},
+
+{
+name:"sailboat",
+file:"sailboat.png",
+answer:"water"
+},
+
+{
+name:"scooty",
+file:"scooty.png",
+answer:"road"
+},
+
+{
+name:"train",
+file:"train.png",
+answer:"road"
+},
+
+{
+name:"ship",
+file:"ship.png",
+answer:"water"
+}
 
 ];
 
-let selectedVehicle = null;
-let completed = 0;
+const area=document.getElementById("vehicleArea");
 
-const vehicleArea = document.getElementById("vehicleArea");
-
-vehicles.forEach((v,index)=>{
+vehicles.forEach(v=>{
 
 const card=document.createElement("div");
 card.className="vehicle";
 card.dataset.answer=v.answer;
+card.dataset.file=v.file;
 
 card.innerHTML=`
-<img src="${v.img}">
-<div class="label">${v.name}</div>
+<img src="assets/${v.file}">
+<span>${v.name}</span>
 `;
 
 card.onclick=()=>{
-
 document.querySelectorAll(".vehicle")
 .forEach(x=>x.classList.remove("selected"));
 
-selectedVehicle=card;
 card.classList.add("selected");
-
+selectedVehicle=card;
 };
 
-vehicleArea.appendChild(card);
+area.appendChild(card);
 
 });
+
+let selectedVehicle=null;
+let completed=0;
 
 document.querySelectorAll(".category").forEach(cat=>{
 
@@ -454,27 +476,22 @@ cat.onclick=()=>{
 if(!selectedVehicle) return;
 
 const correct=
-selectedVehicle.dataset.answer===
-cat.dataset.category;
+selectedVehicle.dataset.answer===cat.dataset.type;
 
 if(correct){
 
+showFeedback("✅");
+
 document.getElementById("clapSound").play();
 
-showTick();
+const img=document.createElement("img");
 
-const img=
-selectedVehicle.querySelector("img").cloneNode(true);
+img.src=
+`assets/${selectedVehicle.dataset.file}`;
 
-img.className="placed";
-
-img.style.left=
-Math.random()*70+"%";
-
-img.style.top=
-Math.random()*60+"%";
-
-cat.appendChild(img);
+document.getElementById(
+cat.dataset.type+"Matched"
+).appendChild(img);
 
 selectedVehicle.remove();
 
@@ -486,21 +503,25 @@ if(completed===10){
 
 setTimeout(()=>{
 
-document.getElementById("gameSlide").classList.remove("active");
-document.getElementById("finalSlide").classList.add("active");
+document.getElementById("slide2")
+.classList.remove("active");
+
+document.getElementById("slide3")
+.classList.add("active");
 
 },1200);
-
 }
 
 }else{
 
-document.getElementById("wrongSound").play();
+showFeedback("❌");
 
-showCross();
+const wrong=
+new Audio(
+"https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"
+);
 
-selectedVehicle.classList.remove("selected");
-selectedVehicle=null;
+wrong.play();
 
 }
 
@@ -508,34 +529,16 @@ selectedVehicle=null;
 
 });
 
-function showTick(){
+function showFeedback(symbol){
 
-const t=document.getElementById("tick");
+const f=document.getElementById("feedback");
 
-t.style.display="block";
-
-setTimeout(()=>{
-t.style.display="none";
-},800);
-
-}
-
-function showCross(){
-
-const c=document.getElementById("cross");
-
-c.style.display="block";
+f.innerHTML=symbol;
+f.style.display="block";
 
 setTimeout(()=>{
-c.style.display="none";
+f.style.display="none";
 },800);
-
-}
-
-function startGame(){
-
-document.getElementById("welcome").classList.remove("active");
-document.getElementById("gameSlide").classList.add("active");
 
 }
 
