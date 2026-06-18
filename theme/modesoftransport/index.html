@@ -7,275 +7,342 @@
 <title>Modes of Transport</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial, sans-serif;
+-webkit-tap-highlight-color:transparent;
 }
 
 html,body{
 width:100%;
 height:100%;
 overflow:hidden;
-background:#f5f5f5;
+font-family:Arial, Helvetica, sans-serif;
+background:#ffffff;
 }
 
 .slide{
-width:100vw;
+width:100%;
 height:100vh;
 display:none;
-position:relative;
-overflow:hidden;
 }
 
 .slide.active{
 display:flex;
 }
 
-/* Slide 1 */
+button{
+cursor:pointer;
+border:none;
+}
 
-#slide1{
+/* -------------------- */
+/* Slide 1 */
+/* -------------------- */
+
+#welcome{
 justify-content:center;
 align-items:center;
 background:white;
+flex-direction:column;
 }
 
 .logo{
 max-width:70%;
-max-height:70%;
+max-height:45vh;
 object-fit:contain;
 }
 
-/* Slide 2 */
+.startBtn{
+margin-top:30px;
+padding:16px 40px;
+font-size:28px;
+font-weight:bold;
+border-radius:20px;
+background:#ff9800;
+color:white;
+}
 
-#slide2{
+/* -------------------- */
+/* Slide 2 */
+/* -------------------- */
+
+#gameSlide{
 flex-direction:column;
-background-image:url('assets/background.png');
-background-size:cover;
-background-position:center;
+height:100vh;
 padding:0.5vh;
+background:white;
 }
 
 .instruction{
 height:8%;
 display:flex;
-justify-content:center;
 align-items:center;
-font-size:clamp(14px,2vw,26px);
+justify-content:center;
+font-size:clamp(18px,2.6vw,30px);
 font-weight:bold;
-color:#333;
+color:#222;
 text-align:center;
 }
 
 .topSection{
-height:38%;
+height:40%;
 display:flex;
-gap:0.5%;
+gap:0.8%;
 }
 
 .bottomSection{
-height:54%;
+height:52%;
 display:grid;
 grid-template-columns:repeat(5,1fr);
 grid-template-rows:repeat(2,1fr);
-gap:0.4%;
-padding-top:0.3%;
+gap:0.8%;
+padding-top:0.5%;
 }
 
 .category{
 position:relative;
-display:flex;
-flex-direction:column;
-border-radius:18px;
+border-radius:20px;
 overflow:hidden;
 border:6px solid;
-background:white;
+display:flex;
+flex-direction:column;
 }
 
 .airBorder{
-border-color:#ff6ec7;
+border-color:#00bcd4;
 }
 
 .waterBorder{
-border-color:#00bfff;
+border-color:#2196f3;
 }
 
 .roadBorder{
-border-color:#32cd32;
+border-color:#ff9800;
 }
 
-.categoryImage{
-height:84%;
+.category img{
 width:100%;
+height:85%;
 object-fit:cover;
+display:block;
 }
 
 .label{
-height:16%;
+height:15%;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 font-weight:bold;
-font-size:clamp(10px,1.2vw,20px);
+font-size:clamp(14px,1.6vw,22px);
 background:white;
 text-transform:lowercase;
 }
 
 .vehicle{
 position:relative;
+border-radius:18px;
+overflow:hidden;
+border:4px solid #9c27b0;
+background:white;
 display:flex;
 flex-direction:column;
-border-radius:15px;
-overflow:hidden;
-border:4px solid #ff9800;
-background:white;
 }
 
 .vehicle img{
-height:80%;
 width:100%;
+height:80%;
 object-fit:contain;
 padding:2px;
 }
 
-.vehicleLabel{
+.vehicle .label{
 height:20%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:clamp(9px,1vw,18px);
-font-weight:bold;
-text-transform:lowercase;
+font-size:clamp(11px,1.2vw,18px);
 }
 
 .vehicle.selected{
 transform:scale(1.05);
-box-shadow:0 0 12px gold;
+border-color:red;
 }
 
-.tickCross{
-position:absolute;
+.tick,
+.cross{
+position:fixed;
 left:50%;
 top:50%;
 transform:translate(-50%,-50%);
 font-size:100px;
+font-weight:bold;
 display:none;
 z-index:9999;
 pointer-events:none;
 }
 
 .tick{
-color:green;
+color:#00c853;
 }
 
 .cross{
-color:red;
+color:#ff1744;
 }
+
+/* -------------------- */
+/* Placed items */
+/* -------------------- */
 
 .placed{
 width:60px;
 height:60px;
 object-fit:contain;
 position:absolute;
-z-index:5;
 }
 
+/* -------------------- */
 /* Slide 3 */
+/* -------------------- */
 
-#slide3{
-background:linear-gradient(#87ceeb,#dff6ff);
-flex-direction:column;
-justify-content:center;
-align-items:center;
+#finalSlide{
+background:linear-gradient(#87ceeb 0%, #87ceeb 60%, #66bb6a 60%);
+position:relative;
 overflow:hidden;
+justify-content:center;
+align-items:flex-start;
 }
 
-.goodjob{
-font-size:clamp(30px,5vw,70px);
+.goodJob{
+position:absolute;
+top:4%;
+width:100%;
+text-align:center;
+font-size:clamp(30px,5vw,60px);
 font-weight:bold;
 color:#ff5722;
-margin-bottom:40px;
+animation:bounce 1s infinite;
 }
 
-.animationArea{
-position:relative;
-width:100%;
-height:60%;
+@keyframes bounce{
+50%{transform:translateY(-10px);}
 }
 
 .road{
 position:absolute;
 bottom:0;
+height:18%;
 width:100%;
-height:80px;
 background:#555;
 }
 
-.road::after{
-content:"";
+.track{
 position:absolute;
-top:36px;
+bottom:18%;
+height:5%;
 width:100%;
-height:8px;
-background:repeating-linear-gradient(
-to right,
-white 0px,
-white 30px,
-transparent 30px,
-transparent 60px
-);
+background:#7f8c8d;
+}
+
+.trainAnim{
+position:absolute;
+bottom:18%;
+left:-200px;
+font-size:50px;
+animation:trainRun 8s linear infinite;
+}
+
+@keyframes trainRun{
+from{left:-200px;}
+to{left:110%;}
 }
 
 .carAnim{
 position:absolute;
-bottom:30px;
-width:90px;
-animation:drive 6s linear infinite;
+bottom:6%;
+left:-100px;
+font-size:50px;
+animation:carRun 6s linear infinite;
 }
 
-.shipAnim{
+@keyframes carRun{
+from{left:-100px;}
+to{left:110%;}
+}
+
+.ship1{
 position:absolute;
-bottom:120px;
-width:90px;
-animation:sail 10s linear infinite;
+top:55%;
+left:-150px;
+font-size:60px;
+animation:shipMove 12s linear infinite;
 }
 
-.balloonAnim{
+.ship2{
 position:absolute;
-top:40px;
-width:90px;
-animation:fly 8s linear infinite;
+top:45%;
+left:-300px;
+font-size:50px;
+animation:shipMove 15s linear infinite;
 }
 
-@keyframes drive{
-0%{left:-100px;}
-100%{left:100%;}
+@keyframes shipMove{
+from{left:-200px;}
+to{left:120%;}
 }
 
-@keyframes sail{
-0%{left:100%;}
-100%{left:-120px;}
+.balloon{
+position:absolute;
+font-size:60px;
+left:15%;
+bottom:-100px;
+animation:balloonFly 12s linear infinite;
 }
 
-@keyframes fly{
-0%{left:-100px;}
-100%{left:100%;}
+@keyframes balloonFly{
+from{
+bottom:-100px;
 }
+to{
+bottom:100%;
+}
+}
+
+.waterArea{
+position:absolute;
+top:38%;
+height:22%;
+width:100%;
+background:#42a5f5;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- Slide 1 -->
+<!-- AUDIO -->
+<audio id="clapSound" preload="auto">
+<source src="assets/clap.mp3" type="audio/mpeg">
+</audio>
 
-<div id="slide1" class="slide active">
-<img class="logo" src="assets/innovine-logo.png">
+<audio id="wrongSound" preload="auto">
+<source src="assets/indext.html" type="audio/mpeg">
+</audio>
+
+<!-- SLIDE 1 -->
+
+<div class="slide active" id="welcome">
+
+<img class="logo"
+src="assets/innovine-logo.png">
+
+<button class="startBtn" onclick="startGame()">Start</button>
+
 </div>
 
-<!-- Slide 2 -->
+<!-- SLIDE 2 -->
 
-<div id="slide2" class="slide">
+<div class="slide" id="gameSlide">
 
 <div class="instruction">
 Identify the given vehicles and put them in the correct ways
@@ -283,212 +350,195 @@ Identify the given vehicles and put them in the correct ways
 
 <div class="topSection">
 
-<div class="category airBorder category" data-category="air">
-<img src="assets/air.png" class="categoryImage">
+<div class="category airBorder" data-category="air">
+<img src="assets/air.png">
 <div class="label">air ways</div>
 </div>
 
-<div class="category waterBorder category" data-category="water">
-<img src="assets/water.png" class="categoryImage">
+<div class="category waterBorder" data-category="water">
+<img src="assets/water.png">
 <div class="label">water ways</div>
 </div>
 
-<div class="category roadBorder category" data-category="road">
-<img src="assets/road.png" class="categoryImage">
+<div class="category roadBorder" data-category="road">
+<img src="assets/road.png">
 <div class="label">road ways</div>
 </div>
 
 </div>
 
-<div class="bottomSection" id="vehicleContainer">
+<div class="bottomSection" id="vehicleArea">
 
-<div class="vehicle" data-answer="air">
-<img src="assets/aeroplane.png">
-<div class="vehicleLabel">aeroplane</div>
-</div>
-
-<div class="vehicle" data-answer="road">
-<img src="assets/bicycle.png">
-<div class="vehicleLabel">bicycle</div>
-</div>
-
-<div class="vehicle" data-answer="water">
-<img src="assets/boat.png">
-<div class="vehicleLabel">boat</div>
-</div>
-
-<div class="vehicle" data-answer="road">
-<img src="assets/car.png">
-<div class="vehicleLabel">car</div>
-</div>
-
-<div class="vehicle" data-answer="air">
-<img src="assets/helicopter.png">
-<div class="vehicleLabel">helicopter</div>
-</div>
-
-<div class="vehicle" data-answer="air">
-<img src="assets/hotairballoon.png">
-<div class="vehicleLabel">hot air balloon</div>
-</div>
-
-<div class="vehicle" data-answer="water">
-<img src="assets/sailboat.png">
-<div class="vehicleLabel">sailboat</div>
-</div>
-
-<div class="vehicle" data-answer="road">
-<img src="assets/scooty.png">
-<div class="vehicleLabel">scooty</div>
-</div>
-
-<div class="vehicle" data-answer="road">
-<img src="assets/train.png">
-<div class="vehicleLabel">train</div>
-</div>
-
-<div class="vehicle" data-answer="water">
-<img src="assets/ship.png">
-<div class="vehicleLabel">ship</div>
 </div>
 
 </div>
 
-<div id="tick" class="tickCross tick">✓</div>
-<div id="cross" class="tickCross cross">✗</div>
+<!-- SLIDE 3 -->
 
-</div>
+<div class="slide" id="finalSlide">
 
-<!-- Slide 3 -->
+<div class="goodJob">Good job!</div>
 
-<div id="slide3" class="slide">
+<div class="waterArea"></div>
 
-<div class="goodjob">
-Good job!
-</div>
+<div class="balloon">🎈</div>
 
-<div class="animationArea">
+<div class="ship1">🚢</div>
 
-<img src="assets/car.png" class="carAnim">
-<img src="assets/ship.png" class="shipAnim">
-<img src="assets/hotairballoon.png" class="balloonAnim">
+<div class="ship2">⛵</div>
+
+<div class="trainAnim">🚂🚃🚃</div>
+
+<div class="carAnim">🚗 🚕 🚌</div>
+
+<div class="track"></div>
 
 <div class="road"></div>
 
 </div>
 
-</div>
-
-<audio id="correctSound" src="assets/clap.mp3"></audio>
+<div class="tick" id="tick">✓</div>
+<div class="cross" id="cross">✗</div>
 
 <script>
 
-setTimeout(()=>{
-document.getElementById('slide1').classList.remove('active');
-document.getElementById('slide2').classList.add('active');
-},3000);
+const vehicles = [
 
-const vehicles=document.querySelectorAll('.vehicle');
-const categories=document.querySelectorAll('.category');
+{name:"aeroplane", img:"assets/aeroplane.png", answer:"air"},
+{name:"bicycle", img:"assets/bicycle.png", answer:"road"},
+{name:"boat", img:"assets/boat.png", answer:"water"},
+{name:"car", img:"assets/car.png", answer:"road"},
+{name:"helicopter", img:"assets/helicopter.png", answer:"air"},
+{name:"hot air balloon", img:"assets/hotairballoon.png", answer:"air"},
+{name:"sailboat", img:"assets/sailboat.png", answer:"water"},
+{name:"scooty", img:"assets/scooty.png", answer:"road"},
+{name:"train", img:"assets/train.png", answer:"road"},
+{name:"ship", img:"assets/ship.png", answer:"water"}
 
-let selectedVehicle=null;
-let completed=0;
+];
 
-vehicles.forEach(vehicle=>{
+let selectedVehicle = null;
+let completed = 0;
 
-vehicle.addEventListener('click',()=>{
+const vehicleArea = document.getElementById("vehicleArea");
 
-document.querySelectorAll('.vehicle').forEach(v=>{
-v.classList.remove('selected');
+vehicles.forEach((v,index)=>{
+
+const card=document.createElement("div");
+card.className="vehicle";
+card.dataset.answer=v.answer;
+
+card.innerHTML=`
+<img src="${v.img}">
+<div class="label">${v.name}</div>
+`;
+
+card.onclick=()=>{
+
+document.querySelectorAll(".vehicle")
+.forEach(x=>x.classList.remove("selected"));
+
+selectedVehicle=card;
+card.classList.add("selected");
+
+};
+
+vehicleArea.appendChild(card);
+
 });
 
-selectedVehicle=vehicle;
-vehicle.classList.add('selected');
+document.querySelectorAll(".category").forEach(cat=>{
 
-});
-
-});
-
-categories.forEach(category=>{
-
-category.addEventListener('click',()=>{
+cat.onclick=()=>{
 
 if(!selectedVehicle) return;
 
-const answer=selectedVehicle.dataset.answer;
-const target=category.dataset.category;
+const correct=
+selectedVehicle.dataset.answer===
+cat.dataset.category;
 
-if(answer===target){
+if(correct){
+
+document.getElementById("clapSound").play();
 
 showTick();
 
-document.getElementById('correctSound').play();
+const img=
+selectedVehicle.querySelector("img").cloneNode(true);
 
-const img=selectedVehicle.querySelector('img').cloneNode(true);
-img.className='placed';
+img.className="placed";
 
-const x=Math.random()*120+20;
-const y=Math.random()*120+20;
+img.style.left=
+Math.random()*70+"%";
 
-img.style.left=x+'px';
-img.style.top=y+'px';
+img.style.top=
+Math.random()*60+"%";
 
-category.appendChild(img);
+cat.appendChild(img);
 
-selectedVehicle.style.visibility='hidden';
-selectedVehicle.style.pointerEvents='none';
+selectedVehicle.remove();
+
+selectedVehicle=null;
 
 completed++;
 
 if(completed===10){
 
 setTimeout(()=>{
-document.getElementById('slide2').classList.remove('active');
-document.getElementById('slide3').classList.add('active');
-},1500);
+
+document.getElementById("gameSlide").classList.remove("active");
+document.getElementById("finalSlide").classList.add("active");
+
+},1200);
 
 }
 
 }else{
 
+document.getElementById("wrongSound").play();
+
 showCross();
 
-const wrongAudio=new Audio();
-wrongAudio.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
-wrongAudio.play();
+selectedVehicle.classList.remove("selected");
+selectedVehicle=null;
 
 }
 
-selectedVehicle.classList.remove('selected');
-selectedVehicle=null;
-
-});
+};
 
 });
 
 function showTick(){
 
-const tick=document.getElementById('tick');
+const t=document.getElementById("tick");
 
-tick.style.display='block';
+t.style.display="block";
 
 setTimeout(()=>{
-tick.style.display='none';
+t.style.display="none";
 },800);
 
 }
 
 function showCross(){
 
-const cross=document.getElementById('cross');
+const c=document.getElementById("cross");
 
-cross.style.display='block';
+c.style.display="block";
 
 setTimeout(()=>{
-cross.style.display='none';
+c.style.display="none";
 },800);
 
 }
+
+function startGame(){
+
+document.getElementById("welcome").classList.remove("active");
+document.getElementById("gameSlide").classList.add("active");
+
+}
+
 </script>
 
 </body>
