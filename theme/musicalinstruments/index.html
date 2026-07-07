@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Musical Instruments Game</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  user-select: none;
+}
+
+body {
+  background: #fff;
+}
+
+/* Splash Slide */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+#splash img {
+  width: min(55vw, 260px);
+  max-height: 45vh;
+  object-fit: contain;
+}
+
+/* Game Area */
+#game {
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: clamp(10px, 2vw, 22px);
+  position: relative;
+  overflow: hidden;
+}
+
+.instruction {
+  font-size: clamp(18px, 4.5vw, 34px);
+  font-weight: 800;
+  text-align: center;
+  color: #303030;
+  margin: 6px 0 10px;
+  line-height: 1.2;
+}
+
+.note-wrap {
+  width: min(35vh, 180px);
+  height: min(35vh, 180px);
+  border-radius: 50%;
+  background: #ffffffcc;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0 12px;
+  cursor: pointer;
+  animation: softPulse 1.8s infinite;
+}
+
+.note-wrap img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+.tap-text {
+  font-size: clamp(13px, 3vw, 18px);
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.options {
+  width: min(96vw, 900px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 2vw, 18px);
+  margin-top: auto;
+  margin-bottom: clamp(8px, 2vh, 20px);
+}
+
+.option-card {
+  background: #ffffff;
+  border: 3px solid #ffffff;
+  border-radius: 18px;
+  padding: clamp(7px, 1.5vw, 14px);
+  min-height: 120px;
+  max-height: 28vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.13);
+  cursor: pointer;
+  transition: transform 0.15s ease, border 0.15s ease;
+}
+
+.option-card img {
+  width: 100%;
+  height: min(18vh, 135px);
+  object-fit: contain;
+}
+
+.option-card span {
+  margin-top: 5px;
+  font-size: clamp(14px, 3.4vw, 22px);
+  font-weight: 800;
+  color: #333;
+  text-transform: lowercase;
+}
+
+.option-card:active {
+  transform: scale(0.96);
+}
+
+.feedback {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.feedback.show {
+  display: flex;
+}
+
+.mark {
+  width: clamp(95px, 24vw, 170px);
+  height: clamp(95px, 24vw, 170px);
+  border-radius: 50%;
+  background: #ffffffee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(60px, 16vw, 120px);
+  font-weight: bold;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  animation: pop 0.35s ease;
+}
+
+.tick {
+  color: #12a846;
+}
+
+.cross {
+  color: #e53935;
+}
+
+.wrong-shake {
+  animation: shake 0.35s ease;
+}
+
+/* Final Slide */
+.final-slide {
+  background: linear-gradient(135deg, #fff0c7, #d7f9ff);
+  justify-content: center;
+}
+
+.final-message {
+  font-size: clamp(42px, 11vw, 86px);
+  font-weight: 900;
+  color: #2b2b2b;
+  text-align: center;
+  z-index: 3;
+  background: #ffffffcc;
+  padding: 20px 34px;
+  border-radius: 28px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.rain-item {
+  position: absolute;
+  top: -80px;
+  font-size: clamp(30px, 8vw, 62px);
+  animation: rainFall linear forwards;
+  z-index: 1;
+}
+
+.rain-img {
+  position: absolute;
+  top: -90px;
+  width: clamp(42px, 9vw, 78px);
+  height: clamp(42px, 9vw, 78px);
+  object-fit: contain;
+  animation: rainFall linear forwards;
+  z-index: 1;
+}
+
+.play-again {
+  margin-top: 22px;
+  border: none;
+  background: #ffffff;
+  color: #222;
+  font-size: clamp(18px, 4vw, 26px);
+  font-weight: 800;
+  padding: 12px 24px;
+  border-radius: 999px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  cursor: pointer;
+  z-index: 4;
+}
+
+/* Animations */
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-6px); }
+}
+
+@keyframes rainFall {
+  0% {
+    transform: translateY(-80px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh) rotate(360deg);
+    opacity: 0.9;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .slide {
+    padding: 10px 8px;
+  }
+
+  .instruction {
+    font-size: 18px;
+    margin-top: 8px;
+  }
+
+  .note-wrap {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 8px;
+  }
+
+  .options {
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .option-card {
+    min-height: 112px;
+    padding: 6px;
+    border-radius: 14px;
+  }
+
+  .option-card img {
+    height: 76px;
+  }
+
+  .option-card span {
+    font-size: 14px;
+  }
+}
+
+/* Very short screens */
+@media (max-height: 560px) {
+  .instruction {
+    font-size: 17px;
+    margin: 4px 0 6px;
+  }
+
+  .note-wrap {
+    width: 92px;
+    height: 92px;
+    margin-bottom: 4px;
+  }
+
+  .tap-text {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .option-card {
+    min-height: 95px;
+    padding: 5px;
+  }
+
+  .option-card img {
+    height: 58px;
+  }
+
+  .option-card span {
+    font-size: 13px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Slide 1: Logo -->
+<div id="splash">
+  <img src="assets/innovine-logo.png" alt="innovine logo">
+</div>
+
+<!-- Game Slides -->
+<div id="game"></div>
+
+<script>
+const ASSET_PATH = "assets/";
+
+const questions = [
+  {
+    answer: "flute",
+    audio: "flute.mp3",
+    bg: "#f7e9ff",
+    options: ["flute", "drum", "guitar"]
+  },
+  {
+    answer: "violin",
+    audio: "violin.mp3",
+    bg: "#e5f5ff",
+    options: ["violin", "tambourine", "maracas"]
+  },
+  {
+    answer: "clapping",
+    audio: "clapping.png",
+    sound: "drum.mp3",
+    bg: "#fff0d9",
+    options: ["clapping", "xylophone", "flute"]
+  },
+  {
+    answer: "tambourine",
+    audio: "tambourine.mp3",
+    bg: "#e9ffe9",
+    options: ["tambourine", "guitar", "violin"]
+  },
+  {
+    answer: "xylophone",
+    audio: "xylophone.mp3",
+    bg: "#fff4f4",
+    options: ["xylophone", "drum", "maracas"]
+  },
+  {
+    answer: "drum",
+    audio: "drum.mp3",
+    bg: "#eef0ff",
+    options: ["drum", "flute", "tambourine"]
+  },
+  {
+    answer: "maracas",
+    audio: "maracas.mp3",
+    bg: "#f2ffe7",
+    options: ["maracas", "violin", "xylophone"]
+  },
+  {
+    answer: "guitar",
+    audio: "guitar.mp3",
+    bg: "#fff7df",
+    options: ["guitar", "clapping", "drum"]
+  }
+];
+
+let currentIndex = 0;
+let currentAudio = null;
+let lockAnswer = false;
+
+const game = document.getElementById("game");
+const splash = document.getElementById("splash");
+
+setTimeout(() => {
+  splash.style.display = "none";
+  game.style.display = "flex";
+  showQuestion();
+}, 3000);
+
+function showQuestion() {
+  lockAnswer = false;
+  const q = questions[currentIndex];
+
+  game.innerHTML = `
+    <div class="slide" style="background:${q.bg}">
+      <div class="instruction">Listen to the audio and identify the correct musical instrument.</div>
+
+      <div class="note-wrap" onclick="playInstrumentAudio()">
+        <img src="${ASSET_PATH}musicalnote.png" alt="musical note">
+      </div>
+
+      <div class="tap-text">tap the musical note</div>
+
+      <div class="options">
+        ${q.options.map(item => `
+          <div class="option-card" onclick="checkAnswer('${item}', this)">
+            <img src="${ASSET_PATH}${item}.png" alt="${item}">
+            <span>${item}</span>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="feedback" id="feedback">
+        <div class="mark" id="mark"></div>
+      </div>
+    </div>
+  `;
+}
+
+function playInstrumentAudio() {
+  const q = questions[currentIndex];
+
+  stopCurrentAudio();
+
+  let audioFile = q.sound ? q.sound : q.audio;
+  currentAudio = new Audio(ASSET_PATH + audioFile);
+  currentAudio.currentTime = 0;
+  currentAudio.play().catch(() => {});
+}
+
+function stopCurrentAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+}
+
+function checkAnswer(selected, card) {
+  if (lockAnswer) return;
+
+  const q = questions[currentIndex];
+  const feedback = document.getElementById("feedback");
+  const mark = document.getElementById("mark");
+
+  if (selected === q.answer) {
+    lockAnswer = true;
+    stopCurrentAudio();
+
+    mark.className = "mark tick";
+    mark.innerHTML = "✓";
+    feedback.classList.add("show");
+
+    setTimeout(() => {
+      feedback.classList.remove("show");
+      currentIndex++;
+
+      if (currentIndex < questions.length) {
+        showQuestion();
+      } else {
+        showFinalSlide();
+      }
+    }, 1000);
+
+  } else {
+    card.classList.remove("wrong-shake");
+    void card.offsetWidth;
+    card.classList.add("wrong-shake");
+
+    mark.className = "mark cross";
+    mark.innerHTML = "✕";
+    feedback.classList.add("show");
+
+    playWrongSound();
+
+    setTimeout(() => {
+      feedback.classList.remove("show");
+    }, 800);
+  }
+}
+
+function playWrongSound() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+    const oscillator = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(180, ctx.currentTime);
+    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.3);
+  } catch (e) {}
+}
+
+function showFinalSlide() {
+  game.innerHTML = `
+    <div class="slide final-slide">
+      <div class="final-message">Good job!</div>
+      <button class="play-again" onclick="restartGame()">play again</button>
+    </div>
+  `;
+
+  startInstrumentRain();
+}
+
+function startInstrumentRain() {
+  const finalSlide = document.querySelector(".final-slide");
+
+  const emojis = ["🎵", "🎶", "🎼", "👏", "💛", "⭐"];
+  const images = [
+    "flute.png",
+    "violin.png",
+    "drum.png",
+    "tambourine.png",
+    "xylophone.png",
+    "maracas.png",
+    "guitar.png",
+    "clapping.png"
+  ];
+
+  let count = 0;
+
+  const rainInterval = setInterval(() => {
+    if (!document.querySelector(".final-slide")) {
+      clearInterval(rainInterval);
+      return;
+    }
+
+    const useImage = Math.random() > 0.45;
+    let item;
+
+    if (useImage) {
+      item = document.createElement("img");
+      item.src = ASSET_PATH + images[Math.floor(Math.random() * images.length)];
+      item.className = "rain-img";
+    } else {
+      item = document.createElement("div");
+      item.className = "rain-item";
+      item.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    }
+
+    item.style.left = Math.random() * 94 + "vw";
+    item.style.animationDuration = (3 + Math.random() * 2.5) + "s";
+
+    finalSlide.appendChild(item);
+
+    setTimeout(() => {
+      if (item && item.parentNode) item.remove();
+    }, 6000);
+
+    count++;
+    if (count > 90) clearInterval(rainInterval);
+  }, 170);
+}
+
+function restartGame() {
+  currentIndex = 0;
+  showQuestion();
+}
+</script>
+
+</body>
+</html>
