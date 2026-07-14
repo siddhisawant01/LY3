@@ -1,0 +1,2709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no"
+>
+
+<title>R-Blend Detective</title>
+
+<style>
+
+/* =====================================================
+   BASIC SETTINGS
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;
+    user-select:none;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#ffffff;
+    font-family:
+    "Comic Sans MS",
+    "Arial Rounded MT Bold",
+    Arial,
+    sans-serif;
+}
+
+button{
+    font-family:inherit;
+    cursor:pointer;
+    touch-action:manipulation;
+}
+
+.screen{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.screen.active{
+    display:flex;
+}
+
+
+/* =====================================================
+   SLIDE 1 — LOGO
+===================================================== */
+
+#logoScreen{
+    background:#ffffff;
+}
+
+.logo-holder{
+    position:relative;
+    width:75%;
+    max-width:330px;
+    min-height:130px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.logo-backup{
+    position:absolute;
+    color:#65339b;
+    font-size:34px;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+#logoImage{
+    position:relative;
+    z-index:2;
+    display:block;
+    width:100%;
+    max-height:220px;
+    object-fit:contain;
+}
+
+
+/* =====================================================
+   START SCREEN
+===================================================== */
+
+#startScreen{
+    padding:15px;
+    text-align:center;
+
+    background:
+    linear-gradient(
+        rgba(255,250,230,.87),
+        rgba(222,244,255,.90)
+    ),
+    url("assets/mystery-room.png");
+
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+.start-card{
+    width:94%;
+    max-width:700px;
+
+    padding:25px 20px;
+
+    background:rgba(255,255,255,.96);
+
+    border:5px solid #8d62c8;
+    border-radius:35px;
+
+    box-shadow:
+    0 8px 0 #67439d,
+    0 18px 30px rgba(72,40,110,.18);
+}
+
+.detective-icon{
+    font-size:72px;
+    line-height:1;
+    margin-bottom:8px;
+}
+
+.game-title{
+    color:#63379a;
+    font-size:38px;
+    line-height:1.15;
+    margin-bottom:10px;
+}
+
+.start-subtitle{
+    color:#294f71;
+    font-size:22px;
+    line-height:1.4;
+    margin:12px auto 20px;
+}
+
+.start-button{
+    min-width:210px;
+
+    border:none;
+    border-radius:50px;
+
+    padding:15px 34px;
+
+    color:#ffffff;
+    background:#28aa75;
+
+    font-size:27px;
+    font-weight:bold;
+
+    box-shadow:0 7px 0 #14774f;
+}
+
+.start-button:active{
+    transform:translateY(5px);
+    box-shadow:0 2px 0 #14774f;
+}
+
+
+/* =====================================================
+   GAME SCREEN
+===================================================== */
+
+#gameScreen{
+    flex-direction:column;
+
+    padding:
+    max(7px, env(safe-area-inset-top))
+    9px
+    max(7px, env(safe-area-inset-bottom));
+
+    background:
+    linear-gradient(
+        180deg,
+        #fff5d8 0%,
+        #e4f7ff 55%,
+        #f2e7ff 100%
+    );
+}
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.game-header{
+    width:96%;
+    max-width:1050px;
+    height:62px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+}
+
+.small-title{
+    color:#643b91;
+    font-size:24px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.progress-holder{
+    flex:1;
+
+    max-width:320px;
+    height:17px;
+
+    overflow:hidden;
+
+    background:#ffffff;
+
+    border:3px solid #8e6cb8;
+    border-radius:20px;
+}
+
+#progressBar{
+    width:10%;
+    height:100%;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #61c986,
+        #f6c94e
+    );
+
+    transition:width .35s ease;
+}
+
+#questionNumber{
+    min-width:55px;
+
+    color:#643b91;
+
+    font-size:19px;
+    font-weight:bold;
+
+    text-align:right;
+}
+
+
+/* =====================================================
+   QUESTION CARD
+===================================================== */
+
+.question-card{
+    width:96%;
+    max-width:1050px;
+
+    flex:1;
+    min-height:0;
+
+    display:flex;
+    flex-direction:column;
+
+    padding:9px;
+
+    background:rgba(255,255,255,.97);
+
+    border:4px solid #d592cf;
+    border-radius:28px;
+
+    box-shadow:
+    0 7px 0 #ba6caf,
+    0 13px 25px rgba(98,52,120,.14);
+}
+
+.instruction{
+    flex-shrink:0;
+
+    padding:3px 5px 8px;
+
+    color:#365575;
+
+    font-size:21px;
+    font-weight:bold;
+
+    text-align:center;
+}
+
+.play-area{
+    width:100%;
+
+    flex:1;
+    min-height:0;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:8px;
+}
+
+
+/* =====================================================
+   MYSTERY ROOM AND OBJECT
+===================================================== */
+
+.visual-column{
+    width:100%;
+
+    flex:1;
+    min-height:145px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.mystery-stage{
+    position:relative;
+
+    width:100%;
+    height:100%;
+    min-height:145px;
+    max-height:330px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    border:4px solid #77b6d4;
+    border-radius:24px;
+
+    background:
+    linear-gradient(
+        rgba(255,255,255,.48),
+        rgba(255,255,255,.48)
+    ),
+    url("assets/mystery-room.png");
+
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+.object-glow{
+    position:absolute;
+
+    width:55%;
+    height:72%;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(255,248,112,.78),
+        rgba(255,248,112,.20) 55%,
+        transparent 72%
+    );
+
+    opacity:0;
+
+    transform:scale(.5);
+
+    transition:
+    opacity .35s,
+    transform .35s;
+}
+
+.mystery-stage.found .object-glow{
+    opacity:1;
+    transform:scale(1);
+}
+
+#objectImage{
+    position:relative;
+    z-index:2;
+
+    width:54%;
+    height:78%;
+
+    object-fit:contain;
+
+    filter:
+    drop-shadow(
+        0 7px 7px
+        rgba(30,30,40,.25)
+    );
+
+    transition:
+    transform .35s,
+    filter .35s;
+}
+
+.mystery-stage.found #objectImage{
+    transform:scale(1.08);
+
+    filter:
+    drop-shadow(
+        0 0 15px
+        #ffeb38
+    );
+}
+
+#emojiFallback{
+    position:relative;
+    z-index:2;
+
+    display:none;
+
+    font-size:105px;
+
+    filter:
+    drop-shadow(
+        0 6px 5px
+        rgba(40,40,50,.18)
+    );
+}
+
+
+/* =====================================================
+   MAGNIFYING GLASS
+===================================================== */
+
+.magnifier{
+    position:absolute;
+    z-index:4;
+
+    right:7px;
+    bottom:5px;
+
+    width:74px;
+    height:74px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#magnifierImage{
+    position:absolute;
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+}
+
+.magnifier-backup{
+    font-size:58px;
+}
+
+
+/* =====================================================
+   CORRECT BADGE
+===================================================== */
+
+.correct-popup{
+    position:absolute;
+    z-index:15;
+
+    inset:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    pointer-events:none;
+
+    opacity:0;
+
+    transform:scale(.3);
+
+    transition:
+    opacity .25s,
+    transform .35s;
+}
+
+.correct-popup.show{
+    opacity:1;
+    transform:scale(1);
+}
+
+.tick-circle{
+    position:absolute;
+
+    width:90px;
+    height:90px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border:7px solid #ffffff;
+    border-radius:50%;
+
+    color:#ffffff;
+    background:#22b573;
+
+    font-size:58px;
+    font-weight:bold;
+
+    box-shadow:
+    0 6px 0 #08794a,
+    0 8px 25px rgba(0,0,0,.22);
+}
+
+.detective-badge{
+    position:absolute;
+
+    right:7%;
+    top:7%;
+
+    width:95px;
+    height:95px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    overflow:hidden;
+
+    border:5px solid #ffffff;
+    border-radius:50%;
+
+    background:#ffcf3f;
+
+    box-shadow:
+    0 5px 0 #d28b18,
+    0 7px 20px rgba(0,0,0,.16);
+}
+
+#detectiveImage{
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+}
+
+#badgeBackup{
+    display:none;
+    font-size:50px;
+}
+
+
+/* =====================================================
+   ANSWER AREA
+===================================================== */
+
+.answer-column{
+    width:100%;
+
+    flex-shrink:0;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+}
+
+.clue-row{
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    gap:8px;
+}
+
+.clue-magnifier{
+    font-size:36px;
+}
+
+.word-clue{
+    min-width:175px;
+
+    padding:7px 18px;
+
+    color:#673499;
+    background:#fff3ae;
+
+    border:4px dashed #e4a62a;
+    border-radius:18px;
+
+    font-size:40px;
+    font-weight:bold;
+
+    letter-spacing:3px;
+
+    text-align:center;
+}
+
+.question-text{
+    margin-top:4px;
+
+    color:#3e5870;
+
+    font-size:18px;
+    font-weight:bold;
+
+    text-align:center;
+}
+
+.options{
+    width:100%;
+
+    display:flex;
+    justify-content:center;
+
+    gap:10px;
+
+    margin-top:8px;
+}
+
+.option{
+    width:29%;
+    max-width:165px;
+    min-height:62px;
+
+    border:4px solid #7352a5;
+    border-radius:20px;
+
+    color:#563185;
+    background:#eee4ff;
+
+    font-size:32px;
+    font-weight:bold;
+
+    box-shadow:0 5px 0 #9c78c9;
+
+    transition:
+    transform .15s,
+    background .15s;
+}
+
+.option:active{
+    transform:translateY(4px);
+    box-shadow:0 1px 0 #9c78c9;
+}
+
+.option:disabled{
+    cursor:default;
+}
+
+.option.correct{
+    color:#ffffff;
+    background:#29b875;
+
+    border-color:#118452;
+
+    box-shadow:0 5px 0 #087548;
+}
+
+.option.reveal{
+    color:#ffffff;
+
+    background:#26b875;
+
+    border-color:#fff44f;
+
+    box-shadow:
+    0 0 0 7px rgba(255,238,57,.36),
+    0 0 24px #ffe72e;
+
+    animation:correctGlow .75s infinite alternate;
+}
+
+.option.wrong{
+    color:#ffffff;
+    background:#ee5f66;
+    border-color:#bd343b;
+
+    animation:giggle .4s;
+}
+
+
+/* =====================================================
+   FEEDBACK
+===================================================== */
+
+.feedback{
+    height:33px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:#5c3b85;
+
+    font-size:20px;
+    font-weight:bold;
+
+    text-align:center;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes giggle{
+
+    0%{
+        transform:translateX(0) rotate(0);
+    }
+
+    20%{
+        transform:translateX(-9px) rotate(-4deg);
+    }
+
+    40%{
+        transform:translateX(8px) rotate(4deg);
+    }
+
+    60%{
+        transform:translateX(-6px) rotate(-3deg);
+    }
+
+    80%{
+        transform:translateX(5px) rotate(2deg);
+    }
+
+    100%{
+        transform:translateX(0) rotate(0);
+    }
+
+}
+
+@keyframes correctGlow{
+
+    from{
+        transform:scale(1);
+    }
+
+    to{
+        transform:scale(1.07);
+    }
+
+}
+
+
+/* =====================================================
+   FINAL SCREEN
+===================================================== */
+
+#endScreen{
+    padding:15px;
+
+    text-align:center;
+
+    background:
+    linear-gradient(
+        #fff1c9,
+        #dff7ff,
+        #eee0ff
+    );
+}
+
+.end-card{
+    position:relative;
+    z-index:5;
+
+    width:92%;
+    max-width:650px;
+
+    padding:25px 18px;
+
+    background:rgba(255,255,255,.96);
+
+    border:5px solid #7e59b3;
+    border-radius:35px;
+
+    box-shadow:
+    0 8px 0 #5d368f,
+    0 15px 35px rgba(70,30,100,.18);
+}
+
+.end-detective{
+    font-size:84px;
+    line-height:1;
+}
+
+.end-title{
+    margin-top:6px;
+
+    color:#673a9a;
+
+    font-size:48px;
+}
+
+.end-message{
+    margin:10px 0 20px;
+
+    color:#35617a;
+
+    font-size:23px;
+    line-height:1.4;
+}
+
+.play-again{
+    min-width:220px;
+
+    padding:15px 30px;
+
+    border:none;
+    border-radius:50px;
+
+    color:#ffffff;
+    background:#ed6ca5;
+
+    font-size:27px;
+    font-weight:bold;
+
+    box-shadow:0 7px 0 #b83e77;
+}
+
+.play-again:active{
+    transform:translateY(5px);
+    box-shadow:0 2px 0 #b83e77;
+}
+
+
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+#confettiContainer{
+    position:fixed;
+
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+
+    z-index:3;
+}
+
+.confetti-piece{
+    position:absolute;
+
+    top:-25px;
+
+    width:12px;
+    height:19px;
+
+    opacity:.95;
+
+    animation:
+    confettiFall
+    3.4s
+    linear
+    infinite;
+}
+
+@keyframes confettiFall{
+
+    0%{
+        transform:
+        translateY(-30px)
+        rotate(0deg);
+    }
+
+    100%{
+        transform:
+        translateY(115vh)
+        rotate(720deg);
+    }
+
+}
+
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media
+(max-width:520px){
+
+    .game-title{
+        font-size:31px;
+    }
+
+    .detective-icon{
+        font-size:62px;
+    }
+
+    .start-subtitle{
+        font-size:19px;
+    }
+
+    .small-title{
+        font-size:18px;
+    }
+
+    .game-header{
+        height:50px;
+    }
+
+    #questionNumber{
+        font-size:16px;
+        min-width:42px;
+    }
+
+    .instruction{
+        font-size:17px;
+    }
+
+    .mystery-stage{
+        max-height:265px;
+    }
+
+    #objectImage{
+        width:62%;
+        height:76%;
+    }
+
+    #emojiFallback{
+        font-size:82px;
+    }
+
+    .magnifier{
+        width:58px;
+        height:58px;
+    }
+
+    .word-clue{
+        min-width:145px;
+
+        padding:5px 12px;
+
+        font-size:34px;
+    }
+
+    .clue-magnifier{
+        font-size:30px;
+    }
+
+    .question-text{
+        font-size:16px;
+    }
+
+    .option{
+        min-height:54px;
+
+        font-size:27px;
+
+        border-width:3px;
+    }
+
+    .feedback{
+        height:28px;
+
+        font-size:17px;
+    }
+
+    .correct-popup .tick-circle{
+        width:76px;
+        height:76px;
+
+        font-size:50px;
+    }
+
+    .detective-badge{
+        width:76px;
+        height:76px;
+    }
+
+}
+
+
+/* =====================================================
+   SHORT PHONE SCREEN
+===================================================== */
+
+@media
+(max-height:640px)
+and
+(orientation:portrait){
+
+    .game-header{
+        height:42px;
+    }
+
+    .small-title{
+        font-size:17px;
+    }
+
+    .question-card{
+        padding:6px;
+    }
+
+    .instruction{
+        padding-bottom:4px;
+
+        font-size:16px;
+    }
+
+    .mystery-stage{
+        min-height:120px;
+        max-height:210px;
+    }
+
+    .word-clue{
+        padding:3px 10px;
+
+        font-size:30px;
+    }
+
+    .question-text{
+        font-size:15px;
+    }
+
+    .options{
+        margin-top:4px;
+    }
+
+    .option{
+        min-height:47px;
+
+        font-size:25px;
+    }
+
+    .feedback{
+        height:24px;
+
+        font-size:15px;
+    }
+
+}
+
+
+/* =====================================================
+   LANDSCAPE MODE
+===================================================== */
+
+@media
+(orientation:landscape)
+and
+(max-height:600px){
+
+    #gameScreen{
+        padding:4px 8px;
+    }
+
+    .game-header{
+        height:38px;
+    }
+
+    .small-title{
+        font-size:17px;
+    }
+
+    .question-card{
+        padding:5px 8px;
+
+        border-radius:20px;
+    }
+
+    .instruction{
+        padding:0 3px 4px;
+
+        font-size:16px;
+    }
+
+    .play-area{
+        flex-direction:row;
+
+        gap:10px;
+    }
+
+    .visual-column{
+        width:47%;
+        height:100%;
+    }
+
+    .answer-column{
+        width:53%;
+        height:100%;
+    }
+
+    .mystery-stage{
+        width:100%;
+        height:100%;
+
+        max-height:none;
+        min-height:0;
+    }
+
+    #objectImage{
+        width:66%;
+        height:76%;
+    }
+
+    #emojiFallback{
+        font-size:75px;
+    }
+
+    .word-clue{
+        padding:4px 12px;
+
+        font-size:31px;
+    }
+
+    .question-text{
+        font-size:15px;
+    }
+
+    .options{
+        margin-top:5px;
+    }
+
+    .option{
+        min-height:48px;
+
+        font-size:25px;
+    }
+
+    .feedback{
+        height:24px;
+
+        font-size:15px;
+    }
+
+    .magnifier{
+        width:55px;
+        height:55px;
+    }
+
+}
+
+
+/* =====================================================
+   VERY SMALL LANDSCAPE
+===================================================== */
+
+@media
+(orientation:landscape)
+and
+(max-height:400px){
+
+    .game-header{
+        height:32px;
+    }
+
+    .instruction{
+        font-size:14px;
+    }
+
+    .word-clue{
+        font-size:27px;
+    }
+
+    .option{
+        min-height:42px;
+
+        font-size:23px;
+    }
+
+    .feedback{
+        font-size:14px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =================================================
+     SLIDE 1 — INNOVINE LOGO
+================================================== -->
+
+<section
+id="logoScreen"
+class="screen active"
+>
+
+    <div class="logo-holder">
+
+        <div class="logo-backup">
+            INNOVINE
+        </div>
+
+        <img
+        id="logoImage"
+        src="assets/innovine-logo.png"
+        alt="Innovine Logo"
+        onerror="
+        this.onerror=null;
+        this.style.display='none';
+        "
+        >
+
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     START SCREEN
+================================================== -->
+
+<section
+id="startScreen"
+class="screen"
+>
+
+    <div class="start-card">
+
+        <div class="detective-icon">
+            🕵️‍♀️
+        </div>
+
+        <h1 class="game-title">
+            R-Blend Detective
+        </h1>
+
+        <div class="start-subtitle">
+
+            Use your magnifying glass.<br>
+
+            Find the missing
+            <b>R-blend!</b>
+
+        </div>
+
+        <button
+        id="startButton"
+        class="start-button"
+        type="button"
+        >
+
+            🔎 Start Game
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =================================================
+     GAME SCREEN
+================================================== -->
+
+<section
+id="gameScreen"
+class="screen"
+>
+
+    <header class="game-header">
+
+        <div class="small-title">
+
+            🕵️ R-Blend Detective
+
+        </div>
+
+
+        <div class="progress-holder">
+
+            <div id="progressBar"></div>
+
+        </div>
+
+
+        <div id="questionNumber">
+
+            1 / 10
+
+        </div>
+
+    </header>
+
+
+
+    <main class="question-card">
+
+
+        <div class="instruction">
+
+            Look carefully and find the missing R-blend.
+
+        </div>
+
+
+
+        <div class="play-area">
+
+
+            <!-- IMAGE SIDE -->
+
+            <div class="visual-column">
+
+
+                <div
+                id="mysteryStage"
+                class="mystery-stage"
+                >
+
+
+                    <div class="object-glow"></div>
+
+
+                    <img
+                    id="objectImage"
+                    src=""
+                    alt=""
+                    >
+
+
+                    <div id="emojiFallback">
+
+                        🪥
+
+                    </div>
+
+
+
+                    <div class="magnifier">
+
+
+                        <span class="magnifier-backup">
+
+                            🔎
+
+                        </span>
+
+
+                        <img
+                        id="magnifierImage"
+                        src="assets/magnifying-glass.png"
+                        alt=""
+                        onerror="
+                        this.style.display='none';
+                        "
+                        >
+
+
+                    </div>
+
+
+
+                    <!-- GREEN TICK AND BADGE -->
+
+                    <div
+                    id="correctPopup"
+                    class="correct-popup"
+                    >
+
+
+                        <div class="tick-circle">
+
+                            ✓
+
+                        </div>
+
+
+                        <div class="detective-badge">
+
+
+                            <img
+                            id="detectiveImage"
+                            src="assets/detective.png"
+                            alt=""
+                            onerror="
+                            this.style.display='none';
+                            document.getElementById(
+                            'badgeBackup'
+                            ).style.display='block';
+                            "
+                            >
+
+
+                            <span id="badgeBackup">
+
+                                🕵️
+
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ANSWER SIDE -->
+
+            <div class="answer-column">
+
+
+                <div class="clue-row">
+
+
+                    <div class="clue-magnifier">
+
+                        🔎
+
+                    </div>
+
+
+                    <div
+                    id="wordClue"
+                    class="word-clue"
+                    >
+
+                        _ush
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="question-text">
+
+                    Which R-blend is missing?
+
+                </div>
+
+
+
+                <div
+                id="options"
+                class="options"
+                >
+
+                </div>
+
+
+
+                <div
+                id="feedback"
+                class="feedback"
+                >
+
+                    Choose an answer.
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+</section>
+
+
+
+<!-- =================================================
+     FINAL SCREEN
+================================================== -->
+
+<section
+id="endScreen"
+class="screen"
+>
+
+
+    <div id="confettiContainer"></div>
+
+
+    <div class="end-card">
+
+
+        <div class="end-detective">
+
+            🕵️‍♀️🏅
+
+        </div>
+
+
+        <h1 class="end-title">
+
+            Good Job!
+
+        </h1>
+
+
+        <div
+        id="endMessage"
+        class="end-message"
+        >
+
+            You found all the hidden
+            R-blends!
+
+        </div>
+
+
+        <button
+        id="playAgainButton"
+        class="play-again"
+        type="button"
+        >
+
+            🔄 Play Again
+
+        </button>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =================================================
+     AUDIO
+================================================== -->
+
+<audio
+id="clapsSound"
+preload="auto"
+>
+
+    <source
+    src="assets/claps.mp3"
+    type="audio/mpeg"
+    >
+
+</audio>
+
+
+<audio
+id="wrongSound"
+preload="auto"
+>
+
+    <source
+    src="assets/wrong.mp3"
+    type="audio/mpeg"
+    >
+
+</audio>
+
+
+
+<script>
+
+/* =====================================================
+   R-BLEND QUESTIONS
+
+   All images are loaded from:
+   assets/image-name.png
+===================================================== */
+
+var originalQuestions = [
+
+    {
+        word:"brush",
+        clue:"_ush",
+        answer:"br",
+        image:"assets/brush.png",
+        emoji:"🪥"
+    },
+
+    {
+        word:"crab",
+        clue:"_ab",
+        answer:"cr",
+        image:"assets/crab.png",
+        emoji:"🦀"
+    },
+
+    {
+        word:"crocodile",
+        clue:"_ocodile",
+        answer:"cr",
+        image:"assets/crocodile.png",
+        emoji:"🐊"
+    },
+
+    {
+        word:"crown",
+        clue:"_own",
+        answer:"cr",
+        image:"assets/crown.png",
+        emoji:"👑"
+    },
+
+    {
+        word:"drum",
+        clue:"_um",
+        answer:"dr",
+        image:"assets/drum.png",
+        emoji:"🥁"
+    },
+
+    {
+        word:"frog",
+        clue:"_og",
+        answer:"fr",
+        image:"assets/frog.png",
+        emoji:"🐸"
+    },
+
+    {
+        word:"grass",
+        clue:"_ass",
+        answer:"gr",
+        image:"assets/grass.png",
+        emoji:"🌱"
+    },
+
+    {
+        word:"prison",
+        clue:"_ison",
+        answer:"pr",
+        image:"assets/prison.png",
+        emoji:"🏛️"
+    },
+
+    {
+        word:"tree",
+        clue:"_ee",
+        answer:"tr",
+        image:"assets/tree.png",
+        emoji:"🌳"
+    },
+
+    {
+        word:"truck",
+        clue:"_uck",
+        answer:"tr",
+        image:"assets/truck.png",
+        emoji:"🚚"
+    }
+
+];
+
+
+/* =====================================================
+   POSSIBLE R-BLENDS
+===================================================== */
+
+var allBlends = [
+
+    "br",
+    "cr",
+    "dr",
+    "fr",
+    "gr",
+    "pr",
+    "tr"
+
+];
+
+
+/* =====================================================
+   GAME VARIABLES
+===================================================== */
+
+var questions = [];
+
+var currentQuestion = 0;
+
+var wrongAttempts = 0;
+
+var acceptingAnswer = true;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+var logoScreen =
+document.getElementById(
+"logoScreen"
+);
+
+var startScreen =
+document.getElementById(
+"startScreen"
+);
+
+var gameScreen =
+document.getElementById(
+"gameScreen"
+);
+
+var endScreen =
+document.getElementById(
+"endScreen"
+);
+
+var startButton =
+document.getElementById(
+"startButton"
+);
+
+var playAgainButton =
+document.getElementById(
+"playAgainButton"
+);
+
+var objectImage =
+document.getElementById(
+"objectImage"
+);
+
+var emojiFallback =
+document.getElementById(
+"emojiFallback"
+);
+
+var mysteryStage =
+document.getElementById(
+"mysteryStage"
+);
+
+var correctPopup =
+document.getElementById(
+"correctPopup"
+);
+
+var wordClue =
+document.getElementById(
+"wordClue"
+);
+
+var optionsArea =
+document.getElementById(
+"options"
+);
+
+var feedback =
+document.getElementById(
+"feedback"
+);
+
+var questionNumber =
+document.getElementById(
+"questionNumber"
+);
+
+var progressBar =
+document.getElementById(
+"progressBar"
+);
+
+var clapsSound =
+document.getElementById(
+"clapsSound"
+);
+
+var wrongSound =
+document.getElementById(
+"wrongSound"
+);
+
+var confettiContainer =
+document.getElementById(
+"confettiContainer"
+);
+
+
+/* =====================================================
+   SHOW ONE SCREEN
+===================================================== */
+
+function showScreen(
+screenId
+){
+
+    var screens =
+    document.getElementsByClassName(
+    "screen"
+    );
+
+    var i;
+
+    for(
+    i=0;
+    i<screens.length;
+    i++
+    ){
+
+        screens[i].className =
+        "screen";
+
+    }
+
+
+    document
+    .getElementById(
+    screenId
+    )
+    .className =
+    "screen active";
+
+}
+
+
+/* =====================================================
+   SHUFFLE
+===================================================== */
+
+function shuffleArray(
+array
+){
+
+    var current =
+    array.length;
+
+    var random;
+
+    var temporary;
+
+
+    while(
+    current!==0
+    ){
+
+        random =
+        Math.floor(
+        Math.random()*current
+        );
+
+        current--;
+
+
+        temporary =
+        array[current];
+
+        array[current] =
+        array[random];
+
+        array[random] =
+        temporary;
+
+    }
+
+
+    return array;
+
+}
+
+
+/* =====================================================
+   PREPARE NEW GAME
+===================================================== */
+
+function prepareGame(){
+
+    questions =
+    originalQuestions.slice(0);
+
+    shuffleArray(
+    questions
+    );
+
+    currentQuestion=0;
+
+    wrongAttempts=0;
+
+    acceptingAnswer=true;
+
+}
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+function startGame(){
+
+    prepareGame();
+
+    clearConfetti();
+
+    showScreen(
+    "gameScreen"
+    );
+
+    showQuestion();
+
+}
+
+
+/* =====================================================
+   SHOW QUESTION
+===================================================== */
+
+function showQuestion(){
+
+    acceptingAnswer=true;
+
+    wrongAttempts=0;
+
+
+    mysteryStage.className =
+    "mystery-stage";
+
+
+    correctPopup.className =
+    "correct-popup";
+
+
+    feedback.innerHTML =
+    "Choose an answer.";
+
+
+    var question =
+    questions[
+    currentQuestion
+    ];
+
+
+    wordClue.innerHTML =
+    question.clue;
+
+
+    questionNumber.innerHTML =
+
+    (currentQuestion+1)
+
+    +" / "+
+
+    questions.length;
+
+
+    progressBar.style.width =
+
+    (
+    (
+    currentQuestion+1
+    )
+    /
+    questions.length
+    *
+    100
+    )
+
+    +"%";
+
+
+    /* SHOW IMAGE */
+
+    emojiFallback.style.display =
+    "none";
+
+
+    emojiFallback.innerHTML =
+    question.emoji;
+
+
+    objectImage.style.display =
+    "block";
+
+
+    objectImage.alt =
+    question.word;
+
+
+    objectImage.onerror =
+    function(){
+
+        objectImage.style.display =
+        "none";
+
+        emojiFallback.style.display =
+        "block";
+
+    };
+
+
+    objectImage.src =
+    question.image;
+
+
+    createOptions(
+    question.answer
+    );
+
+}
+
+
+/* =====================================================
+   CREATE RANDOM OPTIONS
+===================================================== */
+
+function createOptions(
+correctAnswer
+){
+
+    optionsArea.innerHTML="";
+
+
+    var wrongChoices=[];
+
+    var possibleWrong=[];
+
+    var i;
+
+
+    for(
+    i=0;
+    i<allBlends.length;
+    i++
+    ){
+
+        if(
+        allBlends[i]
+        !==
+        correctAnswer
+        ){
+
+            possibleWrong.push(
+            allBlends[i]
+            );
+
+        }
+
+    }
+
+
+    shuffleArray(
+    possibleWrong
+    );
+
+
+    wrongChoices.push(
+    possibleWrong[0]
+    );
+
+    wrongChoices.push(
+    possibleWrong[1]
+    );
+
+
+    var choices=[
+
+        correctAnswer,
+
+        wrongChoices[0],
+
+        wrongChoices[1]
+
+    ];
+
+
+    shuffleArray(
+    choices
+    );
+
+
+    for(
+    i=0;
+    i<choices.length;
+    i++
+    ){
+
+        createOptionButton(
+        choices[i]
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CREATE BUTTON
+===================================================== */
+
+function createOptionButton(
+blend
+){
+
+    var button =
+    document.createElement(
+    "button"
+    );
+
+
+    button.type =
+    "button";
+
+
+    button.className =
+    "option";
+
+
+    button.innerHTML =
+    blend;
+
+
+    button.setAttribute(
+    "data-answer",
+    blend
+    );
+
+
+    button.onclick =
+    function(){
+
+        checkAnswer(
+        button,
+        blend
+        );
+
+    };
+
+
+    optionsArea.appendChild(
+    button
+    );
+
+}
+
+
+/* =====================================================
+   CHECK ANSWER
+===================================================== */
+
+function checkAnswer(
+button,
+selectedAnswer
+){
+
+    if(
+    !acceptingAnswer
+    ){
+
+        return;
+
+    }
+
+
+    var correctAnswer =
+
+    questions[
+    currentQuestion
+    ]
+    .answer;
+
+
+    if(
+    selectedAnswer
+    ===
+    correctAnswer
+    ){
+
+        correctAnswerSelected(
+        button
+        );
+
+    }
+
+    else{
+
+        wrongAnswerSelected(
+        button
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   WRONG ANSWER
+===================================================== */
+
+function wrongAnswerSelected(
+button
+){
+
+    wrongAttempts++;
+
+
+    playSound(
+    wrongSound
+    );
+
+
+    button.className =
+    "option wrong";
+
+
+    button.disabled=true;
+
+
+    feedback.innerHTML =
+
+    wrongAttempts===1
+
+    ?
+
+    "Oops! Try one more time."
+
+    :
+
+    "Look! The correct blend is glowing.";
+
+
+    window.setTimeout(
+
+    function(){
+
+        button.className =
+        "option";
+
+    },
+
+    420
+
+    );
+
+
+    /* AFTER TWO WRONG ATTEMPTS */
+
+    if(
+    wrongAttempts>=2
+    ){
+
+        revealCorrectAnswer();
+
+    }
+
+}
+
+
+/* =====================================================
+   REVEAL THE CORRECT OPTION
+===================================================== */
+
+function revealCorrectAnswer(){
+
+    var correctAnswer =
+
+    questions[
+    currentQuestion
+    ]
+    .answer;
+
+
+    var buttons =
+
+    optionsArea
+    .getElementsByTagName(
+    "button"
+    );
+
+
+    var i;
+
+
+    for(
+    i=0;
+    i<buttons.length;
+    i++
+    ){
+
+        if(
+
+        buttons[i]
+        .getAttribute(
+        "data-answer"
+        )
+
+        ===
+
+        correctAnswer
+
+        ){
+
+            buttons[i].className =
+
+            "option reveal";
+
+
+            buttons[i].disabled=false;
+
+        }
+
+        else{
+
+            buttons[i].disabled=true;
+
+        }
+
+    }
+
+}
+
+
+/* =====================================================
+   CORRECT ANSWER
+===================================================== */
+
+function correctAnswerSelected(
+button
+){
+
+    acceptingAnswer=false;
+
+
+    stopAllSounds();
+
+
+    button.className =
+    "option correct";
+
+
+    button.disabled=true;
+
+
+    feedback.innerHTML =
+
+    "⭐ Good job, Detective! ⭐";
+
+
+    mysteryStage.className =
+
+    "mystery-stage found";
+
+
+    correctPopup.className =
+
+    "correct-popup show";
+
+
+    playSound(
+    clapsSound
+    );
+
+
+    window.setTimeout(
+
+    nextQuestion,
+
+    1500
+
+    );
+
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+function nextQuestion(){
+
+    currentQuestion++;
+
+
+    if(
+    currentQuestion
+    <
+    questions.length
+    ){
+
+        showQuestion();
+
+    }
+
+    else{
+
+        finishGame();
+
+    }
+
+}
+
+
+/* =====================================================
+   FINISH GAME
+===================================================== */
+
+function finishGame(){
+
+    stopAllSounds();
+
+
+    showScreen(
+    "endScreen"
+    );
+
+
+    document
+    .getElementById(
+    "endMessage"
+    )
+    .innerHTML =
+
+    "You found all "
+
+    +questions.length+
+
+    " hidden R-blends!<br>"
+
+    +"You are a super word detective!";
+
+
+    createConfetti();
+
+
+    playSound(
+    clapsSound
+    );
+
+}
+
+
+/* =====================================================
+   PLAY SOUND
+===================================================== */
+
+function playSound(
+sound
+){
+
+    try{
+
+        stopAllSounds();
+
+
+        sound.currentTime=0;
+
+
+        var playPromise =
+        sound.play();
+
+
+        if(
+
+        playPromise
+
+        &&
+
+        typeof
+        playPromise.catch
+
+        ===
+
+        "function"
+
+        ){
+
+            playPromise.catch(
+
+            function(){}
+
+            );
+
+        }
+
+    }
+
+    catch(error){
+
+        /* Game continues
+           even if sound is blocked. */
+
+    }
+
+}
+
+
+/* =====================================================
+   STOP SOUNDS
+===================================================== */
+
+function stopAllSounds(){
+
+    try{
+
+        clapsSound.pause();
+
+        wrongSound.pause();
+
+
+        clapsSound.currentTime=0;
+
+        wrongSound.currentTime=0;
+
+    }
+
+    catch(error){
+
+    }
+
+}
+
+
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+function createConfetti(){
+
+    clearConfetti();
+
+
+    var colours=[
+
+        "#ff5577",
+
+        "#ffcc32",
+
+        "#45c985",
+
+        "#4ea8ff",
+
+        "#a96ce3",
+
+        "#ff8b38"
+
+    ];
+
+
+    var i;
+
+
+    for(
+    i=0;
+    i<65;
+    i++
+    ){
+
+        var confetti =
+
+        document
+        .createElement(
+        "div"
+        );
+
+
+        confetti.className =
+
+        "confetti-piece";
+
+
+        confetti.style.left =
+
+        Math.random()
+        *
+        100
+
+        +"%";
+
+
+        confetti.style.background =
+
+        colours[
+
+        Math.floor(
+
+        Math.random()
+        *
+        colours.length
+
+        )
+
+        ];
+
+
+        confetti.style.animationDelay =
+
+        (
+        Math.random()
+        *
+        3
+        )
+
+        +"s";
+
+
+        confetti.style.animationDuration =
+
+        (
+        2.5
+        +
+        Math.random()
+        *
+        2
+        )
+
+        +"s";
+
+
+        confetti.style.transform =
+
+        "rotate("
+
+        +
+
+        (
+        Math.random()
+        *
+        360
+        )
+
+        +
+
+        "deg)";
+
+
+        confettiContainer
+        .appendChild(
+        confetti
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   REMOVE CONFETTI
+===================================================== */
+
+function clearConfetti(){
+
+    confettiContainer.innerHTML="";
+
+}
+
+
+/* =====================================================
+   BUTTON EVENTS
+===================================================== */
+
+startButton.onclick =
+function(){
+
+    startGame();
+
+};
+
+
+playAgainButton.onclick =
+function(){
+
+    stopAllSounds();
+
+    startGame();
+
+};
+
+
+/* =====================================================
+   LOGO FOR 2 SECONDS
+===================================================== */
+
+window.setTimeout(
+
+function(){
+
+    showScreen(
+    "startScreen"
+    );
+
+},
+
+2000
+
+);
+
+</script>
+
+</body>
+</html>
