@@ -1,295 +1,1346 @@
 <!DOCTYPE html>
 <html lang="en">
+ 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Pop the Correct Blend - L Blend</title>
+ 
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ 
+<title>Pop the Correct Blend - L Blends</title>
+ 
  
 <style>
  
+/* =====================================================
+   BASIC SETTINGS
+===================================================== */
+ 
 *{
     box-sizing:border-box;
-    user-select:none;
-}
- 
-html,body{
     margin:0;
     padding:0;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+}
+ 
+ 
+html,
+body{
+ 
     width:100%;
     height:100%;
+ 
     overflow:hidden;
-    font-family:"Comic Sans MS", "Arial Rounded MT Bold", sans-serif;
+ 
+    font-family:
+    "Arial Rounded MT Bold",
+    "Comic Sans MS",
+    Arial,
+    sans-serif;
+ 
     background:#ffffff;
+ 
 }
+ 
+ 
+button{
+ 
+    font-family:inherit;
+ 
+}
+ 
+ 
+/* =====================================================
+   ALL SCREENS
+===================================================== */
  
 .screen{
-    position:absolute;
+ 
+    position:fixed;
+ 
+    inset:0;
+ 
     width:100%;
     height:100%;
+ 
     display:none;
+ 
     justify-content:center;
     align-items:center;
+ 
     text-align:center;
+ 
 }
  
-.active{
+ 
+.screen.active{
+ 
     display:flex;
+ 
 }
  
  
-/* LOGO */
+/* =====================================================
+   LOGO SCREEN
+===================================================== */
  
 #logoScreen{
-    background:white;
+ 
+    background:#ffffff;
+ 
 }
+ 
  
 .logo{
-    width:250px;
-    max-width:60%;
+ 
+    width:280px;
+ 
+    max-width:65%;
+ 
+    animation:logoPop 1.2s ease;
+ 
 }
  
  
-/* GAME */
+@keyframes logoPop{
+ 
+    0%{
+ 
+        opacity:0;
+ 
+        transform:scale(.5);
+ 
+    }
+ 
+    70%{
+ 
+        transform:scale(1.08);
+ 
+    }
+ 
+    100%{
+ 
+        opacity:1;
+ 
+        transform:scale(1);
+ 
+    }
+ 
+}
+ 
+ 
+/* =====================================================
+   GAME SCREEN
+===================================================== */
  
 #gameScreen{
-    background:linear-gradient(#fff8e7,#e7f7ff);
+ 
     flex-direction:column;
-    padding:10px;
+ 
+    padding:12px;
+ 
+    background:
+ 
+    radial-gradient(
+        circle at 10% 15%,
+        rgba(255,213,128,.5),
+        transparent 25%
+    ),
+ 
+    radial-gradient(
+        circle at 90% 80%,
+        rgba(178,223,255,.7),
+        transparent 25%
+    ),
+ 
+    linear-gradient(
+        145deg,
+        #fff6d9,
+        #e8f8ff,
+        #f6eaff
+    );
+ 
+}
+ 
+ 
+/* =====================================================
+   DECORATIVE BACKGROUND SHAPES
+===================================================== */
+ 
+.decoration{
+ 
+    position:absolute;
+ 
+    border-radius:50%;
+ 
+    opacity:.38;
+ 
+    pointer-events:none;
+ 
+}
+ 
+ 
+.decoration.one{
+ 
+    width:110px;
+ 
+    height:110px;
+ 
+    left:-35px;
+ 
+    top:12%;
+ 
+    background:#ffb5c8;
+ 
+}
+ 
+ 
+.decoration.two{
+ 
+    width:130px;
+ 
+    height:130px;
+ 
+    right:-45px;
+ 
+    top:8%;
+ 
+    background:#91e3ba;
+ 
+}
+ 
+ 
+.decoration.three{
+ 
+    width:90px;
+ 
+    height:90px;
+ 
+    left:5%;
+ 
+    bottom:-20px;
+ 
+    background:#ffd166;
+ 
+}
+ 
+ 
+.decoration.four{
+ 
+    width:120px;
+ 
+    height:120px;
+ 
+    right:5%;
+ 
+    bottom:-50px;
+ 
+    background:#a8c7ff;
+ 
+}
+ 
+ 
+/* =====================================================
+   MAIN GAME CARD
+===================================================== */
+ 
+.gameBox{
+ 
+    position:relative;
+ 
+    z-index:2;
+ 
+    width:min(940px,96%);
+ 
+    height:min(720px,95%);
+ 
+    padding:
+ 
+    clamp(12px,2vh,22px)
+ 
+    clamp(12px,3vw,30px);
+ 
+ 
+    display:flex;
+ 
+    flex-direction:column;
+ 
+    justify-content:space-between;
+ 
+    align-items:center;
+ 
+ 
+    overflow:hidden;
+ 
+ 
+    background:
+ 
+    linear-gradient(
+        145deg,
+        rgba(255,255,255,.99),
+        rgba(255,255,255,.94)
+    );
+ 
+ 
+    border:
+ 
+    clamp(4px,1vw,8px)
+ 
+    solid
+ 
+    rgba(255,255,255,.95);
+ 
+ 
+    border-radius:
+ 
+    clamp(25px,5vw,48px);
+ 
+ 
+    box-shadow:
+ 
+    0 14px 35px
+ 
+    rgba(80,90,130,.22),
+ 
+    inset 0 0 20px
+ 
+    rgba(255,255,255,.8);
+ 
+}
+ 
+ 
+/* =====================================================
+   TOP AREA
+===================================================== */
+ 
+.topArea{
+ 
+    width:100%;
+ 
+    display:flex;
+ 
+    flex-direction:column;
+ 
+    align-items:center;
+ 
+    gap:5px;
+ 
 }
  
  
 .instruction{
-    font-size:clamp(18px,3vw,28px);
-    color:#444;
-    margin-bottom:5px;
+ 
+    color:#6651a6;
+ 
+    font-size:
+ 
+    clamp(20px,3.3vw,34px);
+ 
+    font-weight:bold;
+ 
+    line-height:1.15;
+ 
+    text-shadow:
+ 
+    0 2px 0 white;
+ 
 }
  
  
-.gameBox{
-    width:95%;
-    height:90%;
-    background:white;
-    border-radius:35px;
-    box-shadow:0 5px 20px #ccc;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:space-around;
-    padding:15px;
+.instruction span{
+ 
+    color:#ff7a59;
+ 
 }
  
  
 .questionNo{
-    font-size:20px;
-    color:#777;
+ 
+    min-width:160px;
+ 
+    padding:6px 18px;
+ 
+    color:#69788e;
+ 
+    background:#edf6ff;
+ 
+    border-radius:25px;
+ 
+    font-size:
+ 
+    clamp(14px,2vw,19px);
+ 
+    font-weight:bold;
+ 
+}
+ 
+ 
+/* =====================================================
+   PICTURE FRAME
+===================================================== */
+ 
+.pictureArea{
+ 
+    position:relative;
+ 
+    display:flex;
+ 
+    justify-content:center;
+ 
+    align-items:center;
+ 
 }
  
  
 .pictureBox{
-    width:230px;
-    height:180px;
-    border-radius:30px;
-    border:8px solid #ffd166;
+ 
+    position:relative;
+ 
+    width:
+ 
+    clamp(180px,28vw,285px);
+ 
+    height:
+ 
+    clamp(145px,24vh,220px);
+ 
+ 
     display:flex;
+ 
     justify-content:center;
+ 
     align-items:center;
-    background:#fff;
+ 
+ 
+    padding:12px;
+ 
+ 
+    overflow:hidden;
+ 
+ 
+    background:
+ 
+    linear-gradient(
+ 
+        #ffffff,
+ 
+        #fffdf5
+ 
+    );
+ 
+ 
+    border:
+ 
+    clamp(7px,1.4vw,12px)
+ 
+    solid
+ 
+    #ffd166;
+ 
+ 
+    border-radius:
+ 
+    clamp(25px,4vw,42px);
+ 
+ 
+    box-shadow:
+ 
+    0 9px 0 #eabf53,
+ 
+    0 15px 25px
+ 
+    rgba(101,82,60,.2);
+ 
+}
+ 
+ 
+.pictureBox::before{
+ 
+    content:"";
+ 
+    position:absolute;
+ 
+    inset:7px;
+ 
+    border:
+ 
+    3px dashed
+ 
+    rgba(255,183,59,.5);
+ 
+    border-radius:25px;
+ 
+    pointer-events:none;
+ 
 }
  
  
 .pictureBox img{
-    max-width:90%;
-    max-height:90%;
+ 
+    position:relative;
+ 
+    z-index:2;
+ 
+    display:block;
+ 
+    max-width:88%;
+ 
+    max-height:88%;
+ 
+    object-fit:contain;
+ 
 }
  
  
-.options{
-    width:90%;
+/* =====================================================
+   FEEDBACK
+===================================================== */
+ 
+.feedbackArea{
+ 
+    height:
+ 
+    clamp(48px,7vh,68px);
+ 
     display:flex;
+ 
+    flex-direction:column;
+ 
     justify-content:center;
-    gap:15px;
-    flex-wrap:wrap;
-}
  
- 
-.bubble{
- 
-    width:90px;
-    height:90px;
- 
-    border-radius:50%;
- 
-    display:flex;
     align-items:center;
-    justify-content:center;
- 
-    font-size:35px;
-    font-weight:bold;
- 
-    color:white;
- 
-    background:#7cc6fe;
- 
-    border:5px solid white;
- 
-    box-shadow:0 5px 10px #aaa;
- 
-    cursor:pointer;
- 
-}
- 
- 
-.bubble:nth-child(2){
-    background:#ff9f9f;
-}
- 
- 
-.bubble:nth-child(3){
-    background:#8dd17e;
-}
- 
- 
-.bubble:hover{
-    transform:scale(1.05);
-}
- 
- 
-.jiggle{
- 
-animation:jiggle .3s;
- 
-}
- 
- 
-@keyframes jiggle{
- 
-25%{transform:translateX(-10px);}
-50%{transform:translateX(10px);}
-75%{transform:translateX(-10px);}
-100%{transform:translateX(0);}
  
 }
  
  
 .feedback{
  
-font-size:30px;
-height:40px;
-color:#2ca25f;
+    color:#31a36a;
+ 
+    font-size:
+ 
+    clamp(21px,3vw,31px);
+ 
+    font-weight:bold;
+ 
+    min-height:32px;
+ 
+}
+ 
+ 
+.feedback.wrongText{
+ 
+    color:#ed6170;
  
 }
  
  
 .word{
  
-font-size:35px;
-font-weight:bold;
-color:#ff8c42;
+    min-height:32px;
+ 
+    color:#ff7a3d;
+ 
+    font-size:
+ 
+    clamp(23px,3.7vw,38px);
+ 
+    font-weight:bold;
+ 
+    letter-spacing:1px;
  
 }
  
  
-/* END */
+/* =====================================================
+   BLEND BUBBLES
+===================================================== */
  
-#endScreen{
+.options{
  
-background:linear-gradient(#fff1b8,#ffd6e0);
+    width:100%;
  
-flex-direction:column;
+    display:flex;
  
-}
+    justify-content:center;
  
+    align-items:center;
  
-.endTitle{
+    gap:
  
-font-size:45px;
-color:#ff7b00;
+    clamp(15px,4vw,38px);
  
-}
- 
- 
-.score{
- 
-font-size:28px;
- 
-}
- 
- 
-.play{
- 
-margin-top:20px;
- 
-padding:18px 45px;
- 
-border:none;
- 
-border-radius:40px;
- 
-background:#55b77b;
- 
-color:white;
- 
-font-size:28px;
- 
-font-weight:bold;
- 
-}
- 
- 
-/* CONFETTI */
- 
-.confetti{
- 
-position:absolute;
- 
-width:12px;
-height:20px;
- 
-animation:fall 3s linear infinite;
- 
-}
- 
- 
-@keyframes fall{
- 
-0%{
-top:-20px;
-}
- 
-100%{
-top:100%;
-transform:rotate(360deg);
-}
- 
-}
- 
- 
-@media(max-width:600px){
- 
-.pictureBox{
- 
-width:180px;
-height:150px;
+    padding-bottom:5px;
  
 }
  
  
 .bubble{
  
-width:75px;
-height:75px;
+    position:relative;
  
-font-size:28px;
+ 
+    width:
+ 
+    clamp(78px,13vw,122px);
+ 
+    height:
+ 
+    clamp(78px,13vw,122px);
+ 
+ 
+    display:flex;
+ 
+    justify-content:center;
+ 
+    align-items:center;
+ 
+ 
+    flex-shrink:0;
+ 
+ 
+    color:white;
+ 
+ 
+    background:
+ 
+    linear-gradient(
+ 
+        145deg,
+ 
+        #79cbff,
+ 
+        #4c9fee
+ 
+    );
+ 
+ 
+    border:
+ 
+    clamp(5px,1vw,9px)
+ 
+    solid white;
+ 
+ 
+    border-radius:50%;
+ 
+ 
+    box-shadow:
+ 
+    0 9px 0 #337fc2,
+ 
+    0 15px 24px
+ 
+    rgba(55,102,150,.3),
+ 
+    inset 7px 8px 14px
+ 
+    rgba(255,255,255,.28);
+ 
+ 
+    font-size:
+ 
+    clamp(30px,5vw,49px);
+ 
+    font-weight:bold;
+ 
+ 
+    cursor:pointer;
+ 
+ 
+    transition:
+ 
+    transform .16s ease,
+ 
+    filter .16s ease,
+ 
+    box-shadow .16s ease;
  
 }
  
-.word{
  
-font-size:28px;
+.bubble::before{
+ 
+    content:"";
+ 
+ 
+    position:absolute;
+ 
+ 
+    width:28%;
+ 
+    height:18%;
+ 
+ 
+    left:18%;
+ 
+    top:14%;
+ 
+ 
+    background:
+ 
+    rgba(255,255,255,.55);
+ 
+ 
+    border-radius:50%;
+ 
+ 
+    transform:rotate(-28deg);
  
 }
  
+ 
+.bubble:nth-child(2){
+ 
+    background:
+ 
+    linear-gradient(
+ 
+        145deg,
+ 
+        #ffadb8,
+ 
+        #f16d85
+ 
+    );
+ 
+ 
+    box-shadow:
+ 
+    0 9px 0 #c94f68,
+ 
+    0 15px 24px
+ 
+    rgba(160,70,90,.3),
+ 
+    inset 7px 8px 14px
+ 
+    rgba(255,255,255,.28);
+ 
 }
+ 
+ 
+.bubble:nth-child(3){
+ 
+    background:
+ 
+    linear-gradient(
+ 
+        145deg,
+ 
+        #9ee594,
+ 
+        #55bc70
+ 
+    );
+ 
+ 
+    box-shadow:
+ 
+    0 9px 0 #35944f,
+ 
+    0 15px 24px
+ 
+    rgba(50,125,70,.28),
+ 
+    inset 7px 8px 14px
+ 
+    rgba(255,255,255,.28);
+ 
+}
+ 
+ 
+.bubble:hover{
+ 
+    transform:
+ 
+    translateY(-5px)
+ 
+    scale(1.05);
+ 
+}
+ 
+ 
+.bubble:active{
+ 
+    transform:
+ 
+    translateY(5px)
+ 
+    scale(.97);
+ 
+}
+ 
+ 
+.bubble.disabled{
+ 
+    pointer-events:none;
+ 
+}
+ 
+ 
+/* =====================================================
+   CORRECT ANSWER
+===================================================== */
+ 
+.correctBubble{
+ 
+    animation:
+ 
+    correctPop .65s ease;
+ 
+ 
+    box-shadow:
+ 
+    0 0 0 8px
+ 
+    rgba(86,203,123,.26),
+ 
+    0 0 32px 14px
+ 
+    rgba(58,205,107,.75)
+ 
+    !important;
+ 
+ 
+    border-color:#ffffff;
+ 
+}
+ 
+ 
+@keyframes correctPop{
+ 
+    0%{
+ 
+        transform:scale(1);
+ 
+    }
+ 
+    45%{
+ 
+        transform:scale(1.24);
+ 
+    }
+ 
+    70%{
+ 
+        transform:scale(.96);
+ 
+    }
+ 
+    100%{
+ 
+        transform:scale(1);
+ 
+    }
+ 
+}
+ 
+ 
+/* =====================================================
+   WRONG ANSWER
+===================================================== */
+ 
+.jiggle{
+ 
+    animation:
+ 
+    jiggle .42s ease;
+ 
+}
+ 
+ 
+@keyframes jiggle{
+ 
+    0%{
+ 
+        transform:translateX(0);
+ 
+    }
+ 
+    20%{
+ 
+        transform:translateX(-11px);
+ 
+    }
+ 
+    40%{
+ 
+        transform:translateX(11px);
+ 
+    }
+ 
+    60%{
+ 
+        transform:translateX(-8px);
+ 
+    }
+ 
+    80%{
+ 
+        transform:translateX(8px);
+ 
+    }
+ 
+    100%{
+ 
+        transform:translateX(0);
+ 
+    }
+ 
+}
+ 
+ 
+/* =====================================================
+   END SCREEN
+===================================================== */
+ 
+#endScreen{
+ 
+    flex-direction:column;
+ 
+    padding:20px;
+ 
+ 
+    background:
+ 
+    radial-gradient(
+ 
+        circle at top left,
+ 
+        #fff0b6,
+ 
+        transparent 35%
+ 
+    ),
+ 
+    radial-gradient(
+ 
+        circle at bottom right,
+ 
+        #cceeff,
+ 
+        transparent 38%
+ 
+    ),
+ 
+    linear-gradient(
+ 
+        145deg,
+ 
+        #fff5d8,
+ 
+        #ffe1e9,
+ 
+        #e4f5ff
+ 
+    );
+ 
+}
+ 
+ 
+.endCard{
+ 
+    position:relative;
+ 
+    z-index:3;
+ 
+ 
+    width:
+ 
+    min(580px,92%);
+ 
+ 
+    padding:
+ 
+    clamp(28px,6vw,55px);
+ 
+ 
+    background:
+ 
+    rgba(255,255,255,.96);
+ 
+ 
+    border:
+ 
+    7px solid white;
+ 
+ 
+    border-radius:
+ 
+    clamp(30px,6vw,55px);
+ 
+ 
+    box-shadow:
+ 
+    0 18px 45px
+ 
+    rgba(95,75,115,.25);
+ 
+}
+ 
+ 
+.trophy{
+ 
+    font-size:
+ 
+    clamp(75px,14vw,125px);
+ 
+ 
+    animation:
+ 
+    trophyBounce
+ 
+    1s infinite alternate ease-in-out;
+ 
+}
+ 
+ 
+@keyframes trophyBounce{
+ 
+    from{
+ 
+        transform:
+ 
+        translateY(0)
+ 
+        rotate(-4deg);
+ 
+    }
+ 
+    to{
+ 
+        transform:
+ 
+        translateY(-10px)
+ 
+        rotate(4deg);
+ 
+    }
+ 
+}
+ 
+ 
+.endTitle{
+ 
+    margin:10px 0;
+ 
+ 
+    color:#ff7600;
+ 
+ 
+    font-size:
+ 
+    clamp(35px,7vw,58px);
+ 
+ 
+    font-weight:bold;
+ 
+}
+ 
+ 
+.remark{
+ 
+    margin-bottom:10px;
+ 
+ 
+    color:#6957a5;
+ 
+ 
+    font-size:
+ 
+    clamp(23px,4vw,34px);
+ 
+ 
+    font-weight:bold;
+ 
+}
+ 
+ 
+.score{
+ 
+    color:#46566c;
+ 
+ 
+    font-size:
+ 
+    clamp(21px,3.5vw,29px);
+ 
+ 
+    font-weight:bold;
+ 
+}
+ 
+ 
+.play{
+ 
+    margin-top:25px;
+ 
+ 
+    padding:
+ 
+    16px 42px;
+ 
+ 
+    border:none;
+ 
+ 
+    border-radius:40px;
+ 
+ 
+    color:white;
+ 
+ 
+    background:
+ 
+    linear-gradient(
+ 
+        145deg,
+ 
+        #66d58b,
+ 
+        #35a961
+ 
+    );
+ 
+ 
+    box-shadow:
+ 
+    0 8px 0 #268348,
+ 
+    0 13px 22px
+ 
+    rgba(42,132,75,.3);
+ 
+ 
+    font-size:
+ 
+    clamp(21px,4vw,30px);
+ 
+ 
+    font-weight:bold;
+ 
+ 
+    cursor:pointer;
+ 
+ 
+    transition:
+ 
+    transform .15s ease;
+ 
+}
+ 
+ 
+.play:hover{
+ 
+    transform:
+ 
+    translateY(-4px)
+ 
+    scale(1.03);
+ 
+}
+ 
+ 
+.play:active{
+ 
+    transform:
+ 
+    translateY(5px);
+ 
+}
+ 
+ 
+/* =====================================================
+   CONFETTI
+===================================================== */
+ 
+.confetti{
+ 
+    position:fixed;
+ 
+    z-index:1;
+ 
+ 
+    top:-30px;
+ 
+ 
+    width:
+ 
+    clamp(8px,1.5vw,14px);
+ 
+ 
+    height:
+ 
+    clamp(14px,2.5vw,23px);
+ 
+ 
+    border-radius:3px;
+ 
+ 
+    pointer-events:none;
+ 
+ 
+    animation:
+ 
+    fall linear infinite;
+ 
+}
+ 
+ 
+@keyframes fall{
+ 
+    0%{
+ 
+        top:-30px;
+ 
+ 
+        transform:
+ 
+        translateX(0)
+ 
+        rotate(0deg);
+ 
+    }
+ 
+ 
+    100%{
+ 
+        top:110%;
+ 
+ 
+        transform:
+ 
+        translateX(80px)
+ 
+        rotate(720deg);
+ 
+    }
+ 
+}
+ 
+ 
+/* =====================================================
+   SMALL DEVICES
+===================================================== */
+ 
+@media(max-height:650px){
+ 
+ 
+    .gameBox{
+ 
+        height:96%;
+ 
+        padding:8px 14px;
+ 
+    }
+ 
+ 
+    .pictureBox{
+ 
+        height:135px;
+ 
+        width:180px;
+ 
+    }
+ 
+ 
+    .feedbackArea{
+ 
+        height:45px;
+ 
+    }
+ 
+ 
+    .bubble{
+ 
+        width:73px;
+ 
+        height:73px;
+ 
+        font-size:29px;
+ 
+        border-width:5px;
+ 
+        box-shadow:
+ 
+        0 6px 0 #337fc2,
+ 
+        0 10px 15px
+ 
+        rgba(55,102,150,.25);
+ 
+    }
+ 
+ 
+    .bubble:nth-child(2){
+ 
+        box-shadow:
+ 
+        0 6px 0 #c94f68,
+ 
+        0 10px 15px
+ 
+        rgba(160,70,90,.25);
+ 
+    }
+ 
+ 
+    .bubble:nth-child(3){
+ 
+        box-shadow:
+ 
+        0 6px 0 #35944f,
+ 
+        0 10px 15px
+ 
+        rgba(50,125,70,.24);
+ 
+    }
+ 
+ 
+}
+ 
+ 
+@media(max-width:430px){
+ 
+ 
+    #gameScreen{
+ 
+        padding:7px;
+ 
+    }
+ 
+ 
+    .gameBox{
+ 
+        width:98%;
+ 
+        border-radius:28px;
+ 
+    }
+ 
+ 
+    .options{
+ 
+        gap:11px;
+ 
+    }
+ 
+ 
+    .pictureBox{
+ 
+        width:175px;
+ 
+        height:145px;
+ 
+    }
+ 
+ 
+}
+ 
  
 </style>
  
@@ -299,45 +1350,78 @@ font-size:28px;
 <body>
  
  
-<!-- LOGO -->
+<!-- ==================================================
+     LOGO SCREEN
+=================================================== -->
  
-<div id="logoScreen" class="screen active">
+<div
+id="logoScreen"
+class="screen active">
  
-<img src="assets/innovine-logo.png" class="logo">
+<img
+src="assets/innovine-logo.png"
+class="logo"
+alt="Innovine Logo">
  
 </div>
  
  
-<!-- GAME -->
+<!-- ==================================================
+     GAME SCREEN
+=================================================== -->
  
-<div id="gameScreen" class="screen">
+<div
+id="gameScreen"
+class="screen">
+ 
+ 
+<div class="decoration one"></div>
+ 
+<div class="decoration two"></div>
+ 
+<div class="decoration three"></div>
+ 
+<div class="decoration four"></div>
  
  
 <div class="gameBox">
  
  
+<div class="topArea">
+ 
+ 
 <div class="instruction">
-Pop the correct blend bubble!
+ 
+🫧 Pop the correct
+ 
+<span>blend bubble!</span>
+ 
 </div>
  
  
-<div class="questionNo" id="questionNo"></div>
+<div
+class="questionNo"
+id="questionNo">
+ 
+</div>
+ 
+ 
+</div>
+ 
+ 
+<div class="pictureArea">
  
  
 <div class="pictureBox">
  
-<img id="picture">
  
-</div>
+<img
  
+id="picture"
  
-<div class="feedback" id="feedback"></div>
+src=""
  
- 
-<div class="word" id="word"></div>
- 
- 
-<div class="options" id="options"></div>
+alt="Question picture">
  
  
 </div>
@@ -346,136 +1430,322 @@ Pop the correct blend bubble!
 </div>
  
  
+<div class="feedbackArea">
  
-<!-- END -->
  
-<div id="endScreen" class="screen">
+<div
+ 
+class="feedback"
+ 
+id="feedback">
+ 
+</div>
+ 
+ 
+<div
+ 
+class="word"
+ 
+id="word">
+ 
+</div>
+ 
+ 
+</div>
+ 
+ 
+<div
+ 
+class="options"
+ 
+id="options">
+ 
+</div>
+ 
+ 
+</div>
+ 
+ 
+</div>
+ 
+ 
+<!-- ==================================================
+     END SCREEN
+=================================================== -->
+ 
+<div
+ 
+id="endScreen"
+ 
+class="screen">
+ 
+ 
+<div class="endCard">
+ 
+ 
+<div class="trophy">
+ 
+🏆
+ 
+</div>
  
  
 <div class="endTitle">
-🎉 Good Job! 🎉
+ 
+Good Job!
+ 
 </div>
  
  
-<div class="score" id="score"></div>
+<div
+ 
+class="remark"
+ 
+id="remark">
+ 
+</div>
  
  
-<button class="play" onclick="restartGame()">
+<div
+ 
+class="score"
+ 
+id="score">
+ 
+</div>
+ 
+ 
+<button
+ 
+type="button"
+ 
+class="play"
+ 
+onclick="restartGame()">
+ 
 Play Again
+ 
 </button>
  
  
 </div>
  
  
-<audio id="clap" src="assets/claps.mp3"></audio>
+</div>
  
-<audio id="wrong" src="assets/wrong.mp3"></audio>
+ 
+<!-- ==================================================
+     AUDIO
+ 
+IMPORTANT:
+ 
+Keep these files inside the assets folder:
+ 
+assets/clap.mp3
+ 
+assets/wrong.mp3
+ 
+=================================================== -->
+ 
+ 
+<audio
+ 
+id="clapAudio"
+ 
+src="assets/clap.mp3"
+ 
+preload="auto">
+ 
+</audio>
+ 
+ 
+<audio
+ 
+id="wrongAudio"
+ 
+src="assets/wrong.mp3"
+ 
+preload="auto">
+ 
+</audio>
  
  
 <script>
  
  
-let questions=[
+/* =====================================================
+   QUESTIONS
+===================================================== */
+ 
+ 
+const questions = [
  
  
 {
+ 
 img:"flower.png",
+ 
 answer:"fl",
+ 
 word:"fl + ower = flower",
+ 
 options:["fl","pl","cl"]
+ 
 },
  
  
 {
+ 
 img:"clock.png",
+ 
 answer:"cl",
+ 
 word:"cl + ock = clock",
+ 
 options:["gl","cl","sl"]
+ 
 },
  
  
 {
+ 
 img:"blue.png",
+ 
 answer:"bl",
+ 
 word:"bl + ue = blue",
+ 
 options:["bl","fl","pl"]
+ 
 },
  
  
 {
+ 
 img:"block.png",
+ 
 answer:"bl",
+ 
 word:"bl + ock = block",
+ 
 options:["cl","bl","gl"]
+ 
 },
  
  
 {
+ 
 img:"clap.png",
+ 
 answer:"cl",
+ 
 word:"cl + ap = clap",
+ 
 options:["sl","cl","fl"]
+ 
 },
  
  
 {
+ 
 img:"flag.png",
+ 
 answer:"fl",
+ 
 word:"fl + ag = flag",
+ 
 options:["fl","pl","gl"]
+ 
 },
  
  
 {
+ 
 img:"glass.png",
+ 
 answer:"gl",
+ 
 word:"gl + ass = glass",
+ 
 options:["gl","cl","bl"]
+ 
 },
  
  
 {
+ 
 img:"glove.png",
+ 
 answer:"gl",
+ 
 word:"gl + ove = glove",
+ 
 options:["pl","gl","sl"]
+ 
 },
  
  
 {
+ 
 img:"plum.png",
+ 
 answer:"pl",
+ 
 word:"pl + um = plum",
+ 
 options:["fl","pl","cl"]
+ 
 },
  
  
 {
+ 
 img:"plate.png",
+ 
 answer:"pl",
+ 
 word:"pl + ate = plate",
+ 
 options:["pl","sl","bl"]
+ 
 },
  
  
 {
+ 
 img:"slide.png",
+ 
 answer:"sl",
+ 
 word:"sl + ide = slide",
+ 
 options:["cl","sl","gl"]
+ 
 },
  
  
 {
+ 
 img:"sleep.png",
+ 
 answer:"sl",
+ 
 word:"sl + eep = sleep",
+ 
 options:["sl","fl","pl"]
+ 
 }
+ 
  
 ];
  
+ 
+/* =====================================================
+   VARIABLES
+===================================================== */
+ 
+ 
+let quiz=[];
  
 let current=0;
  
@@ -483,43 +1753,184 @@ let score=0;
  
 let attempts=0;
  
-let quiz=[];
+let answerLocked=false;
  
  
-setTimeout(()=>{
+/* =====================================================
+   ELEMENTS
+===================================================== */
+ 
+ 
+const questionNumber=
+ 
+document.getElementById("questionNo");
+ 
+ 
+const picture=
+ 
+document.getElementById("picture");
+ 
+ 
+const feedback=
+ 
+document.getElementById("feedback");
+ 
+ 
+const word=
+ 
+document.getElementById("word");
+ 
+ 
+const optionsBox=
+ 
+document.getElementById("options");
+ 
+ 
+const clapAudio=
+ 
+document.getElementById("clapAudio");
+ 
+ 
+const wrongAudio=
+ 
+document.getElementById("wrongAudio");
+ 
+ 
+/* =====================================================
+   LOGO TIMER
+===================================================== */
+ 
+ 
+setTimeout(function(){
+ 
  
 showScreen("gameScreen");
  
+ 
 startGame();
+ 
  
 },2000);
  
  
+/* =====================================================
+   SHOW SCREEN
+===================================================== */
  
-function showScreen(id){
  
-document.querySelectorAll(".screen")
-.forEach(x=>x.classList.remove("active"));
+function showScreen(screenID){
  
-document.getElementById(id)
+ 
+document
+ 
+.querySelectorAll(".screen")
+ 
+.forEach(function(screen){
+ 
+ 
+screen.classList.remove("active");
+ 
+ 
+});
+ 
+ 
+document
+ 
+.getElementById(screenID)
+ 
 .classList.add("active");
+ 
  
 }
  
+ 
+/* =====================================================
+   SHUFFLE
+===================================================== */
+ 
+ 
+function shuffle(array){
+ 
+ 
+let copiedArray=[...array];
+ 
+ 
+for(
+ 
+let i=copiedArray.length-1;
+ 
+i>0;
+ 
+i--
+ 
+){
+ 
+ 
+const randomIndex=
+ 
+Math.floor(
+ 
+Math.random()*(i+1)
+ 
+);
+ 
+ 
+[
+ 
+copiedArray[i],
+ 
+copiedArray[randomIndex]
+ 
+]
+ 
+=
+ 
+[
+ 
+copiedArray[randomIndex],
+ 
+copiedArray[i]
+ 
+];
+ 
+ 
+}
+ 
+ 
+return copiedArray;
+ 
+ 
+}
+ 
+ 
+/* =====================================================
+   START GAME
+===================================================== */
  
  
 function startGame(){
  
-quiz=[...questions]
-.sort(()=>Math.random()-0.5);
+ 
+quiz=
+ 
+shuffle(questions);
+ 
  
 current=0;
+ 
+ 
 score=0;
+ 
  
 loadQuestion();
  
+ 
 }
  
+ 
+/* =====================================================
+   LOAD QUESTION
+===================================================== */
  
  
 function loadQuestion(){
@@ -528,42 +1939,124 @@ function loadQuestion(){
 attempts=0;
  
  
-let q=quiz[current];
+answerLocked=false;
  
  
-questionNo.innerHTML=
-"Question "+(current+1)+" / "+quiz.length;
+const question=
+ 
+quiz[current];
  
  
-picture.src="assets/"+q.img;
+questionNumber.textContent=
+ 
+"Question "+
+ 
+(current+1)+
+ 
+" of "+
+ 
+quiz.length;
  
  
-feedback.innerHTML="";
+picture.src=
  
-word.innerHTML="";
+"assets/"+
  
- 
-options.innerHTML="";
- 
- 
-let shuffled=[...q.options]
-.sort(()=>Math.random()-0.5);
+question.img;
  
  
-shuffled.forEach(opt=>{
+picture.alt=
+ 
+question.word
+ 
+.replace(" + ","");
  
  
-let b=document.createElement("div");
- 
-b.className="bubble";
- 
-b.innerHTML=opt;
+feedback.textContent="";
  
  
-b.onclick=()=>checkAnswer(opt,b);
+feedback.className=
+ 
+"feedback";
  
  
-options.appendChild(b);
+word.textContent="";
+ 
+ 
+optionsBox.innerHTML="";
+ 
+ 
+const shuffledOptions=
+ 
+shuffle(
+ 
+question.options
+ 
+);
+ 
+ 
+shuffledOptions
+ 
+.forEach(function(option){
+ 
+ 
+const bubble=
+ 
+document.createElement("div");
+ 
+ 
+bubble.className=
+ 
+"bubble";
+ 
+ 
+bubble.textContent=
+ 
+option;
+ 
+ 
+bubble.setAttribute(
+ 
+"role",
+ 
+"button"
+ 
+);
+ 
+ 
+bubble.setAttribute(
+ 
+"aria-label",
+ 
+option+" blend"
+ 
+);
+ 
+ 
+bubble.onclick=
+ 
+function(){
+ 
+ 
+checkAnswer(
+ 
+option,
+ 
+bubble
+ 
+);
+ 
+ 
+};
+ 
+ 
+optionsBox
+ 
+.appendChild(
+ 
+bubble
+ 
+);
  
  
 });
@@ -572,38 +2065,174 @@ options.appendChild(b);
 }
  
  
+/* =====================================================
+   AUDIO FUNCTION
  
-function checkAnswer(ans,button){
+This resets the audio before playing.
+ 
+It also avoids the sound becoming silent
+after repeated answers.
+===================================================== */
  
  
-let q=quiz[current];
+function playSound(audioElement){
  
  
-if(ans==q.answer){
+try{
+ 
+ 
+audioElement.pause();
+ 
+ 
+audioElement.currentTime=0;
+ 
+ 
+const playPromise=
+ 
+audioElement.play();
+ 
+ 
+if(
+ 
+playPromise!==undefined
+ 
+){
+ 
+ 
+playPromise
+ 
+.catch(function(error){
+ 
+ 
+console.log(
+ 
+"Audio could not play:",
+ 
+error
+ 
+);
+ 
+ 
+});
+ 
+ 
+}
+ 
+ 
+}
+ 
+catch(error){
+ 
+ 
+console.log(
+ 
+"Audio error:",
+ 
+error
+ 
+);
+ 
+ 
+}
+ 
+ 
+}
+ 
+ 
+/* =====================================================
+   CHECK ANSWER
+===================================================== */
+ 
+ 
+function checkAnswer(
+ 
+selectedAnswer,
+ 
+selectedBubble
+ 
+){
+ 
+ 
+if(answerLocked){
+ 
+return;
+ 
+}
+ 
+ 
+const question=
+ 
+quiz[current];
+ 
+ 
+/* CORRECT ANSWER */
+ 
+ 
+if(
+ 
+selectedAnswer===
+ 
+question.answer
+ 
+){
+ 
+ 
+answerLocked=true;
  
  
 score++;
  
  
-feedback.innerHTML="✅ Great Job!";
+disableAllBubbles();
  
  
-word.innerHTML=q.word;
+selectedBubble
+ 
+.classList.add(
+ 
+"correctBubble"
+ 
+);
  
  
-document.getElementById("clap").play();
+feedback.className=
+ 
+"feedback";
  
  
-setTimeout(()=>{
+feedback.textContent=
+ 
+"✅ Great Job!";
  
  
-nextQuestion();
+word.textContent=
+ 
+question.word;
  
  
-},1500);
+/* PLAY CLAP SOUND */
+ 
+ 
+playSound(
+ 
+clapAudio
+ 
+);
+ 
+ 
+setTimeout(
+ 
+nextQuestion,
+ 
+1800
+ 
+);
  
  
 }
+ 
+ 
+/* WRONG ANSWER */
  
  
 else{
@@ -612,41 +2241,190 @@ else{
 attempts++;
  
  
-document.getElementById("wrong").play();
+playSound(
+ 
+wrongAudio
+ 
+);
  
  
-button.classList.add("jiggle");
+feedback.className=
+ 
+"feedback wrongText";
  
  
-setTimeout(()=>{
+selectedBubble
  
-button.classList.remove("jiggle");
+.classList.remove(
  
-},400);
+"jiggle"
+ 
+);
  
  
-if(attempts>=2){
+void
+ 
+selectedBubble.offsetWidth;
  
  
-document.querySelectorAll(".bubble")
-.forEach(b=>{
+selectedBubble
  
-if(b.innerHTML==q.answer){
+.classList.add(
  
-b.style.boxShadow=
-"0 0 25px 10px #55b77b";
+"jiggle"
+ 
+);
+ 
+ 
+if(
+ 
+attempts===1
+ 
+){
+ 
+ 
+feedback.textContent=
+ 
+"Try again!";
+ 
  
 }
  
-});
+ 
+else{
+ 
+ 
+answerLocked=true;
+ 
+ 
+feedback.textContent=
+ 
+"Let's learn!";
+ 
+ 
+showCorrectAnswer();
+ 
+ 
+word.textContent=
+ 
+question.word;
+ 
+ 
+setTimeout(
+ 
+nextQuestion,
+ 
+2200
+ 
+);
  
  
 }
  
+ 
 }
  
  
 }
+ 
+ 
+/* =====================================================
+   DISABLE BUBBLES
+===================================================== */
+ 
+ 
+function disableAllBubbles(){
+ 
+ 
+document
+ 
+.querySelectorAll(
+ 
+".bubble"
+ 
+)
+ 
+.forEach(
+ 
+function(bubble){
+ 
+ 
+bubble.classList.add(
+ 
+"disabled"
+ 
+);
+ 
+ 
+}
+ 
+);
+ 
+ 
+}
+ 
+ 
+/* =====================================================
+   SHOW CORRECT ANSWER
+===================================================== */
+ 
+ 
+function showCorrectAnswer(){
+ 
+ 
+disableAllBubbles();
+ 
+ 
+const correctAnswer=
+ 
+quiz[current].answer;
+ 
+ 
+document
+ 
+.querySelectorAll(
+ 
+".bubble"
+ 
+)
+ 
+.forEach(
+ 
+function(bubble){
+ 
+ 
+if(
+ 
+bubble.textContent===
+ 
+correctAnswer
+ 
+){
+ 
+ 
+bubble
+ 
+.classList.add(
+ 
+"correctBubble"
+ 
+);
+ 
+ 
+}
+ 
+ 
+}
+ 
+);
+ 
+ 
+}
+ 
+ 
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
  
  
 function nextQuestion(){
@@ -655,34 +2433,143 @@ function nextQuestion(){
 current++;
  
  
-if(current>=quiz.length){
+if(
+ 
+current>=
+ 
+quiz.length
+ 
+){
+ 
  
 endGame();
+ 
  
 }
  
 else{
  
+ 
 loadQuestion();
  
-}
- 
  
 }
  
+ 
+}
+ 
+ 
+/* =====================================================
+   END GAME
+===================================================== */
  
  
 function endGame(){
  
  
-showScreen("endScreen");
+showScreen(
+ 
+"endScreen"
+ 
+);
  
  
-scoreBox=document.getElementById("score");
+document
+ 
+.getElementById(
+ 
+"score"
+ 
+)
+ 
+.textContent=
+ 
+"You scored "+
+ 
+score+
+ 
+" out of "+
+ 
+quiz.length+
+ 
+"!";
  
  
-scoreBox.innerHTML=
-"You scored "+score+" / "+quiz.length;
+const percentage=
+ 
+(score/quiz.length)*100;
+ 
+ 
+let finalRemark="";
+ 
+ 
+if(
+ 
+percentage>=80
+ 
+){
+ 
+ 
+finalRemark=
+ 
+"Excellent! 🌟";
+ 
+ 
+}
+ 
+ 
+else if(
+ 
+percentage>=60
+ 
+){
+ 
+ 
+finalRemark=
+ 
+"Well Done! 😊";
+ 
+ 
+}
+ 
+ 
+else if(
+ 
+percentage>=45
+ 
+){
+ 
+ 
+finalRemark=
+ 
+"Good Try! 👍";
+ 
+ 
+}
+ 
+ 
+else{
+ 
+ 
+finalRemark=
+ 
+"Keep Practising! 💪";
+ 
+ 
+}
+ 
+ 
+document
+ 
+.getElementById(
+ 
+"remark"
+ 
+)
+ 
+.textContent=
+ 
+finalRemark;
  
  
 createConfetti();
@@ -691,44 +2578,142 @@ createConfetti();
 }
  
  
+/* =====================================================
+   CONFETTI
+===================================================== */
+ 
+ 
 function createConfetti(){
  
  
-for(let i=0;i<80;i++){
+removeConfetti();
  
  
-let c=document.createElement("div");
+for(
  
-c.className="confetti";
+let i=0;
  
+i<90;
  
-c.style.left=Math.random()*100+"%";
+i++
  
-c.style.background=
-"hsl("+Math.random()*360+",80%,60%)";
- 
- 
-c.style.animationDelay=
-Math.random()*2+"s";
+){
  
  
-document.body.appendChild(c);
+const confetti=
+ 
+document.createElement(
+ 
+"div"
+ 
+);
+ 
+ 
+confetti.className=
+ 
+"confetti";
+ 
+ 
+confetti.style.left=
+ 
+Math.random()*100+
+ 
+"%";
+ 
+ 
+confetti.style.background=
+ 
+"hsl("+
+ 
+Math.random()*360+
+ 
+",85%,60%)";
+ 
+ 
+confetti.style.animationDuration=
+ 
+(
+ 
+2.5+
+ 
+Math.random()*3
+ 
+)+
+ 
+"s";
+ 
+ 
+confetti.style.animationDelay=
+ 
+Math.random()*2+
+ 
+"s";
+ 
+ 
+document.body
+ 
+.appendChild(
+ 
+confetti
+ 
+);
  
  
 }
  
  
 }
+ 
+ 
+/* =====================================================
+   REMOVE CONFETTI
+===================================================== */
+ 
+ 
+function removeConfetti(){
+ 
+ 
+document
+ 
+.querySelectorAll(
+ 
+".confetti"
+ 
+)
+ 
+.forEach(
+ 
+function(confetti){
+ 
+ 
+confetti.remove();
+ 
+ 
+}
+ 
+);
+ 
+ 
+}
+ 
+ 
+/* =====================================================
+   RESTART GAME
+===================================================== */
  
  
 function restartGame(){
  
  
-document.querySelectorAll(".confetti")
-.forEach(c=>c.remove());
+removeConfetti();
  
  
-showScreen("gameScreen");
+showScreen(
+ 
+"gameScreen"
+ 
+);
+ 
  
 startGame();
  
@@ -740,4 +2725,5 @@ startGame();
  
  
 </body>
+ 
 </html>
