@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Build the Number with Balls - Magic Treasure Edition</title>
+<style>
+:root{
+  --screen-h:100vh;
+  --ink:#23405a;
+  --deep-blue:#315f86;
+  --pink:#ff72a6;
+  --purple:#9b73ef;
+  --yellow:#ffd45a;
+  --orange:#ff9c45;
+  --green:#39b96b;
+  --red:#ef4e58;
+  --cream:#fff8df;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:"Arial Rounded MT Bold","Trebuchet MS",Arial,sans-serif;
+  color:var(--ink);
+  background:#bfeaff;
+}
+
+button{
+  font-family:inherit;
+  touch-action:manipulation;
+}
+
+.screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:var(--screen-h);
+  display:none;
+  overflow:hidden;
+}
+
+.screen.active{display:flex}
+
+/* -------------------------------------------------------
+   SHARED DECORATIONS
+------------------------------------------------------- */
+
+.sky-world{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 16%,rgba(255,255,255,.85) 0 2px,transparent 3px),
+    radial-gradient(circle at 83% 12%,rgba(255,255,255,.75) 0 2px,transparent 3px),
+    linear-gradient(180deg,#9fe0ff 0%,#d9f4ff 46%,#fff3c9 100%);
+}
+
+.sun{
+  position:absolute;
+  right:3.5vw;
+  top:3vh;
+  width:clamp(54px,7vw,94px);
+  height:clamp(54px,7vw,94px);
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fffbd8 0 12%,#ffe56f 36%,#ffc94e 72%);
+  box-shadow:0 0 0 12px rgba(255,225,88,.18),0 0 35px rgba(255,196,58,.38);
+  animation:sunFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes sunFloat{
+  from{transform:translateY(0) rotate(-3deg)}
+  to{transform:translateY(7px) rotate(3deg)}
+}
+
+.cloud{
+  position:absolute;
+  width:clamp(100px,13vw,180px);
+  height:clamp(38px,5vw,68px);
+  border-radius:999px;
+  background:rgba(255,255,255,.94);
+  filter:drop-shadow(0 5px 5px rgba(62,126,166,.13));
+  animation:cloudDrift 13s ease-in-out infinite alternate;
+}
+
+.cloud:before,.cloud:after{
+  content:"";
+  position:absolute;
+  background:inherit;
+  border-radius:50%;
+}
+
+.cloud:before{
+  width:44%;
+  height:115%;
+  left:14%;
+  bottom:8%;
+}
+
+.cloud:after{
+  width:38%;
+  height:92%;
+  right:14%;
+  bottom:6%;
+}
+
+.cloud.c1{left:-2vw;top:8vh}
+.cloud.c2{left:42vw;top:5vh;transform:scale(.78);animation-delay:-4s}
+.cloud.c3{right:5vw;top:26vh;transform:scale(.68);animation-delay:-7s}
+
+@keyframes cloudDrift{
+  from{margin-left:-8px}
+  to{margin-left:18px}
+}
+
+.balloon{
+  position:absolute;
+  width:clamp(34px,4.3vw,58px);
+  height:clamp(44px,5.7vw,76px);
+  border-radius:52% 48% 52% 48% / 60% 60% 42% 42%;
+  box-shadow:inset 8px 7px 0 rgba(255,255,255,.35),inset -7px -9px 0 rgba(0,0,0,.09),0 7px 12px rgba(62,78,111,.15);
+  animation:balloonFloat 3.5s ease-in-out infinite alternate;
+}
+
+.balloon:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-8px;
+  transform:translateX(-50%);
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:10px solid currentColor;
+}
+
+.balloon:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:100%;
+  width:2px;
+  height:clamp(45px,7vh,86px);
+  background:rgba(75,89,111,.42);
+}
+
+.balloon.b1{left:2vw;bottom:13vh;background:#ff7da8;color:#d95d86;animation-delay:-1s}
+.balloon.b2{right:2vw;bottom:9vh;background:#8b7cf0;color:#6b5ac9;animation-delay:-2.2s}
+.balloon.b3{right:13vw;top:16vh;background:#4ec7e8;color:#299ebf;transform:scale(.72);animation-delay:-.5s}
+
+@keyframes balloonFloat{
+  from{margin-top:-5px;transform:rotate(-2deg)}
+  to{margin-top:9px;transform:rotate(3deg)}
+}
+
+.ground-hills{
+  position:absolute;
+  left:-5%;
+  right:-5%;
+  bottom:-11vh;
+  height:30vh;
+  border-radius:50% 50% 0 0;
+  background:linear-gradient(180deg,#9fdf78,#77c45f);
+  box-shadow:inset 0 8px 0 rgba(255,255,255,.25);
+}
+
+.ground-hills:before{
+  content:"";
+  position:absolute;
+  left:30%;
+  bottom:3vh;
+  width:55%;
+  height:23vh;
+  border-radius:50% 50% 0 0;
+  background:linear-gradient(180deg,#c2ea8b,#8fd46a);
+}
+
+.decor-star{
+  position:absolute;
+  font-size:clamp(18px,2.3vw,34px);
+  animation:twinkle 1.5s ease-in-out infinite alternate;
+  opacity:.82;
+}
+
+.decor-star.s1{left:8vw;top:28vh;color:#ffcf43}
+.decor-star.s2{right:15vw;top:36vh;color:#ff78ae;animation-delay:-.5s}
+.decor-star.s3{left:31vw;top:11vh;color:#9a77ef;animation-delay:-1s}
+
+@keyframes twinkle{
+  from{transform:scale(.75) rotate(-12deg);opacity:.5}
+  to{transform:scale(1.15) rotate(12deg);opacity:1}
+}
+
+/* -------------------------------------------------------
+   SPLASH
+------------------------------------------------------- */
+
+#splashScreen{
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  z-index:500;
+}
+
+.splash-bubble{
+  position:absolute;
+  border-radius:50%;
+  opacity:.24;
+  animation:splashFloat 4s ease-in-out infinite alternate;
+}
+
+.splash-bubble.one{width:150px;height:150px;background:#ff9cc1;left:-35px;top:-25px}
+.splash-bubble.two{width:190px;height:190px;background:#81d9ff;right:-55px;bottom:-55px;animation-delay:-1s}
+.splash-bubble.three{width:90px;height:90px;background:#ffe074;right:10%;top:12%;animation-delay:-2s}
+
+@keyframes splashFloat{
+  from{transform:translateY(-7px) scale(.96)}
+  to{transform:translateY(9px) scale(1.04)}
+}
+
+.logo-card{
+  position:relative;
+  width:min(78vw,430px);
+  padding:34px 28px;
+  border-radius:38px;
+  background:#fff;
+  border:6px solid #fff;
+  box-shadow:0 20px 55px rgba(49,113,153,.18),0 0 0 6px rgba(126,214,255,.18);
+  text-align:center;
+}
+
+.logo-card img{
+  display:block;
+  width:min(56vw,275px);
+  max-height:35vh;
+  object-fit:contain;
+  margin:auto;
+}
+
+/* -------------------------------------------------------
+   GAME SCREEN
+------------------------------------------------------- */
+
+#gameScreen{
+  align-items:stretch;
+  justify-content:center;
+}
+
+.game-shell{
+  position:relative;
+  z-index:5;
+  width:100%;
+  max-width:1360px;
+  height:100%;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:7px 11px calc(8px + env(safe-area-inset-bottom));
+}
+
+.top-area{
+  flex:0 0 auto;
+  text-align:center;
+}
+
+.title-line{
+  position:relative;
+  min-height:42px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+h1{
+  display:inline-block;
+  padding:5px 23px 7px;
+  border-radius:24px;
+  background:rgba(255,255,255,.82);
+  border:4px solid rgba(255,255,255,.94);
+  box-shadow:0 6px 0 rgba(63,133,174,.16),0 9px 18px rgba(42,101,138,.12);
+  font-size:clamp(23px,3vw,45px);
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:.4px;
+  color:#24547a;
+  text-shadow:0 2px 0 #fff;
+}
+
+.progress-pill{
+  position:absolute;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  min-width:78px;
+  padding:8px 12px;
+  border-radius:22px;
+  background:linear-gradient(180deg,#fff,#eaf9ff);
+  border:3px solid #64b7e5;
+  box-shadow:0 5px 0 #3794c9,0 8px 15px rgba(47,105,142,.2);
+  color:#195d89;
+  font-size:clamp(13px,1.35vw,20px);
+  font-weight:1000;
+}
+
+.instruction{
+  display:inline-block;
+  margin-top:4px;
+  padding:4px 15px 5px;
+  border-radius:18px;
+  background:rgba(255,255,255,.72);
+  font-size:clamp(12px,1.45vw,21px);
+  line-height:1.12;
+  font-weight:900;
+  color:#35566d;
+}
+
+.target-strip{
+  flex:0 0 auto;
+  min-height:66px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+}
+
+.target-text{
+  padding:7px 14px;
+  border-radius:18px;
+  background:linear-gradient(180deg,#fff9df,#ffeaa4);
+  border:3px solid #fff;
+  box-shadow:0 5px 0 #e9b947;
+  font-size:clamp(14px,1.65vw,24px);
+  font-weight:1000;
+  color:#775317;
+}
+
+.target-number{
+  position:relative;
+  min-width:94px;
+  padding:3px 18px 5px;
+  border-radius:24px;
+  background:linear-gradient(180deg,#ff8ab4,#f34f8c);
+  border:5px solid #fff;
+  box-shadow:0 7px 0 #c82d67,0 11px 20px rgba(124,35,78,.24);
+  color:#fff;
+  font-size:clamp(40px,5vw,70px);
+  line-height:1;
+  font-weight:1000;
+  text-shadow:0 3px 0 rgba(141,29,77,.28);
+  animation:numberGlow 1.5s ease-in-out infinite alternate;
+}
+
+.target-number:before,.target-number:after{
+  content:"✦";
+  position:absolute;
+  color:#fff5a8;
+  font-size:18px;
+  animation:twinkle 1s ease-in-out infinite alternate;
+}
+
+.target-number:before{left:-16px;top:-9px}
+.target-number:after{right:-14px;bottom:-9px;animation-delay:-.45s}
+
+@keyframes numberGlow{
+  from{transform:translateY(0) scale(1)}
+  to{transform:translateY(-2px) scale(1.025)}
+}
+
+.main-area{
+  flex:1 1 auto;
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1.07fr;
+  gap:10px;
+}
+
+.play-panel{
+  position:relative;
+  min-height:0;
+  overflow:hidden;
+  padding:8px;
+  border-radius:31px;
+  border:5px solid rgba(255,255,255,.95);
+  box-shadow:0 11px 0 rgba(53,115,151,.13),0 16px 30px rgba(38,89,119,.17);
+  display:flex;
+  flex-direction:column;
+}
+
+.build-panel{
+  background:linear-gradient(180deg,rgba(255,246,218,.96),rgba(255,223,174,.94));
+}
+
+.choose-panel{
+  background:linear-gradient(180deg,rgba(236,231,255,.97),rgba(215,244,255,.94));
+}
+
+.play-panel:before{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:3px dashed rgba(255,255,255,.82);
+  border-radius:23px;
+  pointer-events:none;
+}
+
+.panel-heading{
+  position:relative;
+  z-index:2;
+  flex:0 0 auto;
+  align-self:center;
+  min-width:58%;
+  text-align:center;
+  padding:4px 16px 6px;
+  border-radius:20px;
+  border:3px solid #fff;
+  box-shadow:0 4px 0 rgba(86,69,145,.16);
+  font-size:clamp(17px,2vw,29px);
+  line-height:1;
+  font-weight:1000;
+  color:#fff;
+}
+
+.build-panel .panel-heading{background:linear-gradient(180deg,#ffaf57,#f47d2f)}
+.choose-panel .panel-heading{background:linear-gradient(180deg,#a48af7,#7858dc)}
+
+.panel-subtitle{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  margin:4px 0;
+  font-size:clamp(11px,1.25vw,17px);
+  font-weight:900;
+  color:#53677a;
+}
+
+.panel-content{
+  position:relative;
+  z-index:2;
+  flex:1 1 auto;
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+/* Treasure chest build zone */
+
+.chest-zone{
+  position:relative;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  padding:8px 7px 7px;
+  border-radius:20px;
+  background:linear-gradient(180deg,#fff9e8,#ffe5aa);
+  border:3px solid #f4bf5e;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.62),0 5px 0 #d69b39;
+}
+
+.chest-zone.ones{background:linear-gradient(180deg,#fff4fb,#ffd7e8);border-color:#ef9abb;box-shadow:inset 0 0 0 3px rgba(255,255,255,.62),0 5px 0 #d7759c}
+
+.zone-label{
+  flex:0 0 auto;
+  text-align:center;
+  margin-bottom:5px;
+}
+
+.zone-label span{
+  display:inline-block;
+  padding:4px 11px;
+  border-radius:15px;
+  background:#fff;
+  border:2px solid rgba(255,255,255,.95);
+  box-shadow:0 3px 0 rgba(120,81,35,.12);
+  color:#754d1b;
+  font-size:clamp(12px,1.45vw,20px);
+  font-weight:1000;
+}
+
+.chest-zone.ones .zone-label span{color:#a1406c}
+
+.chest-body{
+  position:relative;
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
+  padding:12px 7px 13px;
+  border-radius:16px 16px 20px 20px;
+  background:
+    linear-gradient(90deg,transparent 48%,rgba(119,61,16,.19) 48% 52%,transparent 52%),
+    linear-gradient(180deg,#c9782d 0 15%,#efac52 15% 30%,#d88732 30% 45%,#f0ac50 45% 60%,#d6842e 60% 75%,#eca34a 75% 100%);
+  border:4px solid #884617;
+  box-shadow:inset 0 0 0 3px rgba(255,217,129,.34),0 6px 0 #6f3511;
+}
+
+.chest-zone.ones .chest-body{
+  background:
+    linear-gradient(90deg,transparent 48%,rgba(90,37,99,.16) 48% 52%,transparent 52%),
+    linear-gradient(180deg,#b96bd5 0 15%,#d998ee 15% 30%,#b86cd4 30% 45%,#db9cf0 45% 60%,#b466cf 60% 75%,#d98fec 75% 100%);
+  border-color:#77418b;
+  box-shadow:inset 0 0 0 3px rgba(255,225,255,.3),0 6px 0 #5e2e70;
+}
+
+.chest-body:before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:44%;
+  width:28px;
+  height:34px;
+  transform:translate(-50%,-50%);
+  border-radius:8px;
+  background:linear-gradient(180deg,#ffe276,#d79b24);
+  border:3px solid #89520d;
+  box-shadow:0 3px 0 rgba(80,39,7,.24);
+  opacity:.88;
+}
+
+.built-items{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  align-content:center;
+  justify-content:center;
+  align-items:center;
+  justify-items:center;
+}
+
+.ten-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 8px}
+.one-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+
+.empty-note{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:90%;
+  transform:translate(-50%,-50%);
+  padding:8px 7px;
+  border-radius:14px;
+  background:rgba(255,255,255,.78);
+  color:#6f583e;
+  text-align:center;
+  font-size:clamp(10px,1.15vw,16px);
+  line-height:1.15;
+  font-weight:900;
+  pointer-events:none;
+}
+
+.empty-note.hide{display:none}
+
+/* Magic basket supply zone */
+
+.basket-zone{
+  position:relative;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  padding:8px 7px 7px;
+  border-radius:20px;
+  background:linear-gradient(180deg,#f3edff,#ded1ff);
+  border:3px solid #aa91ef;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.62),0 5px 0 #8065ca;
+}
+
+.basket-zone.ones{background:linear-gradient(180deg,#e8fbff,#c5edf7);border-color:#72c8dd;box-shadow:inset 0 0 0 3px rgba(255,255,255,.62),0 5px 0 #45a4ba}
+
+.basket-zone .zone-label span{color:#6544b1}
+.basket-zone.ones .zone-label span{color:#24758b}
+
+.basket-body{
+  position:relative;
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden;
+  padding:15px 8px 9px;
+  border-radius:24px 24px 34px 34px;
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 11px,rgba(75,44,133,.12) 11px 18px),
+    linear-gradient(180deg,#b691ee,#8a67d4);
+  border:4px solid #6849ac;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.22),0 6px 0 #51358f;
+}
+
+.basket-zone.ones .basket-body{
+  background:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.16) 0 11px,rgba(27,119,143,.12) 11px 18px),
+    linear-gradient(180deg,#78d6e8,#4db5cc);
+  border-color:#287f95;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.22),0 6px 0 #1d6677;
+}
+
+.basket-body:before{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  top:-13px;
+  height:28px;
+  border:7px solid #6849ac;
+  border-bottom:0;
+  border-radius:60px 60px 0 0;
+}
+
+.basket-zone.ones .basket-body:before{border-color:#287f95}
+
+.option-items{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  min-height:0;
+  display:grid;
+  align-content:center;
+  justify-content:center;
+  align-items:center;
+  justify-items:center;
+}
+
+/* -------------------------------------------------------
+   TREASURE BAG = TEN
+------------------------------------------------------- */
+
+.ten-bag{
+  position:relative;
+  width:clamp(66px,7vw,98px);
+  height:clamp(58px,6.1vw,86px);
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  filter:drop-shadow(0 6px 2px rgba(72,42,14,.25));
+}
+
+.bag-neck{
+  position:absolute;
+  left:50%;
+  top:1px;
+  width:48%;
+  height:18%;
+  transform:translateX(-50%);
+  border-radius:7px 7px 3px 3px;
+  background:linear-gradient(180deg,#f7d383,#c98f31);
+  border:2px solid #7e5018;
+  z-index:3;
+}
+
+.bag-neck:after{
+  content:"";
+  position:absolute;
+  left:-14%;
+  right:-14%;
+  top:65%;
+  height:5px;
+  border-radius:8px;
+  background:#ef4d59;
+  box-shadow:0 2px 0 #a6212f;
+}
+
+.bag-body{
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:13%;
+  bottom:1%;
+  padding:13% 8% 17%;
+  border-radius:34% 34% 25% 25% / 26% 26% 34% 34%;
+  background:
+    radial-gradient(circle at 29% 22%,rgba(255,255,255,.38) 0 8%,transparent 9%),
+    linear-gradient(145deg,#ffd881,#e49d3f 70%,#c67a24);
+  border:3px solid #875116;
+  box-shadow:inset -7px -8px 0 rgba(100,48,7,.12),inset 5px 5px 0 rgba(255,255,255,.25);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  grid-template-rows:repeat(2,1fr);
+  gap:2px;
+  z-index:2;
+}
+
+.ten-bag:nth-child(2n) .bag-body{background:linear-gradient(145deg,#ffb5d0,#ec6e9d 70%,#c94377)}
+.ten-bag:nth-child(3n) .bag-body{background:linear-gradient(145deg,#b9ecff,#5ec5e8 70%,#2893bc)}
+.ten-bag:nth-child(4n) .bag-body{background:linear-gradient(145deg,#d4ef9b,#8dc851 70%,#5a9c28)}
+.ten-bag:nth-child(5n) .bag-body{background:linear-gradient(145deg,#d9c4ff,#9875e6 70%,#6845bd)}
+
+.mini-ball{
+  width:100%;
+  height:100%;
+  min-width:0;
+  min-height:0;
+  border-radius:50%;
+  border:1px solid rgba(61,40,31,.24);
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.55),inset -2px -2px 0 rgba(0,0,0,.12);
+}
+
+.bag-badge{
+  position:absolute;
+  left:50%;
+  bottom:2px;
+  z-index:4;
+  transform:translateX(-50%);
+  min-width:35px;
+  padding:2px 8px 3px;
+  border-radius:12px;
+  background:#6c3d17;
+  color:#fff;
+  border:2px solid #fff6d8;
+  box-shadow:0 2px 0 rgba(57,24,4,.28);
+  font-size:clamp(10px,1.15vw,15px);
+  line-height:1;
+  font-weight:1000;
+}
+
+/* -------------------------------------------------------
+   MAGIC BALL = ONE
+------------------------------------------------------- */
+
+.magic-ball{
+  position:relative;
+  width:clamp(38px,4.6vw,62px);
+  height:clamp(38px,4.6vw,62px);
+  border-radius:50%;
+  border:3px solid rgba(74,50,88,.30);
+  box-shadow:inset 7px 7px 0 rgba(255,255,255,.42),inset -7px -8px 0 rgba(0,0,0,.12),0 6px 0 rgba(76,54,100,.24),0 8px 13px rgba(52,56,98,.16);
+  color:#fff;
+  font-size:clamp(14px,1.7vw,23px);
+  font-weight:1000;
+  text-shadow:0 2px 0 rgba(0,0,0,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.magic-ball:before{
+  content:"";
+  position:absolute;
+  width:21%;
+  height:21%;
+  border-radius:50%;
+  left:19%;
+  top:15%;
+  background:rgba(255,255,255,.92);
+  filter:blur(.2px);
+}
+
+.magic-ball:after{
+  content:"✦";
+  position:absolute;
+  right:-5px;
+  top:-8px;
+  color:#fff7a7;
+  font-size:16px;
+  text-shadow:0 0 5px #fff;
+}
+
+.ten-bag:active,.magic-ball:active{
+  transform:translateY(4px) scale(.97);
+}
+
+.used{
+  opacity:.22;
+  pointer-events:none;
+  filter:grayscale(.65);
+  transform:scale(.9);
+}
+
+.selected-item{animation:itemPop .34s cubic-bezier(.2,.9,.3,1.25)}
+
+@keyframes itemPop{
+  0%{transform:scale(.32) translateY(18px) rotate(-10deg);opacity:0}
+  68%{transform:scale(1.16) translateY(-4px) rotate(4deg);opacity:1}
+  100%{transform:scale(1) translateY(0) rotate(0);opacity:1}
+}
+
+.selection-bounce{animation:choiceBounce .38s ease-out}
+
+@keyframes choiceBounce{
+  0%,100%{transform:translateY(0) scale(1)}
+  45%{transform:translateY(-10px) scale(1.08)}
+  75%{transform:translateY(2px) scale(.98)}
+}
+
+.sparkle-burst{
+  position:fixed;
+  z-index:250;
+  pointer-events:none;
+  width:10px;
+  height:10px;
+}
+
+.sparkle-piece{
+  position:absolute;
+  left:0;
+  top:0;
+  font-size:18px;
+  color:#fff1a0;
+  text-shadow:0 0 5px #fff,0 0 8px #ffc54a;
+  animation:sparkFly .65s ease-out forwards;
+}
+
+@keyframes sparkFly{
+  from{transform:translate(0,0) scale(.2) rotate(0);opacity:1}
+  to{transform:translate(var(--sx),var(--sy)) scale(1.25) rotate(180deg);opacity:0}
+}
+
+/* -------------------------------------------------------
+   CONTROLS
+------------------------------------------------------- */
+
+.controls{
+  flex:0 0 auto;
+  min-height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  padding-top:3px;
+}
+
+.control-btn{
+  min-width:155px;
+  min-height:48px;
+  padding:9px 25px 11px;
+  border:4px solid #fff;
+  border-radius:28px;
+  color:#fff;
+  font-size:clamp(16px,1.9vw,25px);
+  font-weight:1000;
+  letter-spacing:.3px;
+  cursor:pointer;
+  text-shadow:0 2px 0 rgba(0,0,0,.16);
+  transition:transform .12s ease;
+}
+
+#clearBtn{
+  background:linear-gradient(180deg,#ffb65d,#f17b26);
+  box-shadow:0 7px 0 #ba5714,0 10px 16px rgba(94,48,17,.22);
+}
+
+#checkBtn{
+  background:linear-gradient(180deg,#53d47f,#2eaa5c);
+  box-shadow:0 7px 0 #1d7a40,0 10px 16px rgba(21,95,53,.22);
+}
+
+.control-btn:active{
+  transform:translateY(5px) scale(.98);
+  box-shadow:0 2px 0 rgba(0,0,0,.26)!important;
+}
+
+/* -------------------------------------------------------
+   FEEDBACK
+------------------------------------------------------- */
+
+#feedbackLayer{
+  position:fixed;
+  inset:0;
+  z-index:350;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.34);
+  backdrop-filter:blur(1px);
+  pointer-events:none;
+}
+
+#feedbackLayer.show{display:flex}
+
+.feedback-card{
+  width:min(82vw,430px);
+  padding:24px 24px 26px;
+  border-radius:38px;
+  background:rgba(255,255,255,.98);
+  border:7px solid #fff;
+  box-shadow:0 22px 60px rgba(38,76,104,.28);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  animation:feedbackPop .32s cubic-bezier(.18,.9,.28,1.25);
+}
+
+.feedback-card.correct{box-shadow:0 0 0 9px rgba(57,185,107,.82),0 22px 60px rgba(38,76,104,.28)}
+.feedback-card.wrong{box-shadow:0 0 0 9px rgba(239,78,88,.82),0 22px 60px rgba(38,76,104,.28)}
+
+.feedback-icon{
+  width:clamp(116px,20vw,170px);
+  height:clamp(116px,20vw,170px);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:clamp(83px,15vw,130px);
+  line-height:1;
+  font-weight:1000;
+  border:8px solid #fff;
+  text-shadow:0 4px 0 rgba(0,0,0,.15);
+}
+
+.correct .feedback-icon{
+  background:linear-gradient(180deg,#64de8c,#28a857);
+  box-shadow:0 8px 0 #18783b,0 12px 22px rgba(25,123,61,.25);
+  animation:tickPulse .65s ease-in-out infinite alternate;
+}
+
+.wrong .feedback-icon{
+  background:linear-gradient(180deg,#ff767e,#e93c47);
+  box-shadow:0 8px 0 #a91d27,0 12px 22px rgba(142,31,39,.25);
+  animation:crossWiggle .45s ease-in-out infinite alternate;
+}
+
+.feedback-word{
+  margin-top:18px;
+  font-size:clamp(23px,4vw,39px);
+  line-height:1.05;
+  font-weight:1000;
+}
+
+.correct .feedback-word{color:#258d4a}
+.wrong .feedback-word{color:#ca2934}
+
+@keyframes feedbackPop{
+  0%{transform:scale(.25) rotate(-10deg);opacity:0}
+  75%{transform:scale(1.08) rotate(2deg);opacity:1}
+  100%{transform:scale(1) rotate(0);opacity:1}
+}
+
+@keyframes tickPulse{
+  from{transform:scale(.97) rotate(-2deg)}
+  to{transform:scale(1.045) rotate(2deg)}
+}
+
+@keyframes crossWiggle{
+  from{transform:rotate(-5deg)}
+  to{transform:rotate(5deg)}
+}
+
+.shake{animation:shake .42s linear}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  18%{transform:translateX(-10px)}
+  36%{transform:translateX(10px)}
+  54%{transform:translateX(-8px)}
+  72%{transform:translateX(8px)}
+  88%{transform:translateX(-3px)}
+}
+
+/* -------------------------------------------------------
+   CONFETTI
+------------------------------------------------------- */
+
+#celebrationLayer{
+  position:fixed;
+  inset:0;
+  z-index:340;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.confetti-piece{
+  position:absolute;
+  top:-24px;
+  width:11px;
+  height:19px;
+  border-radius:3px;
+  animation:confettiFall var(--dur) linear forwards;
+}
+
+@keyframes confettiFall{
+  0%{transform:translate3d(0,-10vh,0) rotate(0deg);opacity:1}
+  100%{transform:translate3d(var(--drift),115vh,0) rotate(760deg);opacity:.9}
+}
+
+/* -------------------------------------------------------
+   FINAL SCREEN
+------------------------------------------------------- */
+
+#finalScreen{
+  align-items:center;
+  justify-content:center;
+  z-index:400;
+  background:linear-gradient(180deg,#96dcff,#dff7ff 46%,#fff0b9);
+}
+
+.rainbow{
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:min(110vw,1150px);
+  height:min(55vw,575px);
+  transform:translate(-50%,-50%);
+  border-radius:600px 600px 0 0;
+  background:
+    radial-gradient(ellipse at center bottom,
+      transparent 0 31%,
+      #8d6ae8 31% 36%,
+      #5f9df5 36% 41%,
+      #53cf8d 41% 46%,
+      #ffe15b 46% 51%,
+      #ff9e4e 51% 56%,
+      #f26787 56% 61%,
+      transparent 61% 100%);
+  opacity:.88;
+  filter:drop-shadow(0 9px 12px rgba(65,91,130,.15));
+}
+
+#numberRain,#fireworkLayer{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.number-drop{
+  position:absolute;
+  top:-15vh;
+  font-weight:1000;
+  line-height:1;
+  text-shadow:0 3px 0 rgba(255,255,255,.95),0 6px 9px rgba(0,0,0,.18);
+  animation:numberFall linear infinite;
+}
+
+@keyframes numberFall{
+  from{transform:translateY(-18vh) rotate(0deg)}
+  to{transform:translateY(132vh) rotate(360deg)}
+}
+
+.firework{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  animation:fireworkPop 1.5s ease-out infinite;
+}
+
+.firework:before,.firework:after{
+  content:"";
+  position:absolute;
+  inset:-28px;
+  border-radius:50%;
+  border:6px dotted currentColor;
+}
+
+.firework:after{
+  inset:-48px;
+  border-width:5px;
+  transform:rotate(22deg);
+}
+
+.firework.f1{left:14%;top:26%;color:#ff588f;animation-delay:-.2s}
+.firework.f2{right:15%;top:22%;color:#6b7ef2;animation-delay:-.9s}
+.firework.f3{right:9%;bottom:19%;color:#ffb33e;animation-delay:-1.2s}
+.firework.f4{left:10%;bottom:22%;color:#47c78a;animation-delay:-.6s}
+
+@keyframes fireworkPop{
+  0%{transform:scale(.12);opacity:0}
+  15%{opacity:1}
+  62%{transform:scale(1);opacity:1}
+  100%{transform:scale(1.18);opacity:0}
+}
+
+.final-card{
+  position:relative;
+  z-index:5;
+  width:min(88vw,700px);
+  padding:32px 26px 29px;
+  border-radius:42px;
+  background:rgba(255,255,255,.92);
+  border:8px solid #fff;
+  box-shadow:0 18px 0 rgba(94,136,175,.16),0 28px 65px rgba(46,93,130,.25);
+  text-align:center;
+}
+
+.final-card:before,.final-card:after{
+  content:"★";
+  position:absolute;
+  top:18px;
+  color:#ffd247;
+  font-size:clamp(30px,5vw,58px);
+  animation:twinkle 1s ease-in-out infinite alternate;
+}
+
+.final-card:before{left:22px}
+.final-card:after{right:22px;animation-delay:-.5s}
+
+.final-card h2{
+  font-size:clamp(58px,10.5vw,118px);
+  line-height:.9;
+  font-weight:1000;
+  letter-spacing:2px;
+  color:#f04e86;
+  text-shadow:0 4px 0 #fff,0 8px 0 #ffb33e,0 12px 16px rgba(151,55,90,.23);
+  animation:amazingPulse .9s ease-in-out infinite alternate;
+}
+
+.final-card p{
+  margin:21px 0 24px;
+  font-size:clamp(20px,3vw,36px);
+  line-height:1.15;
+  font-weight:1000;
+  color:#28587b;
+}
+
+.play-again{
+  min-width:235px;
+  padding:14px 34px 16px;
+  border:5px solid #fff;
+  border-radius:34px;
+  background:linear-gradient(180deg,#63d88a,#2da95a);
+  color:#fff;
+  box-shadow:0 9px 0 #1b783d,0 13px 20px rgba(20,93,49,.26);
+  font-size:clamp(20px,3vw,32px);
+  font-weight:1000;
+  text-shadow:0 2px 0 rgba(0,0,0,.16);
+  cursor:pointer;
+}
+
+.play-again:active{
+  transform:translateY(6px);
+  box-shadow:0 3px 0 #1b783d;
+}
+
+@keyframes amazingPulse{
+  from{transform:scale(1) rotate(-1deg)}
+  to{transform:scale(1.045) rotate(1deg)}
+}
+
+/* -------------------------------------------------------
+   PORTRAIT MOBILE
+------------------------------------------------------- */
+
+@media (max-width:700px) and (orientation:portrait){
+  .game-shell{gap:3px;padding:5px 5px calc(5px + env(safe-area-inset-bottom))}
+  .title-line{min-height:31px}
+  h1{max-width:77%;padding:4px 10px 5px;border-width:3px;font-size:18px;line-height:1.02}
+  .progress-pill{min-width:58px;padding:4px 7px;border-width:2px;font-size:10px;box-shadow:0 3px 0 #3794c9}
+  .instruction{margin-top:2px;padding:3px 8px;font-size:10px}
+  .target-strip{min-height:48px;gap:7px}
+  .target-text{padding:4px 8px;border-width:2px;font-size:11px;box-shadow:0 3px 0 #e9b947}
+  .target-number{min-width:65px;padding:1px 12px 3px;border-width:3px;border-radius:17px;font-size:34px;box-shadow:0 4px 0 #c82d67}
+  .main-area{grid-template-columns:1fr;grid-template-rows:minmax(0,.98fr) minmax(0,1.02fr);gap:5px}
+  .play-panel{padding:4px;border-radius:20px;border-width:3px;box-shadow:0 5px 0 rgba(53,115,151,.13)}
+  .play-panel:before{inset:3px;border-width:2px;border-radius:15px}
+  .panel-heading{min-width:52%;padding:3px 9px 4px;border-width:2px;font-size:13px}
+  .panel-subtitle{margin:2px 0;font-size:9px}
+  .panel-content{gap:4px}
+  .chest-zone,.basket-zone{padding:4px 3px 3px;border-width:2px;border-radius:13px;box-shadow:0 3px 0 rgba(90,61,22,.28)}
+  .zone-label{margin-bottom:2px}
+  .zone-label span{padding:2px 6px;border-width:1px;font-size:9px}
+  .chest-body,.basket-body{padding:7px 3px 7px;border-width:2px;border-radius:10px 10px 13px 13px;box-shadow:0 3px 0 rgba(67,35,13,.45)}
+  .basket-body{padding-top:9px;border-radius:14px 14px 18px 18px}
+  .basket-body:before{top:-8px;height:17px;border-width:4px}
+  .chest-body:before{width:18px;height:22px;border-width:2px}
+  .ten-grid{gap:2px 4px}
+  .one-grid{gap:3px}
+  .ten-bag{width:50px;height:44px}
+  .bag-body{border-width:2px;gap:1px}
+  .bag-neck{border-width:1px}
+  .bag-neck:after{height:3px}
+  .bag-badge{min-width:24px;padding:0 5px 1px;border-width:1px;font-size:8px}
+  .magic-ball{width:27px;height:27px;border-width:2px;font-size:9px;box-shadow:inset 4px 4px 0 rgba(255,255,255,.42),inset -4px -5px 0 rgba(0,0,0,.12),0 3px 0 rgba(76,54,100,.24)}
+  .magic-ball:after{font-size:10px;right:-4px;top:-6px}
+  .empty-note{padding:4px;font-size:8px}
+  .controls{min-height:45px;gap:8px;padding-top:1px}
+  .control-btn{min-width:115px;min-height:38px;padding:5px 14px 7px;border-width:3px;font-size:13px;box-shadow:0 4px 0 rgba(0,0,0,.28)!important}
+  .cloud.c3,.balloon.b3,.decor-star.s2{display:none}
+  .balloon.b1,.balloon.b2{opacity:.6}
+  .feedback-card{padding:20px;width:min(84vw,350px)}
+  .feedback-icon{width:115px;height:115px;font-size:84px}
+  .feedback-word{margin-top:14px;font-size:24px}
+  .final-card{padding:28px 14px 25px;border-radius:31px}
+  .final-card h2{font-size:57px}
+  .final-card p{margin:17px 0 21px;font-size:19px}
+  .play-again{min-width:200px;font-size:20px}
+}
+
+/* -------------------------------------------------------
+   SHORT SCREENS AND LANDSCAPE PHONES
+------------------------------------------------------- */
+
+@media (max-height:650px){
+  .game-shell{gap:3px;padding-top:4px}
+  .title-line{min-height:28px}
+  h1{font-size:19px;padding-top:3px;padding-bottom:4px}
+  .instruction{font-size:9px;margin-top:1px}
+  .target-strip{min-height:42px}
+  .target-text{font-size:10px;padding:3px 7px}
+  .target-number{font-size:30px;min-width:60px;border-width:3px}
+  .panel-heading{font-size:13px;padding:3px 9px}
+  .panel-subtitle{font-size:9px;margin:2px 0}
+  .zone-label span{font-size:9px;padding:2px 6px}
+  .ten-bag{width:50px;height:43px}
+  .magic-ball{width:27px;height:27px;font-size:9px}
+  .controls{min-height:40px}
+  .control-btn{min-height:34px;padding:4px 15px 6px;font-size:13px}
+}
+
+@media (orientation:landscape) and (max-height:560px){
+  .game-shell{padding:4px 8px calc(4px + env(safe-area-inset-bottom));gap:2px}
+  .title-line{min-height:25px}
+  h1{font-size:18px;padding:3px 13px 4px;border-width:3px}
+  .instruction{font-size:8px;padding:2px 8px}
+  .progress-pill{min-width:55px;padding:3px 7px;border-width:2px;font-size:9px;box-shadow:0 3px 0 #3794c9}
+  .target-strip{min-height:37px;gap:7px}
+  .target-text{font-size:9px;padding:3px 7px;border-width:2px;box-shadow:0 3px 0 #e9b947}
+  .target-number{font-size:28px;min-width:58px;padding:0 11px 2px;border-width:3px;box-shadow:0 4px 0 #c82d67}
+  .main-area{gap:6px}
+  .play-panel{padding:4px;border-width:3px;border-radius:18px;box-shadow:0 5px 0 rgba(53,115,151,.13)}
+  .play-panel:before{inset:3px;border-width:2px;border-radius:13px}
+  .panel-heading{min-width:50%;padding:2px 9px 3px;border-width:2px;font-size:12px}
+  .panel-subtitle{margin:1px 0;font-size:8px}
+  .panel-content{gap:4px}
+  .chest-zone,.basket-zone{padding:3px;border-width:2px;border-radius:12px;box-shadow:0 3px 0 rgba(77,48,20,.26)}
+  .zone-label{margin-bottom:1px}
+  .zone-label span{font-size:8px;padding:1px 5px;border-width:1px}
+  .chest-body,.basket-body{padding:6px 3px;border-width:2px;border-radius:10px;box-shadow:0 3px 0 rgba(67,35,13,.4)}
+  .basket-body{padding-top:8px;border-radius:12px 12px 16px 16px}
+  .basket-body:before{top:-7px;height:15px;border-width:4px}
+  .chest-body:before{width:16px;height:19px;border-width:2px}
+  .ten-grid{gap:2px 4px}
+  .one-grid{gap:2px}
+  .ten-bag{width:47px;height:40px}
+  .bag-body{border-width:2px;gap:1px}
+  .bag-badge{min-width:22px;padding:0 4px 1px;border-width:1px;font-size:7px}
+  .magic-ball{width:24px;height:24px;border-width:2px;font-size:8px;box-shadow:inset 3px 3px 0 rgba(255,255,255,.42),inset -3px -4px 0 rgba(0,0,0,.12),0 3px 0 rgba(76,54,100,.24)}
+  .magic-ball:after{font-size:8px;right:-3px;top:-5px}
+  .empty-note{padding:3px;font-size:7px}
+  .controls{min-height:36px;gap:8px}
+  .control-btn{min-width:106px;min-height:30px;padding:3px 12px 5px;border-width:2px;font-size:11px;box-shadow:0 3px 0 rgba(0,0,0,.3)!important}
+  .cloud.c3,.balloon.b3,.decor-star.s2{display:none}
+}
+
+@media (max-width:370px) and (orientation:portrait){
+  h1{font-size:16px}
+  .instruction{font-size:8px}
+  .progress-pill{font-size:9px;min-width:52px}
+  .target-text{font-size:9px}
+  .target-number{font-size:29px;min-width:55px}
+  .panel-heading{font-size:11px}
+  .zone-label span{font-size:8px}
+  .ten-bag{width:43px;height:38px}
+  .magic-ball{width:23px;height:23px;font-size:8px}
+  .control-btn{min-width:103px;font-size:11px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+/* FINAL ALIGNMENT FIX - TENS TREASURE */
+#tensOptions,
+#builtTens{
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:5px;
+    align-items:center;
+    justify-items:center;
+}
+
+#tensOptions .ten-bag,
+#builtTens .ten-bag{
+    width:clamp(42px,4.5vw,70px);
+    height:clamp(38px,4vw,62px);
+}
+
+#tensOptions .bag-body,
+#builtTens .bag-body{
+    padding:10% 8% 15%;
+}
+
+/* Keep all five tens treasure bags inside the basket on smaller screens */
+@media(max-width:700px){
+    #tensOptions,
+    #builtTens{
+        grid-template-columns:repeat(5,minmax(0,1fr));
+        gap:2px;
+    }
+    #tensOptions .ten-bag,
+    #builtTens .ten-bag{
+        width:34px;
+        height:31px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<section id="splashScreen" class="screen active">
+  <div class="splash-bubble one"></div>
+  <div class="splash-bubble two"></div>
+  <div class="splash-bubble three"></div>
+  <div class="logo-card">
+    <img src="assets/innovine-logo.png" alt="Innovine Logo">
+  </div>
+</section>
+
+<!-- GAME SCREEN -->
+<section id="gameScreen" class="screen">
+  <div class="sky-world">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="balloon b1"></div>
+    <div class="balloon b2"></div>
+    <div class="balloon b3"></div>
+    <div class="decor-star s1">★</div>
+    <div class="decor-star s2">✦</div>
+    <div class="decor-star s3">★</div>
+    <div class="ground-hills"></div>
+  </div>
+
+  <div class="game-shell">
+    <div class="top-area">
+      <div class="title-line">
+        <h1>BUILD THE NUMBER WITH BALLS</h1>
+        <div class="progress-pill" id="progressText">1 / 8</div>
+      </div>
+      <div class="instruction">Tap the treasure bags for tens and the magic balls for ones.</div>
+    </div>
+
+    <div class="target-strip">
+      <div class="target-text">BUILD THIS NUMBER</div>
+      <div class="target-number" id="targetNumber">31</div>
+    </div>
+
+    <main class="main-area" id="mainArea">
+      <!-- BUILD AREA -->
+      <section class="play-panel build-panel">
+        <div class="panel-heading">BUILD MY NUMBER</div>
+        <div class="panel-subtitle">Fill the treasure chest with the correct tens and ones.</div>
+
+        <div class="panel-content">
+          <div class="chest-zone">
+            <div class="zone-label"><span>TENS TREASURE</span></div>
+            <div class="chest-body">
+              <div class="built-items ten-grid" id="builtTens"></div>
+            </div>
+          </div>
+
+          <div class="chest-zone ones">
+            <div class="zone-label"><span>ONES TREASURE</span></div>
+            <div class="chest-body">
+              <div class="built-items one-grid" id="builtOnes"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CHOOSE AREA -->
+      <section class="play-panel choose-panel">
+        <div class="panel-heading">MAGIC BASKET</div>
+        <div class="panel-subtitle">Choose the treasure you need to make the number.</div>
+
+        <div class="panel-content">
+          <div class="basket-zone">
+            <div class="zone-label"><span>1 BAG = 1 TEN</span></div>
+            <div class="basket-body">
+              <div class="option-items ten-grid" id="tensOptions"></div>
+            </div>
+          </div>
+
+          <div class="basket-zone ones">
+            <div class="zone-label"><span>1 BALL = 1 ONE</span></div>
+            <div class="basket-body">
+              <div class="option-items one-grid" id="onesOptions"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="controls">
+      <button class="control-btn" id="clearBtn" type="button">CLEAR</button>
+      <button class="control-btn" id="checkBtn" type="button">CHECK</button>
+    </div>
+  </div>
+</section>
+
+<!-- FEEDBACK -->
+<div id="feedbackLayer">
+  <div class="feedback-card" id="feedbackCard">
+    <div class="feedback-icon" id="feedbackIcon">✓</div>
+    <div class="feedback-word" id="feedbackWord">Amazing! You built it!</div>
+  </div>
+</div>
+
+<!-- CONFETTI -->
+<div id="celebrationLayer"></div>
+
+<!-- FINAL SCREEN -->
+<section id="finalScreen" class="screen">
+  <div class="sky-world">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="balloon b1"></div>
+    <div class="balloon b2"></div>
+    <div class="ground-hills"></div>
+  </div>
+
+  <div class="rainbow"></div>
+  <div id="numberRain"></div>
+  <div id="fireworkLayer">
+    <div class="firework f1"></div>
+    <div class="firework f2"></div>
+    <div class="firework f3"></div>
+    <div class="firework f4"></div>
+  </div>
+
+  <div class="final-card">
+    <h2>AMAZING!</h2>
+    <p>You built all the magic numbers!</p>
+    <button class="play-again" id="playAgainBtn" type="button">PLAY AGAIN</button>
+  </div>
+</section>
+
+<!-- AUDIO -->
+<audio id="clapsSound" src="assets/claps.mp3" preload="auto"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3" preload="auto"></audio>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- MOBILE HEIGHT FIX ---------------- */
+  function setScreenHeight(){
+    document.documentElement.style.setProperty("--screen-h",window.innerHeight+"px");
+  }
+  setScreenHeight();
+  window.addEventListener("resize",setScreenHeight);
+  window.addEventListener("orientationchange",function(){
+    window.setTimeout(setScreenHeight,250);
+  });
+
+  /* ---------------- GAME DATA ---------------- */
+  var TOTAL_QUESTIONS=8;
+  var ALL_NUMBERS=[31,32,33,34,35,36,37,38,39,40];
+  var BALL_COLORS=[
+    "#ff6f91","#ffca3a","#56cfe1","#8ac926","#b388eb",
+    "#ff924c","#4cc9f0","#f15bb5","#90dbf4","#ffd166"
+  ];
+
+  var questions=[];
+  var currentIndex=0;
+  var target=31;
+  var selectedTens=0;
+  var selectedOnes=0;
+  var locked=false;
+
+  /* ---------------- ELEMENTS ---------------- */
+  var splashScreen=document.getElementById("splashScreen");
+  var gameScreen=document.getElementById("gameScreen");
+  var finalScreen=document.getElementById("finalScreen");
+  var targetNumber=document.getElementById("targetNumber");
+  var progressText=document.getElementById("progressText");
+  var builtTens=document.getElementById("builtTens");
+  var builtOnes=document.getElementById("builtOnes");
+  var tensOptions=document.getElementById("tensOptions");
+  var onesOptions=document.getElementById("onesOptions");
+  var mainArea=document.getElementById("mainArea");
+  var feedbackLayer=document.getElementById("feedbackLayer");
+  var feedbackCard=document.getElementById("feedbackCard");
+  var feedbackIcon=document.getElementById("feedbackIcon");
+  var feedbackWord=document.getElementById("feedbackWord");
+  var celebrationLayer=document.getElementById("celebrationLayer");
+  var numberRain=document.getElementById("numberRain");
+  var clapsSound=document.getElementById("clapsSound");
+  var wrongSound=document.getElementById("wrongSound");
+
+  document.getElementById("checkBtn").onclick=checkAnswer;
+  document.getElementById("clearBtn").onclick=resetSelection;
+  document.getElementById("playAgainBtn").onclick=restartGame;
+
+  /* ---------------- SPLASH ---------------- */
+  window.setTimeout(function(){
+    splashScreen.classList.remove("active");
+    gameScreen.classList.add("active");
+    startGame();
+  },2000);
+
+  /* ---------------- HELPERS ---------------- */
+  function shuffle(array){
+    var i,j,temp;
+    for(i=array.length-1;i>0;i--){
+      j=Math.floor(Math.random()*(i+1));
+      temp=array[i];
+      array[i]=array[j];
+      array[j]=temp;
+    }
+    return array;
+  }
+
+  function playSound(audio){
+    try{
+      audio.pause();
+      audio.currentTime=0;
+      var promise=audio.play();
+      if(promise&&typeof promise.catch==="function"){
+        promise.catch(function(){});
+      }
+    }catch(error){}
+  }
+
+  /* ---------------- START / LOAD ---------------- */
+  function startGame(){
+    questions=shuffle(ALL_NUMBERS.slice()).slice(0,TOTAL_QUESTIONS);
+    currentIndex=0;
+    locked=false;
+    loadQuestion();
+  }
+
+  function loadQuestion(){
+    target=questions[currentIndex];
+    targetNumber.textContent=target;
+    progressText.textContent=(currentIndex+1)+" / "+TOTAL_QUESTIONS;
+    resetSelection();
+  }
+
+  function resetSelection(){
+    if(locked){return;}
+
+    selectedTens=0;
+    selectedOnes=0;
+    builtTens.innerHTML="";
+    builtOnes.innerHTML="";
+    tensOptions.innerHTML="";
+    onesOptions.innerHTML="";
+
+    addEmptyNote(builtTens,"Tap a treasure bag below.","emptyTens");
+    addEmptyNote(builtOnes,"Tap magic balls below.","emptyOnes");
+
+    createOptions();
+    updateEmptyNotes();
+  }
+
+  function addEmptyNote(parent,text,id){
+    var note=document.createElement("div");
+    note.className="empty-note";
+    note.id=id;
+    note.textContent=text;
+    parent.appendChild(note);
+  }
+
+  function createOptions(){
+    var i;
+    for(i=0;i<5;i++){
+      tensOptions.appendChild(createTenBag(i,true));
+    }
+    for(i=0;i<10;i++){
+      onesOptions.appendChild(createMagicBall(i,true));
+    }
+  }
+
+  /* ---------------- TEN BAG ---------------- */
+  function createTenBag(index,selectable){
+    var bag=document.createElement("button");
+    var neck=document.createElement("span");
+    var body=document.createElement("span");
+    var badge=document.createElement("span");
+    var i,mini;
+
+    bag.type="button";
+    bag.className="ten-bag";
+    bag.setAttribute("data-index",index);
+    bag.setAttribute("aria-label","Treasure bag with ten balls");
+
+    neck.className="bag-neck";
+    body.className="bag-body";
+
+    for(i=0;i<10;i++){
+      mini=document.createElement("span");
+      mini.className="mini-ball";
+      mini.style.background=BALL_COLORS[(i+index*2)%BALL_COLORS.length];
+      body.appendChild(mini);
+    }
+
+    badge.className="bag-badge";
+    badge.textContent="10";
+
+    bag.appendChild(neck);
+    bag.appendChild(body);
+    bag.appendChild(badge);
+
+    if(selectable){
+      bag.onclick=function(){selectTen(bag,index);};
+    }else{
+      bag.className+=" selected-item";
+      bag.onclick=function(){removeTen(bag,index);};
+    }
+
+    return bag;
+  }
+
+  /* ---------------- MAGIC BALL ---------------- */
+  function createMagicBall(index,selectable){
+    var ball=document.createElement("button");
+    ball.type="button";
+    ball.className="magic-ball";
+    ball.textContent="1";
+    ball.style.background=BALL_COLORS[index%BALL_COLORS.length];
+    ball.setAttribute("data-index",index);
+    ball.setAttribute("aria-label","One magic ball");
+
+    if(selectable){
+      ball.onclick=function(){selectOne(ball,index);};
+    }else{
+      ball.className+=" selected-item";
+      ball.onclick=function(){removeOne(ball,index);};
+    }
+
+    return ball;
+  }
+
+  /* ---------------- SELECT ---------------- */
+  function selectTen(source,index){
+    var selected;
+    if(locked||source.classList.contains("used")){return;}
+
+    source.classList.add("selection-bounce");
+    window.setTimeout(function(){source.classList.remove("selection-bounce");},400);
+    source.classList.add("used");
+
+    selectedTens++;
+    selected=createTenBag(index,false);
+    builtTens.appendChild(selected);
+    updateEmptyNotes();
+    makeSparkles(selected);
+  }
+
+  function selectOne(source,index){
+    var selected;
+    if(locked||source.classList.contains("used")){return;}
+
+    source.classList.add("selection-bounce");
+    window.setTimeout(function(){source.classList.remove("selection-bounce");},400);
+    source.classList.add("used");
+
+    selectedOnes++;
+    selected=createMagicBall(index,false);
+    builtOnes.appendChild(selected);
+    updateEmptyNotes();
+    makeSparkles(selected);
+  }
+
+  /* ---------------- REMOVE ---------------- */
+  function removeTen(selected,index){
+    var source;
+    if(locked){return;}
+
+    source=tensOptions.querySelector('[data-index="'+index+'"]');
+    if(source){source.classList.remove("used");}
+    if(selected.parentNode){selected.parentNode.removeChild(selected);}
+    selectedTens=Math.max(0,selectedTens-1);
+    updateEmptyNotes();
+  }
+
+  function removeOne(selected,index){
+    var source;
+    if(locked){return;}
+
+    source=onesOptions.querySelector('[data-index="'+index+'"]');
+    if(source){source.classList.remove("used");}
+    if(selected.parentNode){selected.parentNode.removeChild(selected);}
+    selectedOnes=Math.max(0,selectedOnes-1);
+    updateEmptyNotes();
+  }
+
+  function updateEmptyNotes(){
+    var emptyTens=document.getElementById("emptyTens");
+    var emptyOnes=document.getElementById("emptyOnes");
+
+    if(emptyTens){emptyTens.className=selectedTens>0?"empty-note hide":"empty-note";}
+    if(emptyOnes){emptyOnes.className=selectedOnes>0?"empty-note hide":"empty-note";}
+  }
+
+  /* ---------------- SPARKLES ---------------- */
+  function makeSparkles(element){
+    var rect=element.getBoundingClientRect();
+    var burst=document.createElement("div");
+    var positions=[[-32,-26],[0,-39],[31,-24],[-38,8],[39,9],[-23,34],[22,35]];
+    var i,piece;
+
+    burst.className="sparkle-burst";
+    burst.style.left=(rect.left+rect.width/2)+"px";
+    burst.style.top=(rect.top+rect.height/2)+"px";
+
+    for(i=0;i<positions.length;i++){
+      piece=document.createElement("span");
+      piece.className="sparkle-piece";
+      piece.textContent=i%2===0?"✦":"★";
+      piece.style.setProperty("--sx",positions[i][0]+"px");
+      piece.style.setProperty("--sy",positions[i][1]+"px");
+      piece.style.animationDelay=(i*.03)+"s";
+      burst.appendChild(piece);
+    }
+
+    document.body.appendChild(burst);
+    window.setTimeout(function(){
+      if(burst.parentNode){burst.parentNode.removeChild(burst);}
+    },850);
+  }
+
+  /* ---------------- CHECK ---------------- */
+  function checkAnswer(){
+    var correctTens,correctOnes;
+    if(locked){return;}
+
+    correctTens=Math.floor(target/10);
+    correctOnes=target%10;
+
+    if(selectedTens===correctTens&&selectedOnes===correctOnes){
+      showCorrect();
+    }else{
+      showWrong();
+    }
+  }
+
+  function showCorrect(){
+    locked=true;
+    playSound(clapsSound);
+    showFeedback(true);
+    createConfettiBurst(80,false);
+
+    window.setTimeout(function(){
+      hideFeedback();
+      currentIndex++;
+
+      if(currentIndex<TOTAL_QUESTIONS){
+        locked=false;
+        loadQuestion();
+      }else{
+        showFinalScreen();
+      }
+    },1650);
+  }
+
+  function showWrong(){
+    playSound(wrongSound);
+    showFeedback(false);
+
+    mainArea.classList.remove("shake");
+    void mainArea.offsetWidth;
+    mainArea.classList.add("shake");
+
+    window.setTimeout(function(){
+      hideFeedback();
+      mainArea.classList.remove("shake");
+    },1000);
+  }
+
+  function showFeedback(isCorrect){
+    feedbackCard.className=isCorrect?"feedback-card correct":"feedback-card wrong";
+    feedbackIcon.textContent=isCorrect?"✓":"✕";
+    feedbackWord.textContent=isCorrect?"Amazing! You built it!":"Try Again!";
+    feedbackLayer.className="show";
+  }
+
+  function hideFeedback(){
+    feedbackLayer.className="";
+  }
+
+  /* ---------------- CONFETTI ---------------- */
+  function createConfettiBurst(amount,persistent){
+    var colors=["#ff5f93","#ffd54f","#4cc9f0","#61d68a","#9c74ef","#ff944d"];
+    var i,piece,duration,drift;
+
+    if(!persistent){celebrationLayer.innerHTML="";}
+
+    for(i=0;i<amount;i++){
+      piece=document.createElement("span");
+      duration=1.5+Math.random()*1.3;
+      drift=(-120+Math.random()*240)+"px";
+      piece.className="confetti-piece";
+      piece.style.left=(Math.random()*100)+"%";
+      piece.style.background=colors[i%colors.length];
+      piece.style.width=(7+Math.random()*7)+"px";
+      piece.style.height=(10+Math.random()*13)+"px";
+      piece.style.setProperty("--dur",duration+"s");
+      piece.style.setProperty("--drift",drift);
+      piece.style.animationDelay=(Math.random()*.35)+"s";
+      celebrationLayer.appendChild(piece);
+    }
+
+    if(!persistent){
+      window.setTimeout(function(){celebrationLayer.innerHTML="";},3200);
+    }
+  }
+
+  /* ---------------- FINAL ---------------- */
+  function showFinalScreen(){
+    locked=true;
+    gameScreen.classList.remove("active");
+    finalScreen.classList.add("active");
+    createNumberRain();
+    createConfettiBurst(125,true);
+    playSound(clapsSound);
+  }
+
+  function createNumberRain(){
+    var colors=["#ff3d7f","#ff9800","#00a8e8","#6bbf24","#8d5ce6","#ef476f","#06b6a9"];
+    var i,drop,number,size,duration,delay;
+
+    numberRain.innerHTML="";
+
+    for(i=0;i<42;i++){
+      drop=document.createElement("span");
+      number=31+Math.floor(Math.random()*10);
+      size=24+Math.floor(Math.random()*36);
+      duration=2.8+Math.random()*3.5;
+      delay=-Math.random()*duration;
+
+      drop.className="number-drop";
+      drop.textContent=number;
+      drop.style.left=(Math.random()*96)+"%";
+      drop.style.fontSize=size+"px";
+      drop.style.color=colors[i%colors.length];
+      drop.style.animationDuration=duration+"s";
+      drop.style.animationDelay=delay+"s";
+      numberRain.appendChild(drop);
+    }
+  }
+
+  /* ---------------- PLAY AGAIN ---------------- */
+  function restartGame(){
+    numberRain.innerHTML="";
+    celebrationLayer.innerHTML="";
+    finalScreen.classList.remove("active");
+    gameScreen.classList.add("active");
+    locked=false;
+    startGame();
+  }
+})();
+</script>
+</body>
+</html>
