@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#eaf7ff">
+  <title>Firefighter Memory Match</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background: #ffffff;
+      color: #14365c;
+      touch-action: manipulation;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* ---------------- SPLASH SCREEN ---------------- */
+
+    #splashScreen {
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    #splashScreen img {
+      width: min(58vw, 330px);
+      max-height: 42vh;
+      object-fit: contain;
+      animation: logoPop 0.65s ease-out both;
+    }
+
+    @keyframes logoPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.78);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* ---------------- GAME SCREEN ---------------- */
+
+    #gameScreen {
+      flex-direction: column;
+      align-items: center;
+      padding:
+        max(8px, env(safe-area-inset-top))
+        max(10px, env(safe-area-inset-right))
+        max(8px, env(safe-area-inset-bottom))
+        max(10px, env(safe-area-inset-left));
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255,255,255,0.95) 0 5%, transparent 5.4%),
+        radial-gradient(circle at 88% 15%, rgba(255,255,255,0.82) 0 4%, transparent 4.4%),
+        linear-gradient(180deg, #dff4ff 0%, #f7fcff 48%, #fff1cf 100%);
+    }
+
+    .sky-decoration {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .cloud {
+      position: absolute;
+      width: 120px;
+      height: 34px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.72);
+      filter: blur(0.2px);
+    }
+
+    .cloud::before,
+    .cloud::after {
+      content: "";
+      position: absolute;
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .cloud::before {
+      width: 48px;
+      height: 48px;
+      left: 22px;
+      top: -23px;
+    }
+
+    .cloud::after {
+      width: 60px;
+      height: 60px;
+      right: 18px;
+      top: -30px;
+    }
+
+    .cloud.one {
+      left: 4%;
+      top: 12%;
+      transform: scale(0.72);
+    }
+
+    .cloud.two {
+      right: 4%;
+      top: 19%;
+      transform: scale(0.52);
+    }
+
+    .city {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 18%;
+      opacity: 0.22;
+      background:
+        linear-gradient(to top, #396a8f 0 52%, transparent 52%),
+        repeating-linear-gradient(
+          90deg,
+          #396a8f 0 8%,
+          transparent 8% 10%,
+          #396a8f 10% 18%,
+          transparent 18% 21%
+        );
+      clip-path: polygon(
+        0 46%, 7% 46%, 7% 24%, 15% 24%, 15% 40%, 24% 40%,
+        24% 16%, 33% 16%, 33% 42%, 42% 42%, 42% 28%, 51% 28%,
+        51% 8%, 59% 8%, 59% 39%, 69% 39%, 69% 19%, 77% 19%,
+        77% 45%, 86% 45%, 86% 30%, 94% 30%, 94% 45%, 100% 45%,
+        100% 100%, 0 100%
+      );
+    }
+
+    .hose-line {
+      position: absolute;
+      left: -4%;
+      bottom: 4%;
+      width: 48%;
+      height: 10%;
+      border: 12px solid rgba(220, 42, 42, 0.22);
+      border-top-color: transparent;
+      border-left-color: transparent;
+      border-radius: 50%;
+      transform: rotate(4deg);
+    }
+
+    .game-panel {
+      position: relative;
+      z-index: 2;
+      width: min(96vw, 1040px);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 0;
+    }
+
+    .title-wrap {
+      flex: 0 0 auto;
+      text-align: center;
+      padding-top: clamp(1px, 0.4vh, 5px);
+      padding-bottom: clamp(3px, 0.8vh, 8px);
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(7px, 1.5vw, 14px);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(38px, 6vh, 58px);
+      height: clamp(38px, 6vh, 58px);
+      border-radius: 50%;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: clamp(22px, 3.6vh, 36px);
+      background: linear-gradient(145deg, #ef3b2d, #b91616);
+      border: 4px solid #ffffff;
+      box-shadow: 0 4px 0 #8f1111, 0 7px 18px rgba(126, 24, 24, 0.25);
+    }
+
+    h1 {
+      margin: 0;
+      color: #125aa3;
+      font-size: clamp(26px, 5.1vh, 49px);
+      line-height: 1;
+      letter-spacing: 0.4px;
+      text-shadow: 0 2px 0 #ffffff;
+    }
+
+    .subtitle {
+      margin: clamp(3px, 0.8vh, 8px) 0 0;
+      color: #243d58;
+      font-size: clamp(14px, 2.3vh, 23px);
+      font-weight: 700;
+    }
+
+    .status-row {
+      width: min(96%, 860px);
+      min-height: clamp(25px, 4.2vh, 39px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: clamp(3px, 0.7vh, 7px);
+    }
+
+    #statusText {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: clamp(25px, 4.2vh, 39px);
+      padding: 4px 16px;
+      border: 2px solid rgba(18, 90, 163, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 4px 10px rgba(58, 101, 137, 0.10);
+      color: #17476e;
+      font-size: clamp(13px, 2vh, 18px);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .board {
+      flex: 1 1 auto;
+      min-height: 0;
+      width: min(95vw, 840px);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      gap: clamp(7px, 1.4vh, 14px);
+      padding: clamp(7px, 1.3vh, 13px);
+      border: clamp(3px, 0.5vh, 5px) solid rgba(255,255,255,0.94);
+      border-radius: clamp(18px, 3vh, 30px);
+      background: rgba(255,255,255,0.43);
+      box-shadow:
+        0 12px 26px rgba(34, 91, 132, 0.20),
+        inset 0 0 0 2px rgba(37, 116, 187, 0.16);
+      backdrop-filter: blur(3px);
+    }
+
+    .card {
+      position: relative;
+      border: 0;
+      padding: 0;
+      border-radius: clamp(13px, 2.3vh, 23px);
+      background: transparent;
+      cursor: pointer;
+      perspective: 800px;
+      min-width: 0;
+      min-height: 0;
+      outline: none;
+    }
+
+    .card:focus-visible {
+      box-shadow: 0 0 0 4px #ffd84e;
+    }
+
+    .card-inner {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.42s ease;
+    }
+
+    .card.flipped .card-inner,
+    .card.matched .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: inherit;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+    }
+
+    .card-front {
+      border: clamp(3px, 0.45vh, 5px) solid #f5fbff;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,0.42) 0 5%, transparent 5.5%),
+        linear-gradient(135deg, #206fc5 0%, #69aee8 49%, #1765b8 50%, #4b98db 100%);
+      background-size: 34px 34px, 32px 32px;
+      box-shadow:
+        inset 0 0 0 3px rgba(11,80,148,0.28),
+        0 5px 0 #185c9f,
+        0 8px 13px rgba(29, 80, 123, 0.25);
+    }
+
+    .card-front::before {
+      content: "";
+      width: clamp(42px, 7vh, 70px);
+      height: clamp(42px, 7vh, 70px);
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    }
+
+    .card-front::after {
+      content: "🔥";
+      position: absolute;
+      font-size: clamp(26px, 5vh, 48px);
+      transform: translateY(-1px);
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      border: clamp(3px, 0.45vh, 5px) solid #ffffff;
+      background: linear-gradient(150deg, #fffdf7, #fff3cf);
+      box-shadow:
+        inset 0 0 0 2px rgba(184, 120, 30, 0.16),
+        0 5px 0 #d9b66c,
+        0 8px 13px rgba(81, 65, 35, 0.20);
+    }
+
+    .card-back img {
+      width: 78%;
+      height: 78%;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .card.matched {
+      pointer-events: none;
+    }
+
+    .card.matched .card-back {
+      animation: matchGlow 0.9s ease both;
+    }
+
+    @keyframes matchGlow {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 190, 93, 0.7), 0 5px 0 #d9b66c;
+      }
+      45% {
+        box-shadow: 0 0 0 8px rgba(37, 190, 93, 0.34), 0 5px 0 #3ca55b;
+      }
+      100% {
+        box-shadow: 0 0 0 3px rgba(37, 190, 93, 0.5), 0 5px 0 #3ca55b;
+      }
+    }
+
+    .card.wrong {
+      animation: jiggle 0.38s ease;
+    }
+
+    @keyframes jiggle {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-5px); }
+    }
+
+    .card.hint .card-inner {
+      animation: hintPulse 1.15s ease-in-out 3;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% {
+        filter: drop-shadow(0 0 0 rgba(255, 214, 54, 0));
+        transform: scale(1);
+      }
+      50% {
+        filter: drop-shadow(0 0 14px rgba(255, 187, 0, 0.95));
+        transform: scale(1.07);
+      }
+    }
+
+    .feedback {
+      position: fixed;
+      left: 50%;
+      top: 48%;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: clamp(78px, 14vh, 130px);
+      height: clamp(78px, 14vh, 130px);
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      color: #ffffff;
+      font-size: clamp(48px, 9vh, 88px);
+      font-weight: 900;
+      border: 6px solid #ffffff;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      pointer-events: none;
+    }
+
+    .feedback.show {
+      display: flex;
+      animation: feedbackPop 0.85s ease both;
+    }
+
+    .feedback.correct {
+      background: #24b95d;
+    }
+
+    .feedback.wrong-feedback {
+      background: #e33d36;
+    }
+
+    @keyframes feedbackPop {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.4);
+      }
+      35% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.18);
+      }
+      70% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.92);
+      }
+    }
+
+    /* ---------------- FINAL SCREEN ---------------- */
+
+    #finalScreen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 20%, #ffffff 0 8%, transparent 30%),
+        linear-gradient(180deg, #bceaff 0 62%, #def5ff 62% 68%, #585d68 68% 100%);
+    }
+
+    .final-sun {
+      position: absolute;
+      right: 8%;
+      top: 9%;
+      width: clamp(55px, 10vw, 100px);
+      height: clamp(55px, 10vw, 100px);
+      border-radius: 50%;
+      background: #ffdf51;
+      box-shadow: 0 0 30px rgba(255, 211, 55, 0.8);
+    }
+
+    .final-cloud {
+      position: absolute;
+      left: 8%;
+      top: 18%;
+      width: 160px;
+      height: 44px;
+      border-radius: 40px;
+      background: rgba(255,255,255,0.84);
+    }
+
+    .final-cloud::before,
+    .final-cloud::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: inherit;
+    }
+
+    .final-cloud::before {
+      width: 62px;
+      height: 62px;
+      left: 28px;
+      top: -30px;
+    }
+
+    .final-cloud::after {
+      width: 76px;
+      height: 76px;
+      right: 24px;
+      top: -38px;
+    }
+
+    .excellent {
+      position: relative;
+      z-index: 3;
+      margin: 0 0 clamp(10px, 2vh, 20px);
+      color: #cf201f;
+      font-size: clamp(42px, 10vw, 104px);
+      line-height: 1;
+      text-shadow:
+        0 4px 0 #ffffff,
+        0 8px 16px rgba(137, 21, 21, 0.25);
+      animation: excellentBounce 1s ease both;
+    }
+
+    @keyframes excellentBounce {
+      0% { opacity: 0; transform: translateY(-35px) scale(0.8); }
+      65% { opacity: 1; transform: translateY(6px) scale(1.08); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .road {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 32%;
+      background:
+        linear-gradient(to bottom, #666b75 0 62%, #4b4f57 62% 100%);
+      border-top: 8px solid #f3cf55;
+    }
+
+    .road::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 8px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #ffffff 0 7%,
+          transparent 7% 13%
+        );
+      opacity: 0.9;
+    }
+
+    .truck-wrap {
+      position: absolute;
+      z-index: 4;
+      bottom: 12%;
+      left: 100%;
+      width: clamp(230px, 38vw, 430px);
+      height: clamp(112px, 18vw, 205px);
+      animation: driveAcross 5.2s linear infinite;
+    }
+
+    @keyframes driveAcross {
+      from { left: 104%; }
+      to { left: -48%; }
+    }
+
+    .truck {
+      position: absolute;
+      left: 4%;
+      top: 20%;
+      width: 91%;
+      height: 62%;
+      border-radius: 16px 22px 12px 12px;
+      background: linear-gradient(#ed3530, #b71318);
+      border: 5px solid #7c0d11;
+      box-shadow: 0 9px 0 rgba(0,0,0,0.18);
+    }
+
+    .truck-cab {
+      position: absolute;
+      right: 2%;
+      top: -28%;
+      width: 31%;
+      height: 72%;
+      border-radius: 16px 26px 6px 6px;
+      background: linear-gradient(#f74c42, #c9151c);
+      border: 5px solid #7c0d11;
+    }
+
+    .truck-window {
+      position: absolute;
+      right: 7%;
+      top: 12%;
+      width: 18%;
+      height: 24%;
+      border-radius: 8px;
+      background: #aee8ff;
+      border: 4px solid #f2f8fb;
+      box-shadow: inset 0 0 0 3px #3d718c;
+    }
+
+    .truck-panel {
+      position: absolute;
+      left: 7%;
+      top: 18%;
+      width: 42%;
+      height: 46%;
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, #f4cd49 0 7%, transparent 7% 12%, #f4cd49 12% 19%, transparent 19% 24%, #f4cd49 24% 31%, transparent 31%);
+      border: 4px solid #891015;
+    }
+
+    .ladder-on-truck {
+      position: absolute;
+      left: 7%;
+      top: 3%;
+      width: 60%;
+      height: 13%;
+      border-top: 6px solid #e8edf0;
+      border-bottom: 6px solid #e8edf0;
+      transform: rotate(-4deg);
+    }
+
+    .ladder-on-truck::after {
+      content: "";
+      position: absolute;
+      inset: -5px 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent 0 10%,
+          #e8edf0 10% 13%,
+          transparent 13% 20%
+        );
+    }
+
+    .siren {
+      position: absolute;
+      right: 15%;
+      top: -43%;
+      width: 16%;
+      height: 19%;
+      border-radius: 50% 50% 3px 3px;
+      background: #1487ff;
+      border: 4px solid #ebf7ff;
+      box-shadow:
+        0 0 12px #1494ff,
+        0 0 25px #1494ff;
+      animation: sirenFlash 0.42s steps(2, end) infinite;
+    }
+
+    @keyframes sirenFlash {
+      50% {
+        background: #ff3535;
+        box-shadow: 0 0 12px #ff3535, 0 0 25px #ff3535;
+      }
+    }
+
+    .wheel {
+      position: absolute;
+      bottom: -23%;
+      width: 23%;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background: #202329;
+      border: 7px solid #0d0e11;
+      box-shadow: inset 0 0 0 7px #adb4bd;
+      animation: wheelSpin 0.55s linear infinite;
+    }
+
+    .wheel.left { left: 14%; }
+    .wheel.right { right: 12%; }
+
+    @keyframes wheelSpin {
+      to { transform: rotate(-360deg); }
+    }
+
+    #playAgain {
+      position: relative;
+      z-index: 8;
+      margin-top: clamp(4px, 1vh, 10px);
+      padding: clamp(10px, 1.8vh, 17px) clamp(22px, 4vw, 42px);
+      border: 4px solid #ffffff;
+      border-radius: 999px;
+      color: #ffffff;
+      background: linear-gradient(#1f86dc, #0b5fab);
+      box-shadow: 0 7px 0 #08467d, 0 12px 20px rgba(0,0,0,0.18);
+      font-size: clamp(18px, 3.2vh, 31px);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    #playAgain:active {
+      transform: translateY(5px);
+      box-shadow: 0 2px 0 #08467d;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: -20px;
+      z-index: 20;
+      width: 10px;
+      height: 18px;
+      border-radius: 2px;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translate3d(var(--drift), 112vh, 0) rotate(760deg);
+      }
+    }
+
+    /* ---------------- RESPONSIVE LAYOUT ---------------- */
+
+    @media (max-width: 640px) {
+      .game-panel {
+        width: 100%;
+      }
+
+      .board {
+        width: min(96vw, 520px);
+        gap: 7px;
+        padding: 7px;
+      }
+
+      .title-wrap {
+        padding-bottom: 2px;
+      }
+
+      .subtitle {
+        margin-top: 2px;
+      }
+
+      .status-row {
+        margin-bottom: 3px;
+      }
+
+      .cloud {
+        opacity: 0.55;
+      }
+    }
+
+    @media (max-height: 560px) and (orientation: landscape) {
+      .game-panel {
+        width: min(98vw, 940px);
+      }
+
+      .title-wrap {
+        padding: 0;
+      }
+
+      .title-row {
+        gap: 7px;
+      }
+
+      h1 {
+        font-size: clamp(24px, 7vh, 40px);
+      }
+
+      .badge {
+        width: clamp(34px, 8vh, 48px);
+        height: clamp(34px, 8vh, 48px);
+        font-size: clamp(19px, 5vh, 28px);
+        border-width: 3px;
+      }
+
+      .subtitle {
+        font-size: clamp(12px, 3.5vh, 18px);
+        margin-top: 2px;
+      }
+
+      .status-row {
+        min-height: 24px;
+        margin-bottom: 3px;
+      }
+
+      #statusText {
+        min-height: 24px;
+        padding: 2px 12px;
+        font-size: clamp(11px, 3vh, 15px);
+      }
+
+      .board {
+        width: min(78vw, 720px);
+        gap: 6px;
+        padding: 6px;
+        border-radius: 16px;
+      }
+    }
+
+    @media (orientation: portrait) and (max-width: 520px) {
+      .board {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Slide 1 -->
+  <section id="splashScreen" class="screen active" aria-label="Innovine logo screen">
+    <img src="assets/innovine-logo.png" alt="Innovine logo">
+  </section>
+
+  <!-- Slide 2 -->
+  <section id="gameScreen" class="screen" aria-label="Memory Match game">
+    <div class="sky-decoration" aria-hidden="true">
+      <div class="cloud one"></div>
+      <div class="cloud two"></div>
+      <div class="city"></div>
+      <div class="hose-line"></div>
+    </div>
+
+    <main class="game-panel">
+      <header class="title-wrap">
+        <div class="title-row">
+          <span class="badge" aria-hidden="true">3</span>
+          <h1>Memory Match</h1>
+        </div>
+        <p class="subtitle">Flip the cards and find the matching pairs.</p>
+      </header>
+
+      <div class="status-row" aria-live="polite">
+        <div id="statusText">Find all 6 matching pairs!</div>
+      </div>
+
+      <div id="gameBoard" class="board" aria-label="Memory cards"></div>
+    </main>
+
+    <div id="feedback" class="feedback" aria-hidden="true"></div>
+  </section>
+
+  <!-- Slide 3 -->
+  <section id="finalScreen" class="screen" aria-label="Excellent completion screen">
+    <div class="final-sun" aria-hidden="true"></div>
+    <div class="final-cloud" aria-hidden="true"></div>
+
+    <h2 class="excellent">Excellent!</h2>
+    <button id="playAgain" type="button">Play Again</button>
+
+    <div class="road" aria-hidden="true"></div>
+
+    <div class="truck-wrap" aria-hidden="true">
+      <div class="truck">
+        <div class="truck-cab"></div>
+        <div class="truck-window"></div>
+        <div class="truck-panel"></div>
+        <div class="ladder-on-truck"></div>
+        <div class="siren"></div>
+        <div class="wheel left"></div>
+        <div class="wheel right"></div>
+      </div>
+    </div>
+  </section>
+
+  <audio id="clapAudio" preload="auto">
+    <source src="assets/clap.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="wrongAudio" preload="auto">
+    <source src="assets/wrong.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var splashScreen = document.getElementById("splashScreen");
+      var gameScreen = document.getElementById("gameScreen");
+      var finalScreen = document.getElementById("finalScreen");
+      var gameBoard = document.getElementById("gameBoard");
+      var statusText = document.getElementById("statusText");
+      var feedback = document.getElementById("feedback");
+      var playAgainButton = document.getElementById("playAgain");
+      var clapAudio = document.getElementById("clapAudio");
+      var wrongAudio = document.getElementById("wrongAudio");
+
+      var tools = [
+        {
+          id: "hose",
+          name: "Hose",
+          image: "assets/hose.png"
+        },
+        {
+          id: "hydrant",
+          name: "Fire hydrant",
+          image: "assets/firehydrant.png"
+        },
+        {
+          id: "extinguisher",
+          name: "Fire extinguisher",
+          image: "assets/fireextinguisher.png"
+        },
+        {
+          id: "axe",
+          name: "Firefighter's axe",
+          image: "assets/firefighteraxe.png"
+        },
+        {
+          id: "ladder",
+          name: "Ladder",
+          image: "assets/ladder.png"
+        },
+        {
+          id: "cap",
+          name: "Firefighter's cap",
+          image: "assets/firefighterscap.png"
+        }
+      ];
+
+      var firstCard = null;
+      var secondCard = null;
+      var lockBoard = false;
+      var matchedPairs = 0;
+      var wrongAttempts = 0;
+      var splashTimer = null;
+
+      function showScreen(screen) {
+        splashScreen.className = "screen";
+        gameScreen.className = "screen";
+        finalScreen.className = "screen";
+        screen.className = "screen active";
+      }
+
+      function safePlay(audioElement) {
+        try {
+          audioElement.pause();
+          audioElement.currentTime = 0;
+          var promise = audioElement.play();
+          if (promise && typeof promise.catch === "function") {
+            promise.catch(function () {});
+          }
+        } catch (error) {}
+      }
+
+      function shuffle(array) {
+        var currentIndex = array.length;
+        var temporaryValue;
+        var randomIndex;
+
+        while (currentIndex !== 0) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+      }
+
+      function makeDeck() {
+        var deck = [];
+        var i;
+
+        for (i = 0; i < tools.length; i += 1) {
+          deck.push({
+            id: tools[i].id,
+            name: tools[i].name,
+            image: tools[i].image,
+            copy: 1
+          });
+
+          deck.push({
+            id: tools[i].id,
+            name: tools[i].name,
+            image: tools[i].image,
+            copy: 2
+          });
+        }
+
+        return shuffle(deck);
+      }
+
+      function createCard(item, index) {
+        var card = document.createElement("button");
+        var inner = document.createElement("span");
+        var front = document.createElement("span");
+        var back = document.createElement("span");
+        var image = document.createElement("img");
+
+        card.type = "button";
+        card.className = "card";
+        card.setAttribute("data-id", item.id);
+        card.setAttribute("aria-label", "Hidden memory card " + (index + 1));
+        card.setAttribute("aria-pressed", "false");
+
+        inner.className = "card-inner";
+        front.className = "card-face card-front";
+        back.className = "card-face card-back";
+
+        image.src = item.image;
+        image.alt = item.name;
+        image.draggable = false;
+
+        back.appendChild(image);
+        inner.appendChild(front);
+        inner.appendChild(back);
+        card.appendChild(inner);
+
+        card.onclick = function () {
+          flipCard(card, item);
+        };
+
+        return card;
+      }
+
+      function buildBoard() {
+        var deck = makeDeck();
+        var fragment = document.createDocumentFragment();
+        var i;
+
+        gameBoard.innerHTML = "";
+
+        for (i = 0; i < deck.length; i += 1) {
+          fragment.appendChild(createCard(deck[i], i));
+        }
+
+        gameBoard.appendChild(fragment);
+      }
+
+      function resetTurn() {
+        firstCard = null;
+        secondCard = null;
+        lockBoard = false;
+      }
+
+      function showFeedback(type) {
+        feedback.className = "feedback " + type + " show";
+        feedback.textContent = type === "correct" ? "✓" : "✕";
+
+        window.setTimeout(function () {
+          feedback.className = "feedback";
+          feedback.textContent = "";
+        }, 850);
+      }
+
+      function flipCard(card, item) {
+        if (lockBoard || card === firstCard || card.classList.contains("matched")) {
+          return;
+        }
+
+        card.classList.add("flipped");
+        card.setAttribute("aria-pressed", "true");
+        card.setAttribute("aria-label", item.name);
+
+        if (!firstCard) {
+          firstCard = card;
+          statusText.textContent = "Now find the matching card!";
+          return;
+        }
+
+        secondCard = card;
+        lockBoard = true;
+        checkForMatch();
+      }
+
+      function checkForMatch() {
+        var isMatch =
+          firstCard.getAttribute("data-id") ===
+          secondCard.getAttribute("data-id");
+
+        if (isMatch) {
+          handleMatch();
+        } else {
+          handleMismatch();
+        }
+      }
+
+      function handleMatch() {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+        firstCard.disabled = true;
+        secondCard.disabled = true;
+
+        matchedPairs += 1;
+        wrongAttempts = 0;
+
+        showFeedback("correct");
+        safePlay(clapAudio);
+
+        statusText.textContent =
+          matchedPairs === 6
+            ? "You found all the pairs!"
+            : "Great match! " + matchedPairs + " of 6 pairs found.";
+
+        resetTurn();
+
+        if (matchedPairs === tools.length) {
+          window.setTimeout(finishGame, 1150);
+        }
+      }
+
+      function handleMismatch() {
+        wrongAttempts += 1;
+
+        firstCard.classList.add("wrong");
+        secondCard.classList.add("wrong");
+
+        showFeedback("wrong-feedback");
+        safePlay(wrongAudio);
+
+        statusText.textContent =
+          wrongAttempts % 5 === 0
+            ? "Here is a little hint!"
+            : "Try again! Remember where the tools are.";
+
+        window.setTimeout(function () {
+          firstCard.classList.remove("flipped", "wrong");
+          secondCard.classList.remove("flipped", "wrong");
+          firstCard.setAttribute("aria-pressed", "false");
+          secondCard.setAttribute("aria-pressed", "false");
+          firstCard.setAttribute("aria-label", "Hidden memory card");
+          secondCard.setAttribute("aria-label", "Hidden memory card");
+
+          resetTurn();
+
+          if (wrongAttempts > 0 && wrongAttempts % 5 === 0) {
+            giveHint();
+          }
+        }, 900);
+      }
+
+      function giveHint() {
+        var unmatchedCards = gameBoard.querySelectorAll(".card:not(.matched)");
+        var groups = {};
+        var i;
+        var id;
+        var possible = [];
+        var chosen;
+
+        for (i = 0; i < unmatchedCards.length; i += 1) {
+          id = unmatchedCards[i].getAttribute("data-id");
+
+          if (!groups[id]) {
+            groups[id] = [];
+          }
+
+          groups[id].push(unmatchedCards[i]);
+        }
+
+        for (id in groups) {
+          if (Object.prototype.hasOwnProperty.call(groups, id) && groups[id].length >= 2) {
+            possible.push(groups[id]);
+          }
+        }
+
+        if (!possible.length) {
+          return;
+        }
+
+        chosen = possible[Math.floor(Math.random() * possible.length)];
+        chosen[0].classList.add("hint");
+        chosen[1].classList.add("hint");
+
+        window.setTimeout(function () {
+          chosen[0].classList.remove("hint");
+          chosen[1].classList.remove("hint");
+          statusText.textContent = "Find the glowing matching pair!";
+        }, 3500);
+      }
+
+      function launchConfetti() {
+        var colors = ["#ef3c35", "#ffcc2f", "#1b83dd", "#32b76d", "#b74ce3", "#ff7a24"];
+        var i;
+        var piece;
+        var duration;
+        var drift;
+
+        for (i = 0; i < 90; i += 1) {
+          piece = document.createElement("span");
+          piece.className = "confetti-piece";
+          piece.style.left = Math.random() * 100 + "vw";
+          piece.style.backgroundColor = colors[i % colors.length];
+          piece.style.width = 7 + Math.random() * 7 + "px";
+          piece.style.height = 10 + Math.random() * 12 + "px";
+          piece.style.opacity = 0.7 + Math.random() * 0.3;
+          duration = 2.8 + Math.random() * 2.6;
+          drift = -90 + Math.random() * 180;
+          piece.style.animationDuration = duration + "s";
+          piece.style.animationDelay = Math.random() * 0.8 + "s";
+          piece.style.setProperty("--drift", drift + "px");
+
+          document.body.appendChild(piece);
+
+          (function (confettiPiece, removeAfter) {
+            window.setTimeout(function () {
+              if (confettiPiece.parentNode) {
+                confettiPiece.parentNode.removeChild(confettiPiece);
+              }
+            }, removeAfter);
+          })(piece, (duration + 1.2) * 1000);
+        }
+      }
+
+      function finishGame() {
+        showScreen(finalScreen);
+        launchConfetti();
+        safePlay(clapAudio);
+      }
+
+      function startGame() {
+        if (splashTimer) {
+          window.clearTimeout(splashTimer);
+          splashTimer = null;
+        }
+
+        firstCard = null;
+        secondCard = null;
+        lockBoard = false;
+        matchedPairs = 0;
+        wrongAttempts = 0;
+
+        buildBoard();
+        statusText.textContent = "Find all 6 matching pairs!";
+        showScreen(gameScreen);
+      }
+
+      function restartGame() {
+        var confetti = document.querySelectorAll(".confetti-piece");
+        var i;
+
+        for (i = 0; i < confetti.length; i += 1) {
+          if (confetti[i].parentNode) {
+            confetti[i].parentNode.removeChild(confetti[i]);
+          }
+        }
+
+        startGame();
+      }
+
+      splashScreen.onclick = startGame;
+      splashScreen.onkeydown = function (event) {
+        event = event || window.event;
+        if (event.keyCode === 13 || event.keyCode === 32) {
+          startGame();
+        }
+      };
+
+      playAgainButton.onclick = restartGame;
+
+      splashTimer = window.setTimeout(startGame, 3000);
+    })();
+  </script>
+</body>
+</html>
